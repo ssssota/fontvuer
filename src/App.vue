@@ -1,20 +1,32 @@
 <template>
   <div id="app">
+    <!--
     <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js + TypeScript App"/>
+    <HelloWorld msg="Welcome to fontvuer"/>
+    -->
+    <HeaderItem @change-preview-text="onChangePreviewText" :preview-text="previewText" />
+    <FontList :preview-text="previewText" />
   </div>
 </template>
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
-import HelloWorld from './components/HelloWorld.vue';
+import HeaderItem from './components/HeaderItem.vue';
+import FontList from './components/FontList.vue';
 
 @Component({
   components: {
-    HelloWorld,
+    HeaderItem,
+    FontList
   },
 })
-export default class App extends Vue {}
+export default class App extends Vue {
+  previewText: string = "fontvuer"
+
+  onChangePreviewText(text: string) {
+    this.previewText = text
+  }
+}
 </script>
 
 <style lang="scss">
@@ -22,8 +34,6 @@ export default class App extends Vue {}
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
 }
 </style>
