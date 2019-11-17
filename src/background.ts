@@ -1,5 +1,8 @@
 'use strict'
 
+/* global __static */
+
+import path from 'path'
 import { app, protocol, BrowserWindow } from 'electron'
 import { autoUpdater } from 'electron-updater'
 import {
@@ -21,6 +24,7 @@ function createWindow () {
     titleBarStyle: 'hidden',
     width: 800,
     height: 600,
+    icon: path.join(__static, 'icon.png'),
     webPreferences: {
       nodeIntegration: true
     }
