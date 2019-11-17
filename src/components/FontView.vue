@@ -1,7 +1,7 @@
 <template>
   <div class="font-view">
     <h3 :style="style">{{ previewText }}</h3>
-    <p>{{ fontName }}</p>
+    <p>{{ font.family }}</p>
   </div>
 </template>
 
