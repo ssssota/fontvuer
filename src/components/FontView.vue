@@ -1,5 +1,5 @@
 <template>
-  <div class="font-view">
+  <div class="font-view" @click="$emit('click')">
     <h3 :style="style">{{ previewText }}</h3>
     <p>{{ font.family }}</p>
   </div>
@@ -18,6 +18,7 @@ interface IPostscirpt {
 }
 interface IFontFamily {
   family: string;
+  favorite: boolean;
   postscripts: Array<IPostscirpt>;
 }
 
@@ -25,10 +26,18 @@ interface IFontFamily {
 export default class FontView extends Vue {
   @Prop({ default: 'fontvuer' }) private previewText!: string;
   @Prop() private font!: IFontFamily;
+  @Prop({ default: 400 }) private weight!: number;
+  @Prop({ default: false }) private italic!: boolean;
+  @Prop({ default: 0 }) private kerning!: number;
 
   get style() {
     return {
-      fontFamily: this.font.family
+      fontFamily: this.font.family,
+      fontWeight: this.weight,
+      fontStyle: (this.italic)? 'italic': 'normal',
+      letterSpacing: `${this.kerning}em`,
+      fontKerning: 'normal',
+      fontFutureSettings: 'palt 1'
     }
   }
 }
@@ -42,6 +51,7 @@ export default class FontView extends Vue {
   // fix appearance
   border-radius: 8px;
   box-shadow: 0 1px 3px;
+  cursor: pointer;
 
   h3 {
     font-size: 2em;

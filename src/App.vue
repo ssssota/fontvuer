@@ -1,11 +1,7 @@
 <template>
   <div id="app">
-    <!--
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to fontvuer"/>
-    -->
     <HeaderItem @change-preview-text="onChangePreviewText" :preview-text="previewText" />
-    <FontList :preview-text="previewText" />
+    <FontList :preview-text="(previewText == '')? 'Preview text': previewText" />
   </div>
 </template>
 

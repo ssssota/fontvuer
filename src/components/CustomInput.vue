@@ -15,7 +15,7 @@
       @input="$emit('input', $event)"
       @focus="$emit('focus', $event)"
       @blur="$emit('blur', $event)">
-    <button v-if="deleteButton" @click="clearInput" :style="{ fontSize: styles.fontSize }">×</button>
+    <button v-if="deleteButton" @click="clearInput" :style="{ fontSize: styles.fontSize }"><img src="../assets/clear-24px.svg" title="Clear text"></button>
     <span class="bar"></span>
   </div>
 </template>
