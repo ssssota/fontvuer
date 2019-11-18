@@ -20,36 +20,9 @@
 import { Component, Prop, Vue } from 'vue-property-decorator';
 import FontView from './FontView.vue';
 import FontDetail from './FontDetail.vue';
+import { IFontDescripter, IFontManager, IFontFamily, IPostscript } from '../type';
 
-// font-manager interface
-interface IFontDescripter {
-  path: string;
-  postscriptName: string;
-  family: string;
-  style: string;
-  weight: number;
-  width: number;
-  italic: boolean;
-  monospace: boolean;
-}
-interface IFontManager {
-  getAvailableFonts(callback: Function): void;
-  getAvailableFontsSync(): Array<IFontDescripter>;
-}
-interface IPostscirpt {
-  name: string;
-  italic: boolean;
-  monospace: boolean;
-  style: string;
-  weight: number;
-  width: number;
-}
-interface IFontFamily {
-  family: string;
-  favorite: boolean;
-  postscripts: Array<IPostscirpt>;
-}
-const fontManager = require('font-manager');
+const fontManager: IFontManager = require('font-manager');
 
 @Component({
   components: {
@@ -76,19 +49,18 @@ export default class FontList extends Vue {
   }
 
   get fontList() {
-    const _fontlist = [
+    return [
       // 重複削除
       ...new Map(
         // フォント一覧取得
-        (fontManager.getAvailableFontsSync() as Array<IFontDescripter>)
+        (fontManager.getAvailableFontsSync() as IFontDescripter[])
         .sort((a: IFontDescripter, b: IFontDescripter) => ((a.postscriptName < b.postscriptName)? -1: 1))
         .map(fd => [fd.postscriptName, fd])
       ).values()
     ];
-    return _fontlist;
   }
 
-  get fontArray(): Array<IFontFamily> {
+  get fontArray(): IFontFamily[] {
     return this.fontList.reduce((arr, fd) => {
       const i = arr.findIndex(obj => obj.family === fd.family);
       if (i < 0) {
@@ -103,7 +75,7 @@ export default class FontList extends Vue {
               style: fd.style,
               weight: fd.weight,
               width: fd.width
-            } as IPostscirpt
+            } as IPostscript
           ]
         })
       } else {
@@ -114,10 +86,10 @@ export default class FontList extends Vue {
           style: fd.style,
           weight: fd.weight,
           width: fd.width
-        } as IPostscirpt)
+        } as IPostscript)
       }
       return arr;
-    }, [] as Array<IFontFamily>).map(f => {
+    }, [] as IFontFamily[]).map(f => {
       f.postscripts = f.postscripts.sort((p1, p2) => (p1.weight > p2.weight)? 1: -1);
       return f;
     });

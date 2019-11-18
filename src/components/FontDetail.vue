@@ -42,20 +42,7 @@
 
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator';
-
-interface IPostscirpt {
-  name: string;
-  italic: boolean;
-  monospace: boolean;
-  style: string;
-  weight: number;
-  width: number;
-}
-interface IFontFamily {
-  family: string;
-  favorite: boolean;
-  postscripts: Array<IPostscirpt>;
-}
+import { IFontFamily, IPostscript } from '../type';
 
 @Component
 export default class FontDetail extends Vue {
