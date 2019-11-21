@@ -1,5 +1,5 @@
 <template>
-  <div class="font-list" :key="rerenderKey">
+  <div class="font-list">
     <FontDetail
       v-if="showModal"
       :font="moreFont"
@@ -80,11 +80,6 @@ export default class FontList extends Vue {
     });
   }
 
-  f() {
-    console.log(this.fontArray)
-    //this.rerenderKey++;
-  }
-
   openModal(font: IFontFamily) {
     this.moreFont = font;
     this.showModal = true;
@@ -95,9 +90,7 @@ export default class FontList extends Vue {
   }
 
   favorite(v: boolean, i: number) {
-    console.log('fav', v, i);
     this.fontArray[i].favorite = v;
-    this.rerenderKey = !this.rerenderKey;
   }
 
   get fontList() {
