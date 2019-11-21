@@ -1,15 +1,20 @@
 <template>
   <div class="font-view" @click="$emit('click')">
-    <h3 :style="style">{{ previewText }}</h3>
-    <p>{{ font.family }}</p>
+    <h3 @click="$emit('open-detail')" :style="style">{{ previewText }} <StarButton v-model="_favorite" /></h3>
+    <p @click="$emit('open-detail')">{{ font.family }}</p>
   </div>
 </template>
 
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator';
 import { IFontFamily, IPostscript } from '../type';
+import StarButton from './StarButton.vue';
 
-@Component
+@Component({
+  components: {
+    StarButton
+  }
+})
 export default class FontView extends Vue {
   @Prop({ default: 'fontvuer' }) private previewText!: string;
   @Prop() private font!: IFontFamily;
@@ -27,6 +32,9 @@ export default class FontView extends Vue {
       fontFutureSettings: 'palt 1'
     }
   }
+
+  get _favorite() { return this.font.favorite; }
+  set _favorite(v) { this.$emit('fav', v); }
 }
 </script>
 
@@ -38,7 +46,6 @@ export default class FontView extends Vue {
   // fix appearance
   border-radius: 8px;
   box-shadow: 0 1px 3px;
-  cursor: pointer;
 
   h3 {
     font-size: 2em;
@@ -46,12 +53,14 @@ export default class FontView extends Vue {
     margin-block-end: 0;
     margin-inline-start: 0;
     margin-inline-end: 0;
-    font-weight: 400; 
+    font-weight: 400;
+    cursor: pointer;
   }
 
   > p {
     font-size: 0.75em;
     color: #999;
+    cursor: pointer;
   }
 }
 </style>

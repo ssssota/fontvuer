@@ -1,5 +1,5 @@
 <template>
-  <transition name="modal">
+  <transition name="modal" appear>
     <div class="modal-mask" @click.self="$emit('close')">
       <div class="modal-container">
         <img
@@ -7,7 +7,7 @@
           alt="Close"
           title="Close"
           class="close-button"
-          @close="$emit('close')">
+          @click="$emit('close')">
         <slot></slot>
       </div>
     </div>

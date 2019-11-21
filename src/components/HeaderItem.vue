@@ -2,8 +2,7 @@
   <div class="header">
     <p>
       <CustomInput
-        @input="$emit('change-preview-text', $event.target.value)"
-        :value="previewText"
+        v-model="previewText"
         placeholder="Preview Text"
         deleteButton="true"
         :styles="{
@@ -24,15 +23,10 @@ import CustomInput from './CustomInput.vue';
   }
 })
 export default class Header extends Vue {
-  @Prop({ default: 'fontvuer' }) private previewText!: string;
+  @Prop({ default: 'fontvuer' }) private value!: string;
 
-  clearChangePreviewText() {
-    this.$emit('change-preview-text', '');
-
-    // focus to input
-    const elem = this.$refs.previewTextEditor;
-    if (elem instanceof HTMLElement) elem.focus();
-  }
+  get previewText() { return this.value; }
+  set previewText(val) { this.$emit('input', val); }
 }
 </script>
 

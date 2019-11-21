@@ -1,53 +1,56 @@
 <template>
-  <transition name="font-modal" appear>
-    <div class="font-detail" @click.self="$emit('close')">
-      <div class="font-detail-container">
-        <img class="close-button" src="../assets/clear-24px.svg" title="Close modal" @click="$emit('close')">
-        <h2>{{ font.family }}</h2>
-        <div class="postscripts">
-          <p class="select-wrapper" v-if="font.postscripts.length > 1">
-            <select v-model="selectedPostscript">
-              <option
-                v-for="(postscript, i) in font.postscripts"
-                :key="postscript.name"
-                :value="i"
-                :selected="i===0">
-                {{ postscript.style }}
-              </option>
-            </select>
-          </p>
-          <p>italic: {{font.postscripts[selectedPostscript].italic}}</p>
-          <p>monospace: {{font.postscripts[selectedPostscript].monospace}}</p>
-          <p>style: {{font.postscripts[selectedPostscript].style}}</p>
-          <p>weight: {{font.postscripts[selectedPostscript].weight}}</p>
-          <p>width: {{font.postscripts[selectedPostscript].width}}</p>
-        </div>
-        <!--
-        <div
-          class="postscript"
-          v-for="postscript in font.postscripts"
-          :key="postscript.name">
-          <h4>{{ postscript.name }}</h4>
-          <p>italic: {{postscript.italic}}</p>
-          <p>monospace: {{postscript.monospace}}</p>
-          <p>style: {{postscript.style}}</p>
-          <p>weight: {{postscript.weight}}</p>
-          <p>width: {{postscript.width}}</p>
-        </div>
-        -->
-      </div>
+  <Modal @close="$emit('close')">
+    <h2>{{ font.family }}</h2>
+    <div class="postscripts">
+      <p class="select-wrapper" v-if="font.postscripts.length > 1">
+        <CustomSelect v-model="selectedPostscript">
+          <option
+            v-for="(postscript, i) in font.postscripts"
+            :key="postscript.name"
+            :value="i"
+            :selected="i===0">
+            {{ postscript.style }}
+          </option>
+        </CustomSelect>
+      </p>
+      <h3 :style="style">{{ previewText }}</h3>
+      <p>italic: {{font.postscripts[selectedPostscript].italic}}</p>
+      <p>monospace: {{font.postscripts[selectedPostscript].monospace}}</p>
+      <p>style: {{font.postscripts[selectedPostscript].style}}</p>
+      <p>weight: {{font.postscripts[selectedPostscript].weight}}</p>
+      <p>width: {{font.postscripts[selectedPostscript].width}}</p>
     </div>
-  </transition>
+  </Modal>
 </template>
 
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator';
+import Modal from './Modal.vue';
+import CustomSelect from './CustomSelect.vue';
 import { IFontFamily, IPostscript } from '../type';
 
-@Component
+@Component({
+  components: {
+    Modal,
+    CustomSelect
+  }
+})
 export default class FontDetail extends Vue {
   @Prop() private font!: IFontFamily;
+  @Prop() private previewText!: string;
+  @Prop() private kerning!: number;
   selectedPostscript: number = 0;
+
+  get style() {
+    return {
+      margin: 0,
+      fontSize: '3em',
+      fontFamily: this.font.family,
+      fontStyle: (this.font.postscripts[this.selectedPostscript].italic)? 'italic': 'normal',
+      fontWeight: this.font.postscripts[this.selectedPostscript].weight,
+      fontKerning: `${this.kerning}em`
+    };
+  }
 }
 </script>
 

@@ -8,11 +8,17 @@
         color: styles.color
       }"
       :type="type" 
-      :name="name" 
+      :name="name"
+      v-model="_value"
       :placeholder="placeholder" 
-      :value="value"
       :required="required"
-      @input="$emit('input', $event)"
+      :autocomplete="autocomplete"
+      :autofocus="autofocus"
+      :disabled="disabled"
+      :form="form"
+      :list="list"
+      :readonly="readonly"
+      :tabindex="tabindex"
       @focus="$emit('focus', $event)"
       @blur="$emit('blur', $event)">
     <button v-if="deleteButton" @click="clearInput" :style="{ fontSize: styles.fontSize }"><img src="../assets/clear-24px.svg" title="Clear text"></button>
@@ -31,12 +37,22 @@ export default class CustomInput extends Vue {
   @Prop({ default: '' }) private placeholder!: string;
   @Prop({ default: '' }) private value!: string;
   @Prop({ default: false }) private required!: boolean;
+  @Prop({ default: '' }) private autocomplete!: string;
+  @Prop({ default: false }) private autofocus!: boolean;
+  @Prop({ default: false }) private disabled!: boolean;
+  @Prop({ default: '' }) private form!: string;
+  @Prop({ default: '' }) private list!: string;
+  @Prop({ default: false }) private readonly!: boolean;
+  @Prop({ default: 0 }) private tabindex!: number;
   @Prop({ default: false }) private deleteButton!: boolean;
+
+  get _value() { return this.value; }
+  set _value(val) { this.$emit('input', val); }
 
   clearInput() {
     // input event の偽装
     // 他の正しいやり方があるはず
-    this.$emit('input', { target: { value: '' } });
+    this._value = '';
     
     // input element にフォーカス
     const elem = this.$el.querySelector('input.custom-input-main');

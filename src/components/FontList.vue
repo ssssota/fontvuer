@@ -1,18 +1,21 @@
 <template>
-  <div class="font-list">
+  <div class="font-list" :key="rerenderKey">
     <FontDetail
       v-if="showModal"
       :font="moreFont"
+      :preview-text="previewText"
+      :kerning="kerning"
       @close="closeModal" />
     <FontView
-      v-for="font in fontArray"
+      v-for="(font, i) in fontArray"
       :key="font.family"
-      :previewText="previewText"
+      :preview-text="previewText"
       :font="font"
       :italic="italic"
       :weight="weight"
       :kerning="kerning"
-      @click="openModal(font)" />
+      @open-detail="openModal(font)"
+      @fav="favorite($event, i)" />
   </div>
 </template>
 
@@ -38,30 +41,11 @@ export default class FontList extends Vue {
   private weight: number = 400;
   private italic: boolean = false;
   private kerning: number = 0;
+  private fontArray: IFontFamily[] = [];
+  private rerenderKey = true;
 
-  openModal(font: IFontFamily) {
-    this.moreFont = font;
-    this.showModal = true;
-  }
-
-  closeModal() {
-    this.showModal = false;
-  }
-
-  get fontList() {
-    return [
-      // 重複削除
-      ...new Map(
-        // フォント一覧取得
-        (fontManager.getAvailableFontsSync() as IFontDescripter[])
-        .sort((a: IFontDescripter, b: IFontDescripter) => ((a.postscriptName < b.postscriptName)? -1: 1))
-        .map(fd => [fd.postscriptName, fd])
-      ).values()
-    ];
-  }
-
-  get fontArray(): IFontFamily[] {
-    return this.fontList.reduce((arr, fd) => {
+  created() {
+    this.fontList.reduce((arr, fd) => {
       const i = arr.findIndex(obj => obj.family === fd.family);
       if (i < 0) {
         arr.push({
@@ -91,8 +75,41 @@ export default class FontList extends Vue {
       return arr;
     }, [] as IFontFamily[]).map(f => {
       f.postscripts = f.postscripts.sort((p1, p2) => (p1.weight > p2.weight)? 1: -1);
+      this.fontArray.push(f);
       return f;
     });
+  }
+
+  f() {
+    console.log(this.fontArray)
+    //this.rerenderKey++;
+  }
+
+  openModal(font: IFontFamily) {
+    this.moreFont = font;
+    this.showModal = true;
+  }
+
+  closeModal() {
+    this.showModal = false;
+  }
+
+  favorite(v: boolean, i: number) {
+    console.log('fav', v, i);
+    this.fontArray[i].favorite = v;
+    this.rerenderKey = !this.rerenderKey;
+  }
+
+  get fontList() {
+    return [
+      // 重複削除
+      ...new Map(
+        // フォント一覧取得
+        (fontManager.getAvailableFontsSync() as IFontDescripter[])
+        .sort((a: IFontDescripter, b: IFontDescripter) => ((a.postscriptName < b.postscriptName)? -1: 1))
+        .map(fd => [fd.postscriptName, fd])
+      ).values()
+    ];
   }
 }
 </script>
@@ -105,6 +122,8 @@ export default class FontList extends Vue {
   justify-content: space-around;
   align-items: stretch;
   align-content: flex-start;
+
+  font-synthesis: none;
 
   .font-view {
     flex-grow: 1;
