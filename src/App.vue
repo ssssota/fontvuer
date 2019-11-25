@@ -19,14 +19,6 @@ import FontList from './components/FontList.vue';
 export default class App extends Vue {
   previewText: string = "fontvuer";
 
-  users:any;
-  created() {
-    this.users = [
-      {id: 0, name:'a'},
-      {id: 1, name:'b'}
-    ]
-  }
-
   onChangePreviewText(text: string) {
     this.previewText = text;
   }
