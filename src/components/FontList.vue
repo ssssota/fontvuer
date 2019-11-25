@@ -6,6 +6,7 @@
       :preview-text="previewText"
       :kerning="kerning"
       @close="closeModal" />
+    <Loading v-if="fontArray.length < 1" />
     <FontView
       v-for="(font, i) in fontArray"
       :key="font.family"
@@ -23,14 +24,17 @@
 import { Component, Prop, Vue } from 'vue-property-decorator';
 import FontView from './FontView.vue';
 import FontDetail from './FontDetail.vue';
+import Loading from './Loading.vue';
 import { IFontDescripter, IFontManager, IFontFamily, IPostscript } from '../type';
+import { getFontList, saveFavFonts } from '../fonts';
 
 const fontManager: IFontManager = require('font-manager');
 
 @Component({
   components: {
     FontView,
-    FontDetail
+    FontDetail,
+    Loading
   }
 })
 export default class FontList extends Vue {
@@ -45,39 +49,7 @@ export default class FontList extends Vue {
   private rerenderKey = true;
 
   created() {
-    this.fontList.reduce((arr, fd) => {
-      const i = arr.findIndex(obj => obj.family === fd.family);
-      if (i < 0) {
-        arr.push({
-          family: fd.family,
-          favorite: false,
-          postscripts: [
-            {
-              name: fd.postscriptName,
-              italic: fd.italic,
-              monospace: fd.monospace,
-              style: fd.style,
-              weight: fd.weight,
-              width: fd.width
-            } as IPostscript
-          ]
-        })
-      } else {
-        arr[i].postscripts.push({
-          name: fd.postscriptName,
-          italic: fd.italic,
-          monospace: fd.monospace,
-          style: fd.style,
-          weight: fd.weight,
-          width: fd.width
-        } as IPostscript)
-      }
-      return arr;
-    }, [] as IFontFamily[]).map(f => {
-      f.postscripts = f.postscripts.sort((p1, p2) => (p1.weight > p2.weight)? 1: -1);
-      this.fontArray.push(f);
-      return f;
-    });
+    getFontList().then(res => res.map(ff => this.fontArray.push(ff)))
   }
 
   openModal(font: IFontFamily) {
@@ -91,18 +63,7 @@ export default class FontList extends Vue {
 
   favorite(v: boolean, i: number) {
     this.fontArray[i].favorite = v;
-  }
-
-  get fontList() {
-    return [
-      // 重複削除
-      ...new Map(
-        // フォント一覧取得
-        (fontManager.getAvailableFontsSync() as IFontDescripter[])
-        .sort((a: IFontDescripter, b: IFontDescripter) => ((a.postscriptName < b.postscriptName)? -1: 1))
-        .map(fd => [fd.postscriptName, fd])
-      ).values()
-    ];
+    saveFavFonts(this.fontArray);
   }
 }
 </script>

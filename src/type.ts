@@ -23,6 +23,7 @@ export interface IFontManager {
 
 export interface IPostscript {
   name: string;
+  favorite: boolean;
   italic: boolean;
   monospace: boolean;
   style: string;

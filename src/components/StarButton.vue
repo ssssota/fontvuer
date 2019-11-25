@@ -2,6 +2,7 @@
   <span class="star-button">
     <button v-if="_fav" @click="_fav=false"><img src="../assets/star-24px.svg"></button>
     <button v-else @click="_fav=true"><img src="../assets/star_border-24px.svg"></button>
+    <p class="description">Favorite</p>
   </span>
 </template>
 
@@ -21,6 +22,7 @@ export default class StarButton extends Vue {
 .star-button {
   width: 24px;
   height: 24px;
+  position: relative;
 
   button {
     // fix appearance
@@ -38,7 +40,27 @@ export default class StarButton extends Vue {
 
     &:hover {
       background: rgba(0, 0, 0, .1);
+
+      + .description {
+        opacity: 1;
+      }
     }
+  }
+  .description {
+    // fix position
+    position: absolute;
+    top: 0;
+    left: 24px;
+    // fix appearance
+    opacity: 0;
+    font-size: 12px;
+    font-family: 'Avenir', Helvetica, Arial, sans-serif;
+    background: rgba(0, 0, 0, 0.75);
+    color: #f5f5f5;
+    border-radius: 2px;
+    padding: 1px 2px;
+
+    transition: all 0s ease;
   }
 }
 </style>
