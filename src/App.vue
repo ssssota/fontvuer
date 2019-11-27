@@ -1,6 +1,6 @@
 <template>
   <v-app>
-    <HeaderItem v-model="previewText" />
+    <HeaderItem />
     <FontList
       :preview-text="(previewText == '')? 'Preview text': previewText"
       :onlyFavs="false" />
