@@ -60,7 +60,7 @@ export default class StarButton extends Vue {
     border-radius: 2px;
     padding: 1px 2px;
 
-    transition: all 0s ease;
+    transition: all 0.2s ease;
   }
 }
 </style>

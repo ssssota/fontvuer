@@ -7,16 +7,31 @@
       :kerning="kerning"
       @close="closeModal" />
     <Loading v-if="fontArray.length < 1" />
-    <FontView
-      v-for="(font, i) in fontArray"
-      :key="font.family"
-      :preview-text="previewText"
-      :font="font"
-      :italic="italic"
-      :weight="weight"
-      :kerning="kerning"
-      @open-detail="openModal(font)"
-      @fav="favorite($event, i)" />
+    <div class="fontview-wrapper">
+      <FontView
+        v-for="(font, i) in targetFontArray"
+        :key="font.family"
+        :preview-text="previewText"
+        :font="font"
+        :italic="italic"
+        :weight="weight"
+        :kerning="kerning"
+        @open-detail="openModal(font)"
+        @fav="favorite($event, i)" />
+    </div>
+    <div class="fontview-wrapper" v-if="false">
+      <!-- TODO:postscripts view -->
+      <FontView
+        v-for="(font, i) in targetFontArray"
+        :key="font.family"
+        :preview-text="previewText"
+        :font="font"
+        :italic="italic"
+        :weight="weight"
+        :kerning="kerning"
+        @open-detail="openModal(font)"
+        @fav="favorite($event, i)" />
+    </div>
   </div>
 </template>
 
@@ -39,6 +54,7 @@ const fontManager: IFontManager = require('font-manager');
 })
 export default class FontList extends Vue {
   @Prop({ default: 'fontvuer' }) private previewText!: string;
+  @Prop({ default: false }) private onlyFavs!: boolean;
   private moreFont!: IFontFamily;
   private showModal: boolean = false;
 
@@ -50,6 +66,10 @@ export default class FontList extends Vue {
 
   created() {
     getFontList().then(res => res.map(ff => this.fontArray.push(ff)))
+  }
+
+  get targetFontArray() {
+    return (this.onlyFavs)? this.fontArray.filter(ff => ff.favorite): this.fontArray;
   }
 
   openModal(font: IFontFamily) {
@@ -70,19 +90,21 @@ export default class FontList extends Vue {
 
 <style lang="scss" scoped>
 .font-list {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  justify-content: space-around;
-  align-items: stretch;
-  align-content: flex-start;
+  .fontview-wrapper {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    align-items: stretch;
+    align-content: flex-start;
 
-  font-synthesis: none;
+    font-synthesis: none;
 
-  .font-view {
-    flex-grow: 1;
-    flex-shrink: 0;
-    flex-basis: auto;;
+    .font-view {
+      flex-grow: 1;
+      flex-shrink: 0;
+      flex-basis: auto;;
+    }
   }
 }
 </style>

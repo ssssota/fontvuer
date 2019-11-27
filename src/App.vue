@@ -1,7 +1,9 @@
 <template>
   <div id="app">
     <HeaderItem v-model="previewText" />
-    <FontList :preview-text="(previewText == '')? 'Preview text': previewText" />
+    <FontList
+      :preview-text="(previewText == '')? 'Preview text': previewText"
+      :onlyFavs="false" />
   </div>
 </template>
 
