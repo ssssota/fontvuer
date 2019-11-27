@@ -42,11 +42,16 @@ export default class FontDetail extends Vue {
   selectedPostscript: number = 0;
 
   get style() {
+    const fontStyle =
+      (this.font.postscripts[this.selectedPostscript].italic)? 'italic':
+      (this.font.postscripts[this.selectedPostscript].style.toLowerCase().includes('oblique'))? 'oblique':
+      'normal';
+
     return {
       margin: 0,
       fontSize: '3em',
       fontFamily: this.font.family,
-      fontStyle: (this.font.postscripts[this.selectedPostscript].italic)? 'italic': 'normal',
+      fontStyle: fontStyle,
       fontWeight: this.font.postscripts[this.selectedPostscript].weight,
       fontKerning: `${this.kerning}em`
     };
