@@ -1,12 +1,11 @@
-export default class Store {
-  private _previewText!: string
-  private _italic!: boolean
-  private _weight!: number
-  debug: boolean
+import { Component, Vue } from 'vue-property-decorator'
 
-  constructor(_debug: boolean = false) {
-    this.debug = _debug
-  }
+@Component
+export default class Store extends Vue {
+  private _previewText: string = 'fontvuer'
+  private _italic: boolean = false
+  private _weight: number = 400
+  debug: boolean = process.env.NODE_ENV !== 'production';
 
   get previewText() {
     return this._previewText

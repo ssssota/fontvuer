@@ -2,7 +2,6 @@
   <v-app>
     <HeaderItem />
     <FontList
-      :preview-text="(previewText == '')? 'Preview text': previewText"
       :onlyFavs="false" />
     <!--
     <v-app-bar

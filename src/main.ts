@@ -5,7 +5,7 @@ import Store from './store'
 
 Vue.config.productionTip = false
 
-Vue.prototype.$store = new Store(process.env.NODE_ENV !== 'production')
+Vue.prototype.$store = new Store()
 
 new Vue({
   vuetify,

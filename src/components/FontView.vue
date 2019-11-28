@@ -1,6 +1,6 @@
 <template>
   <div class="font-view" @click="$emit('click')">
-    <h3 @click.self="$emit('open-detail')" :style="style">{{ previewText }} <StarButton v-model="_favorite" /></h3>
+    <h3 @click.self="$emit('open-detail')" :style="style">{{ $store.previewText }} <StarButton v-model="_favorite" /></h3>
     <p @click="$emit('open-detail')">{{ font.family }}</p>
   </div>
 </template>
@@ -8,6 +8,7 @@
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator';
 import { IFontFamily, IPostscript } from '../type';
+import Store from '../store';
 import StarButton from './StarButton.vue';
 
 @Component({
