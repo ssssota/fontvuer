@@ -13,7 +13,7 @@ export default class VToggleBtn extends Vue {
   @Prop({ required: true }) private falseIcon!: string;
   @Prop() private trueColor!: string | undefined;
   @Prop() private falseColor!: string | undefined;
-  value: boolean = true;
+  private value: boolean = false;
 
   get bvalue() {
     return this.value;

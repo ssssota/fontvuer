@@ -1,6 +1,69 @@
 <template>
+  <v-card max-width="600">
+    <v-card-title>
+      {{ state.detailFont.family }}
+      <v-copy-btn :copy-text="state.detailFont.family" />
+    </v-card-title>
+    <v-card-text>
+      <v-btn-toggle
+        mandatory
+        v-model="selectedPostscriptIndex"
+        v-if="state.detailFont.postscripts.length > 1">
+        <v-btn
+          x-small
+          dense
+          v-for="(ps, i) in state.detailFont.postscripts"
+          :key="ps.name"
+          :value="i">
+          {{ ps.style }}
+        </v-btn>
+      </v-btn-toggle>
+      <h3 :style="style">{{ previewText }}</h3>
+      <v-list-item>
+        <v-list-item-content>
+          <v-list-item-title>Postscript name</v-list-item-title>
+          <v-list-item-subtitle>
+            {{ selectedPostscript.name }}
+          </v-list-item-subtitle>
+        </v-list-item-content>
+      </v-list-item>
+      <v-list-item>
+        <v-list-item-content>
+          <v-list-item-title>Italic support</v-list-item-title>
+          <v-list-item-subtitle>
+            {{ boolToYenNo(selectedPostscript.italic) }}
+          </v-list-item-subtitle>
+        </v-list-item-content>
+      </v-list-item>
+      <v-list-item>
+        <v-list-item-content>
+          <v-list-item-title>Font weight</v-list-item-title>
+          <v-list-item-subtitle>
+            {{ selectedPostscript.weight }}
+          </v-list-item-subtitle>
+        </v-list-item-content>
+      </v-list-item>
+      <v-list-item>
+        <v-list-item-content>
+          <v-list-item-title>Font width</v-list-item-title>
+          <v-list-item-subtitle>
+            {{ selectedPostscript.width }}
+          </v-list-item-subtitle>
+        </v-list-item-content>
+      </v-list-item>
+      <v-list-item>
+        <v-list-item-content>
+          <v-list-item-title>Monospace support</v-list-item-title>
+          <v-list-item-subtitle>
+            {{ boolToYenNo(selectedPostscript.monospace) }}
+          </v-list-item-subtitle>
+        </v-list-item-content>
+      </v-list-item>
+    </v-card-text>
+  </v-card>
+<!--
   <Modal @close="$emit('close')">
-    <h2>{{ font.family }}</h2>
+    <h2>{{ state.detailFont.family }}</h2>
     <div class="postscripts">
       <p class="select-wrapper" v-if="font.postscripts.length > 1">
         <CustomSelect v-model="selectedPostscript">
@@ -20,41 +83,51 @@
       <p>weight: {{font.postscripts[selectedPostscript].weight}}</p>
       <p>width: {{font.postscripts[selectedPostscript].width}}</p>
     </div>
-  </Modal>
+  </Modal>-->
 </template>
 
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator';
-import Modal from './Modal.vue';
-import CustomSelect from './CustomSelect.vue';
+import VCopyBtn from './VCopyBtn.vue';
 import { IFontFamily, IPostscript } from '../type';
+import { IState, store } from '../store';
 
 @Component({
   components: {
-    Modal,
-    CustomSelect
+    VCopyBtn
   }
 })
-export default class FontDetail extends Vue {
-  @Prop() private font!: IFontFamily;
-  @Prop() private previewText!: string;
-  @Prop() private kerning!: number;
-  selectedPostscript: number = 0;
+export default class VFontDetailCard extends Vue {
+  private state: IState = store.state;
+  private copyMessage: string = 'Copy';
+  private selectedPostscriptIndex: number = 0;
+
+  get selectedPostscript() {
+    if (this.state.detailFont.postscripts.length <= 1) return this.state.detailFont.postscripts[0]
+    return this.state.detailFont.postscripts[this.selectedPostscriptIndex]
+  }
+  get previewText() {
+    return store.getPreviewText();
+  }
 
   get style() {
     const fontStyle =
-      (this.font.postscripts[this.selectedPostscript].italic)? 'italic':
-      (this.font.postscripts[this.selectedPostscript].style.toLowerCase().includes('oblique'))? 'oblique':
+      (this.selectedPostscript.italic)? 'italic':
+      (this.selectedPostscript.style.toLowerCase().includes('oblique'))? 'oblique':
       'normal';
 
     return {
-      margin: 0,
+      margin: '0.5em',
       fontSize: '3em',
-      fontFamily: this.font.family,
+      fontFamily: this.state.detailFont.family,
       fontStyle: fontStyle,
-      fontWeight: this.font.postscripts[this.selectedPostscript].weight,
-      fontKerning: `${this.kerning}em`
+      fontWeight: this.selectedPostscript.weight,
+      fontKerning: `${this.state.kerning}em`
     };
+  }
+
+  boolToYenNo(val: boolean): string {
+    return val? 'Yes': 'No';
   }
 }
 </script>
