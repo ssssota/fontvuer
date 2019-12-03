@@ -1,21 +1,42 @@
 <template>
-  <v-card max-width="450">
+  <v-card max-width="450" class="pa-1">
     <v-card-title>Settings</v-card-title>
     <v-list>
       <v-list-item>
+        <v-list-item-title>Font size(px)</v-list-item-title>
+        <v-list-item-action>
+          <v-select
+            v-model="state.size"
+            :items="[6,8,10,12,14,16,20,24,32,36,48,64,72,96]"
+            @change="changeSize" />
+        </v-list-item-action>
+      </v-list-item>
+      <v-list-item>
         <v-list-item-title>Font weight</v-list-item-title>
-        <v-select
-          :items="fontWeightItems"
-          v-model="state.weight">
-        </v-select>
+        <v-list-item-action>
+          <v-select
+            :items="fontWeightItems"
+            v-model="state.weight">
+          </v-select>
+        </v-list-item-action>
       </v-list-item>
       <v-list-item>
         <v-list-item-title>Italic</v-list-item-title>
-        <v-switch v-model="state.italic" />
+        <v-list-item-action>
+          <v-switch v-model="state.italic" />
+        </v-list-item-action>
+      </v-list-item>
+      <v-list-item>
+        <v-list-item-title>Kerning</v-list-item-title>
+        <v-list-item-action>
+          <v-text-field type="number" v-model="state.kerning" />
+        </v-list-item-action>
       </v-list-item>
       <v-list-item>
         <v-list-item-title>Favorite only</v-list-item-title>
-        <v-switch v-model="state.favotiteOnly" />
+        <v-list-item-action>
+          <v-switch v-model="state.favotiteOnly" />
+        </v-list-item-action>
       </v-list-item>
       <v-list-item>
         <v-spacer />
@@ -58,6 +79,10 @@ export default class VSettings extends Vue {
       { text: '800(Extra Bold)', value: 800 },
       { text: '900(Heavy)', value: 900 }
     ];
+  }
+
+  changeSize(val: number) {
+    store.setSize(val)
   }
 }
 </script>

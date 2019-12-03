@@ -15,28 +15,6 @@
       <v-btn icon text @click="$emit('open-setting')">
         <v-icon>mdi-tune</v-icon>
       </v-btn>
-      <!-- 
-      <v-select
-        :items="[100,200,300,400,500,600,700,800,900]"
-        hide-details
-        placceholder="Weight"
-        v-model="state.weight"
-        @change="setWeight">
-      </v-select>
-      <v-toggle-btn
-        trueIcon="mdi-format-italic"
-        trueColor="black"
-        falseIcon="mdi-format-italic"
-        falseColor="grey"
-        v-model="state.italic"
-        @change="setItalic" />
-      <v-toggle-btn
-        trueIcon="mdi-star"
-        trueColor="black"
-        falseIcon="mdi-star"
-        falseColor="grey"
-        v-model="state.favoriteOnly"
-        @change="setFavoriteOnly" /> -->
   </v-app-bar>
 </template>
 
@@ -52,18 +30,22 @@ import { IState, store } from '../store';
 })
 export default class VHeader extends Vue {
   private state: IState = store.state;
+  get fontWeightItems(): Array<object> {
+    return [
+      { text: '100(Thin)', value: 100 },
+      { text: '200(Extra Light)', value: 200 },
+      { text: '300(Light)', value: 300 },
+      { text: '400(Normal)', value: 400 },
+      { text: '500(Medium)', value: 500 },
+      { text: '600(Semi Bold)', value: 600 },
+      { text: '700(Bold)', value: 700 },
+      { text: '800(Extra Bold)', value: 800 },
+      { text: '900(Heavy)', value: 900 }
+    ];
+  }
 
-  setPreviewText(_previewText: string) {
-    store.setPreviewText(_previewText);
-  }
-  setItalic(_italic: boolean) {
-    store.setItalic(_italic);
-  }
-  setWeight(_weight: number) {
-    store.setWeight(_weight);
-  }
-  setFavoriteOnly(_favoriteOnly: boolean) {
-    store.setFavoriteOnly(_favoriteOnly);
+  changeSize(val: number) {
+    store.setSize(val)
   }
 }
 </script>
