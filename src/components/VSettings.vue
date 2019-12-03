@@ -16,8 +16,7 @@
         <v-list-item-action>
           <v-select
             :items="fontWeightItems"
-            v-model="state.weight">
-          </v-select>
+            v-model="state.weight" />
         </v-list-item-action>
       </v-list-item>
       <v-list-item>
