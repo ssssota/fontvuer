@@ -40,7 +40,7 @@ const fontManager: IFontManager = require('font-manager');
     VFontDetailCard
   }
 })
-export default class FontList extends Vue {
+export default class VFontList extends Vue {
   private fontArray: IFontFamily[] = [];
   private showModal: boolean = false;
   private state: IState = store.state;

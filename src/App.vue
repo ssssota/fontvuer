@@ -5,7 +5,7 @@
       <v-settings />
     </v-dialog>
     <v-content>
-      <FontList />
+      <v-font-list />
     </v-content>
   </v-app>
 </template>
@@ -14,14 +14,14 @@
 import { Component, Vue } from 'vue-property-decorator';
 import VHeader from './components/VHeader.vue';
 import VSettings from './components/VSettings.vue';
-import FontList from './components/FontList.vue';
+import VFontList from './components/VFontList.vue';
 import { IState, store } from './store';
 
 @Component({
   components: {
     VHeader,
     VSettings,
-    FontList
+    VFontList
   },
 })
 export default class App extends Vue {
