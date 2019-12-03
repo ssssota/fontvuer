@@ -38,45 +38,8 @@ import { IState, store } from '../store';
 })
 export default class VFontCard extends Vue {
   @Prop() private font!: IFontFamily;
-  @Prop({ default: 400 }) private weight!: number;
-  @Prop({ default: false }) private italic!: boolean;
-  @Prop({ default: 0 }) private kerning!: number;
 
   private state: IState = store.state;
-  private copyMessage: string = 'Copy';
-
-  copyFamilyName() {
-    // 空div 生成
-    const preWrapper = document.createElement("div");
-    // 選択用のタグ生成
-    const pre = document.createElement('pre');
-    // 親要素のCSSで user-select: none だとコピーできないので書き換える
-    pre.style.webkitUserSelect = 'auto';
-    pre.style.userSelect = 'auto';
-
-    preWrapper.appendChild(pre);
-    pre.textContent = this.font.family;
-
-    // 要素を画面外へ
-    preWrapper.style.position = 'fixed';
-    preWrapper.style.right = '200%';
-
-    // body に追加
-    document.body.appendChild(preWrapper);
-    // 要素を選択
-    document.getSelection()!.selectAllChildren(preWrapper);
-
-    try {
-      if (!document.execCommand('copy')) throw new Error('CopyFailed');
-      this.copyMessage = 'Copied!';
-    } catch (e) {
-      this.copyMessage = 'Copy failed';
-    }
-    // 要素削除
-    document.body.removeChild(preWrapper);
-
-    setTimeout(() => this.copyMessage = 'Copy', 1000);
-  }
 
   setDetailFont() {
     store.setDetailFont(this.font);
