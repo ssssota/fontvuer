@@ -1,5 +1,5 @@
 <template>
-  <v-btn text @click="bvalue = !value" class="v-toggle-btn">
+  <v-btn text @click="click" class="v-toggle-btn">
     <v-icon :color="color">{{ iconName }}</v-icon>
   </v-btn>
 </template>
@@ -13,20 +13,29 @@ export default class VToggleBtn extends Vue {
   @Prop({ required: true }) private falseIcon!: string;
   @Prop() private trueColor!: string | undefined;
   @Prop() private falseColor!: string | undefined;
-  private value: boolean = false;
+  @Prop({ default: false }) private initValue!: boolean;
+  private innerValue!: boolean;
 
+  click() {
+    console.log(this.bvalue, this.innerValue);
+    console.log(!this.bvalue);
+    this.bvalue = !this.bvalue;
+    console.log(this.bvalue, this.innerValue);
+  }
   get bvalue() {
-    return this.value;
+    return this.innerValue = (typeof this.innerValue === 'undefined')? this.initValue: this.innerValue;
   }
   set bvalue(val) {
-    this.value = val;
-    this.$emit('change', this.value);
+    console.log('set', this.innerValue, val);
+    this.innerValue = val;
+    console.log('set', this.innerValue, val)
+    this.$emit('change', this.innerValue);
   }
   get iconName() {
-    return (this.value)? this.trueIcon: this.falseIcon;
+    return (this.bvalue)? this.trueIcon: this.falseIcon;
   }
   get color() {
-    return (this.value)? this.trueColor: this.falseColor;
+    return (this.bvalue)? this.trueColor: this.falseColor;
   }
 }
 </script>

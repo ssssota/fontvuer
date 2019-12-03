@@ -7,17 +7,19 @@ export interface IState {
   kerning: number
   favoriteOnly: boolean
   detailFont: IFontFamily
+  favFonts: string[]
 }
 
 export const store = {
   debug: process.env.NODE_ENV !== 'production',
   state: {
-    previewText: '',
+    previewText: 'fontvuer',
     italic: false,
     weight: 400,
     kerning: 0,
     favoriteOnly: false,
-    detailFont: {}
+    favFonts: [],
+    detailFont: {} as IFontFamily
   } as IState,
 
   getPreviewText() {

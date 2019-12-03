@@ -10,7 +10,8 @@
           <v-toggle-btn
             v-on="on"
             trueIcon="mdi-star"
-            falseIcon="mdi-star-outline" />
+            falseIcon="mdi-star-outline"
+            :value="state.favFonts" />
         </template>
         <span>Favorite</span>
       </v-tooltip>

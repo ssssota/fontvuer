@@ -12,6 +12,10 @@
         </v-text-field>
       </v-toolbar-title>
       <v-spacer />
+      <v-btn icon text @click="$emit('open-setting')">
+        <v-icon>mdi-tune</v-icon>
+      </v-btn>
+      <!-- 
       <v-select
         :items="[100,200,300,400,500,600,700,800,900]"
         hide-details
@@ -32,7 +36,7 @@
         falseIcon="mdi-star"
         falseColor="grey"
         v-model="state.favoriteOnly"
-        @change="setFavoriteOnly" />
+        @change="setFavoriteOnly" /> -->
   </v-app-bar>
 </template>
 
