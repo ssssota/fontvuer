@@ -2,6 +2,7 @@ import { IFontFamily } from './type';
 
 export interface IState {
   previewText: string
+  size: number
   italic: boolean
   weight: number
   kerning: number
@@ -14,6 +15,7 @@ export const store = {
   debug: process.env.NODE_ENV !== 'production',
   state: {
     previewText: 'fontvuer',
+    size: 16,
     italic: false,
     weight: 400,
     kerning: 0,
