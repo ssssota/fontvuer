@@ -2,7 +2,7 @@
   <div class="font-list">
     <v-dialog v-model="showModal" max-width="600">
       <v-font-detail-card />
-    </v-dialog>
+    </v-dialog><!-- 
     <v-container fluid>
       <v-row
         dense>
@@ -20,6 +20,13 @@
             @open-modal="showModal = true" />
         </v-col>
       </v-row>
+    </v-container> -->
+    <v-container fluid class="d-flex flex-wrap justify-space-around align-strech">
+      <v-font-card
+        v-for="(font) in targetFontArray"
+        :key="font.family"
+        :font="font"
+        @open-modal="showModal = true" />
     </v-container>
   </div>
 </template>

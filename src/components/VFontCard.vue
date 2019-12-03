@@ -1,5 +1,5 @@
 <template>
-  <v-card>
+  <v-card class="ma-1" tile outlined>
     <v-card-title
       :style="style"
       @click.self.stop="setDetailFont">
