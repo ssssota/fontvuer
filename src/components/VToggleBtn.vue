@@ -17,18 +17,13 @@ export default class VToggleBtn extends Vue {
   private innerValue!: boolean;
 
   click() {
-    console.log(this.bvalue, this.innerValue);
-    console.log(!this.bvalue);
     this.bvalue = !this.bvalue;
-    console.log(this.bvalue, this.innerValue);
   }
   get bvalue() {
     return this.innerValue = (typeof this.innerValue === 'undefined')? this.initValue: this.innerValue;
   }
   set bvalue(val) {
-    console.log('set', this.innerValue, val);
     this.innerValue = val;
-    console.log('set', this.innerValue, val)
     this.$emit('change', this.innerValue);
   }
   get iconName() {
