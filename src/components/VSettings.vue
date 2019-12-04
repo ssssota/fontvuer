@@ -28,13 +28,13 @@
       <v-list-item>
         <v-list-item-title>Kerning</v-list-item-title>
         <v-list-item-action>
-          <v-text-field type="number" v-model="state.kerning" />
+          <v-text-field type="number" step="0.1" v-model="state.kerning" />
         </v-list-item-action>
       </v-list-item>
       <v-list-item>
         <v-list-item-title>Favorite only</v-list-item-title>
         <v-list-item-action>
-          <v-switch v-model="state.favotiteOnly" />
+          <v-switch v-model="state.favoriteOnly" />
         </v-list-item-action>
       </v-list-item>
       <v-list-item>
@@ -53,12 +53,18 @@
           </v-btn>
           <v-toolbar-title>Settings</v-toolbar-title>
         </v-toolbar>
+        <v-list>
+          <v-list-item>
+            <v-switch label="Force italic" v-model="state.forceItalic" />
+          </v-list-item>
+        </v-list>
       </v-card>
     </v-dialog>
   </v-card>
 </template>
 
 <script lang="ts">
+import Store from 'electron-store';
 import { Component, Vue } from 'vue-property-decorator';
 import { IState, store } from '../store';
 
@@ -66,6 +72,7 @@ import { IState, store } from '../store';
 export default class VSettings extends Vue {
   private state: IState = store.state;
   private showSettings: boolean = false;
+  private estore: Store = new Store();
   get fontWeightItems(): Array<object> {
     return [
       { text: '100(Thin)', value: 100 },

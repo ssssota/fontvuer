@@ -94,12 +94,15 @@ export default class VFontDetailCard extends Vue {
       'normal';
 
     return {
-      margin: '0.5em',
+      padding: '16px',
       fontSize: `${this.state.size}px`,
       fontFamily: this.state.detailFont.family,
       fontStyle: fontStyle,
       fontWeight: this.selectedPostscript.weight,
-      fontKerning: `${this.state.kerning}em`
+      letterSpacing: `${this.state.kerning}em`,
+      fontKerning: 'normal',
+      fontFutureSettings: 'palt 1',
+      lineHeight: `${this.state.size+4}px`
     };
   }
 

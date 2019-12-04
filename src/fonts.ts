@@ -1,4 +1,7 @@
 import { IFontDescripter, IFontManager, IFontFamily, IPostscript } from './type'
+import Store from 'electron-store';
+
+const estore = new Store();
 
 interface IFavoriteFonts {
   favFamilies: string[];
@@ -17,7 +20,7 @@ export const getFontList = (): Promise<IFontFamily[]> => new Promise(async resol
     |1    |0    |0     |
     |1    |1    |cache |
   */
-  const manager = await getFontListFromManager()
+  const manager = await getFontListFromManager()/* 
   const favs = getFavFonts()
   const result = manager.map(ff => {
     if (favs.favFamilies.includes(ff.family)) ff.favorite = true
@@ -25,8 +28,8 @@ export const getFontList = (): Promise<IFontFamily[]> => new Promise(async resol
       if (favs.favPostscripts.includes(ps.name)) ps.favorite = true
     })
     return ff
-  })
-  resolve(result)
+  }) */
+  resolve(manager)
 })
 
 // get fontlist(IFontFamily[]) from font-manager module
@@ -67,32 +70,12 @@ export const getFontListFromManager = (): Promise<IFontFamily[]> => new Promise(
 })
 
 // get favorite fonts from webstorage
-export const getFavFonts = (): IFavoriteFonts => {
-  const favFamiliesString: string | null = localStorage.getItem('favFamilies')
-  const favPostscriptsString: string | null = localStorage.getItem('favPostscript')
-  const favFamilies: string[] = (favFamiliesString)? JSON.parse(favFamiliesString): []
-  const favPostscripts: string[] = (favPostscriptsString)? JSON.parse(favPostscriptsString): []
-
-  return {
-    favFamilies,
-    favPostscripts
-  }
+export const getFavFonts = (fontFamilyName: string): boolean => {
+  estore
 }
 
 // save favorite font to webstorage
-export const saveFavFonts = (fontList: IFontFamily[]) => {
-  const favFamilies: string[] = []
-  const favPostscripts: string[] = []
-
-  fontList.forEach(ff => {
-    if (ff.favorite) favFamilies.push(ff.family)
-    ff.postscripts.forEach(ps => {
-      if (ps.favorite) favPostscripts.push(ps.name)
-    })
-  })
-
-  localStorage.setItem('favFamilies', JSON.stringify(favFamilies))
-  localStorage.setItem('favPostscript', JSON.stringify(favPostscripts))
+export const saveFavFonts = (fontFamilyName: string) => {
 }
 
 const getFontDescripters = (force: boolean = false): IFontDescripter[] => {

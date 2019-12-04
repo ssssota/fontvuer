@@ -1,16 +1,23 @@
 import { IFontFamily } from './type';
+import Store from 'electron-store';
+
+const estore = new Store();
 
 const INIT_SIZE = 32
 const INIT_WEIGHT = 400
 const INIT_KERNING = 0
 const INIT_ITALIC = false
+const INIT_FORCE_ITALIC = estore.get('settings.forceItalic')
 const INIT_PREVIEW = 'fontvuer'
 const INIT_FAV_ONLY = false
+
+if (!INIT_FORCE_ITALIC) estore.set('settings.forceItalic', false)
 
 export interface IState {
   previewText: string
   size: number
   italic: boolean
+  forceItalic: boolean
   weight: number
   kerning: number
   favoriteOnly: boolean
@@ -24,6 +31,7 @@ export const store = {
     previewText: INIT_PREVIEW,
     size: INIT_SIZE,
     italic: INIT_ITALIC,
+    forceItalic: INIT_FORCE_ITALIC,
     weight: INIT_WEIGHT,
     kerning: INIT_KERNING,
     favoriteOnly: INIT_FAV_ONLY,
@@ -49,6 +57,10 @@ export const store = {
     //if (this.debug) console.log('Italic →', _italic)
     this.state.italic = _italic
   },
+  setForceItalic(_forceItalic: boolean) {
+    //if (this.debug) console.log('Force italic →', _forceItalic)
+    this.state.forceItalic = _forceItalic
+  },
   setWeight(_weight: number) {
     if (typeof _weight !== "number" || _weight < 0 || 1000 < _weight) _weight = INIT_WEIGHT
     //if (this.debug) console.log('Weight →', _weight)
@@ -65,7 +77,7 @@ export const store = {
     this.state.favoriteOnly = _favoriteOnly
   },
   setDetailFont(_detailFont: IFontFamily) {
-    //if (this.debug) console.log('Detail font →', _detailFont.family)
+    if (this.debug) console.log('Detail font →', _detailFont.family)
     this.state.detailFont = _detailFont
   }
 }

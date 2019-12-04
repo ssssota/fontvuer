@@ -1,5 +1,5 @@
 <template>
-  <v-app-bar>
+  <v-app-bar dense>
     <v-toolbar-title>
       <v-text-field
         class="title"
@@ -32,7 +32,7 @@
         </v-tooltip>
         <v-tooltip bottom>
           <template v-slot:activator="{ on }">
-            <v-col cols="3" md="2" lg="1" v-on="on">
+            <v-col cols="4" md="2" lg="1" v-on="on">
               <v-select
                 hide-details
                 placeholder="Font weight"
@@ -42,18 +42,12 @@
           </template>
           <span class="caption">Font weight</span>
         </v-tooltip>
-        <v-col cols="3" md="2" lg="1">
-          <v-switch
-            class="mr-1"
-            hide-details
-            v-model="state.italic"
-            label="Italic" />
-        </v-col>
         <v-tooltip bottom>
           <template v-slot:activator="{ on }">
-            <v-col class="hidden-sm-and-down" cols="3" md="2" lg="1" v-on="on">
+            <v-col class="hidden-sm-and-down" cols="4" md="2" lg="1" v-on="on">
               <v-text-field
                 type="number"
+                step="0.1"
                 hide-details
                 v-model="state.kerning"
                 placeholder="Kerning" />
@@ -61,12 +55,18 @@
           </template>
           <span class="caption">Kerning</span>
         </v-tooltip>
-        <v-col cols="3" md="2" lg="1">
-          <v-switch
-            class="mr-1"
-            hide-details
-            v-model="state.favotiteOnly"
-            label="Fav only" />
+        <v-col cols="4" md="2" lg="1">
+          <v-btn-toggle
+            multiple
+            dense
+            group>
+            <v-btn text icon v-model="state.italic">
+              <v-icon>mdi-format-italic</v-icon>
+            </v-btn>
+            <v-btn text icon v-model="state.favoriteOnly">
+              <v-icon>mdi-star</v-icon>
+            </v-btn>
+          </v-btn-toggle>
         </v-col>
       </v-row>
     </v-container>

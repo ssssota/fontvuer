@@ -24,6 +24,9 @@ function createWindow () {
     titleBarStyle: 'hidden',
     width: 800,
     height: 600,
+    minWidth: 480,
+    minHeight: 50,
+    title: 'fontvuer',
     icon: path.join(__dirname, 'icon.png'),
     webPreferences: {
       nodeIntegration: true

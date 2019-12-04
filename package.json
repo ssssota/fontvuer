@@ -15,6 +15,7 @@
   "main": "background.js",
   "dependencies": {
     "core-js": "^3.3.2",
+    "electron-store": "^5.1.0",
     "electron-updater": "^4.2.0",
     "font-finder": "^1.0.4",
     "font-manager": "^0.3.0",
