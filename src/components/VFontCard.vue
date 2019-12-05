@@ -26,7 +26,7 @@
     </v-card-subtitle>
     <v-card-text v-if="showItalicWarn">
       <v-alert
-        class="ma-0"
+        class="ma-0 caption"
         type="warning"
         dense
         outlined

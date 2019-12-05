@@ -17,6 +17,17 @@ import VSettings from './components/VSettings.vue';
 import VFontList from './components/VFontList.vue';
 import { IState, store } from './store';
 
+window.addEventListener('keydown', e => {
+  if (!(e.ctrlKey || e.metaKey)) return;
+  console.log(e);
+  switch (e.key) {
+    case 'i':
+    case 'I':
+      console.log('i')
+      store.setItalic(!store.state.italic);
+  }
+});
+
 @Component({
   components: {
     VHeader,
@@ -35,6 +46,6 @@ export default class App extends Vue {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  color: black;
+  user-select: none;
 }
 </style>
