@@ -77,7 +77,7 @@ export const store = {
     this.state.favoriteOnly = _favoriteOnly
   },
   setDetailFont(_detailFont: IFontFamily) {
-    if (this.debug) console.log('Detail font →', _detailFont.family)
+    //if (this.debug) console.log('Detail font →', _detailFont.family)
     this.state.detailFont = _detailFont
   }
 }

@@ -1,12 +1,7 @@
 import { IFontDescripter, IFontManager, IFontFamily, IPostscript } from './type'
 import Store from 'electron-store';
 
-const estore = new Store();
-
-interface IFavoriteFonts {
-  favFamilies: string[];
-  favPostscripts: string[];
-}
+const estore = new Store()
 
 const fontManager: IFontManager = require('font-manager')
 let fontDescripters: IFontDescripter[]
@@ -20,15 +15,7 @@ export const getFontList = (): Promise<IFontFamily[]> => new Promise(async resol
     |1    |0    |0     |
     |1    |1    |cache |
   */
-  const manager = await getFontListFromManager()/* 
-  const favs = getFavFonts()
-  const result = manager.map(ff => {
-    if (favs.favFamilies.includes(ff.family)) ff.favorite = true
-    ff.postscripts.forEach(ps => {
-      if (favs.favPostscripts.includes(ps.name)) ps.favorite = true
-    })
-    return ff
-  }) */
+  const manager = await getFontListFromManager()
   resolve(manager)
 })
 
@@ -69,13 +56,31 @@ export const getFontListFromManager = (): Promise<IFontFamily[]> => new Promise(
   }))
 })
 
-// get favorite fonts from webstorage
-export const getFavFonts = (fontFamilyName: string): boolean => {
-  estore
+export const getFavFonts = (): string[] => {
+  return estore.get('favFonts', [])
 }
 
-// save favorite font to webstorage
-export const saveFavFonts = (fontFamilyName: string) => {
+export const getFavFontIndex = (fontFamilyName: string): number => {
+  return getFavFonts().findIndex(favFontFamilyName => favFontFamilyName === fontFamilyName);
+}
+
+export const getFavFont = (fontFamilyName: string): boolean => {
+  return getFavFontIndex(fontFamilyName) >= 0
+}
+
+export const saveFavFonts = (fontFamilyName: string, val: boolean) => {
+  const favFonts = getFavFonts()
+  const favFontIndex = getFavFontIndex(fontFamilyName)
+  const favFont = favFontIndex >= 0
+
+  if (val && !favFont) {
+    // add to fav fonts array
+    favFonts.push(fontFamilyName)
+    estore.set('favFonts', favFonts)
+  } else if (!val && favFont) {
+    // remove from fav fonts array
+    estore.set('favFonts', favFonts.splice(favFontIndex, 1))
+  }
 }
 
 const getFontDescripters = (force: boolean = false): IFontDescripter[] => {

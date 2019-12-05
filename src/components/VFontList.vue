@@ -1,5 +1,8 @@
 <template>
-  <div class="font-list">
+  <v-card
+    tile
+    elevation="0"
+    min-height="100%">
     <v-dialog v-model="showModal" max-width="600">
       <v-font-detail-card />
     </v-dialog>
@@ -10,7 +13,7 @@
         :font="font"
         @open-modal="showModal = true" />
     </v-container>
-  </div>
+  </v-card>
 </template>
 
 <script lang="ts">
@@ -39,7 +42,7 @@ export default class VFontList extends Vue {
   }
 
   get targetFontArray() {
-    return (this.state.favoriteOnly)? this.fontArray.filter(ff => ff.favorite): this.fontArray;
+    return this.fontArray;
   }
 }
 </script>
