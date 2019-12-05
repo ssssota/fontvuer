@@ -1,15 +1,21 @@
 <template>
   <v-app-bar dense>
     <v-toolbar-title>
-      <v-text-field
-        class="title"
-        clearable
-        hide-details
-        placeholder="Preview text"
-        value="fontvuer"
-        @change="setPreviewText"
-        @click:clear="setPreviewText('')">
-      </v-text-field>
+      <v-tooltip bottom>
+        <template v-slot:activator="{ on }">
+          <v-text-field
+            v-on="on"
+            class="title"
+            clearable
+            hide-details
+            placeholder="Preview text"
+            value="fontvuer"
+            @change="setPreviewText"
+            @click:clear="setPreviewText('')">
+        </v-text-field>
+        </template>
+        <span class="caption">Preview text</span>
+      </v-tooltip>
     </v-toolbar-title>
     <v-container fluid>
       <v-row
@@ -19,7 +25,7 @@
         dense>
         <v-tooltip bottom>
           <template v-slot:activator="{ on }">
-          <v-col cols="3" md="2" lg="1" v-on="on">
+          <v-col cols="4" md="3" lg="1" xl="1" v-on="on">
             <v-select
               hide-details
               placeholder="Font size"
@@ -32,7 +38,7 @@
         </v-tooltip>
         <v-tooltip bottom>
           <template v-slot:activator="{ on }">
-            <v-col cols="4" md="2" lg="1" v-on="on">
+            <v-col cols="4" md="3" lg="2" xl="1" v-on="on">
               <v-select
                 hide-details
                 placeholder="Font weight"
@@ -44,7 +50,7 @@
         </v-tooltip>
         <v-tooltip bottom>
           <template v-slot:activator="{ on }">
-            <v-col class="hidden-sm-and-down" cols="4" md="2" lg="1" v-on="on">
+            <v-col class="hidden-sm-and-down" cols="4" md="3" lg="2" xl="1" v-on="on">
               <v-text-field
                 type="number"
                 step="0.1"
@@ -55,24 +61,39 @@
           </template>
           <span class="caption">Kerning</span>
         </v-tooltip>
-        <v-col cols="4" md="2" lg="1">
+        <v-col cols="4" md="3" lg="2" xl="1">
           <v-btn-toggle
             multiple
             dense
             group>
-            <v-btn text icon v-model="state.italic">
-              <v-icon>mdi-format-italic</v-icon>
-            </v-btn>
-            <v-btn text icon v-model="state.favoriteOnly">
-              <v-icon>mdi-star</v-icon>
-            </v-btn>
+            <v-tooltip bottom>
+              <template v-slot:activator="{ on }">
+                <v-btn text icon v-model="state.italic" v-on="on">
+                  <v-icon>mdi-format-italic</v-icon>
+                </v-btn>
+              </template>
+              <span class="caption">Italic</span>
+            </v-tooltip>
+            <v-tooltip bottom>
+              <template v-slot:activator="{ on }">
+                <v-btn text icon v-model="state.favoriteOnly" v-on="on">
+                  <v-icon>mdi-star</v-icon>
+                </v-btn>
+              </template>
+              <span class="caption">Favorite only</span>
+            </v-tooltip>
           </v-btn-toggle>
         </v-col>
       </v-row>
     </v-container>
-    <v-btn icon text @click="$emit('open-setting')">
-      <v-icon>mdi-tune</v-icon>
-    </v-btn>
+      <v-tooltip bottom>
+        <template v-slot:activator="{ on }">
+          <v-btn icon text @click="$emit('open-setting')" v-on="on">
+            <v-icon>mdi-tune</v-icon>
+          </v-btn>
+      </template>
+      <span class="caption">More</span>
+    </v-tooltip>
   </v-app-bar>
 </template>
 
