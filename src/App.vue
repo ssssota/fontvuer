@@ -7,6 +7,9 @@
     <v-dialog v-model="showSettings" max-width="450">
       <v-settings />
     </v-dialog>
+    <v-dialog v-model="showSearch" max-width="450">
+      <v-search @close-search="showSearch = false" />
+    </v-dialog>
     <v-content>
       <v-font-list />
     </v-content>
@@ -17,6 +20,7 @@
 import { Component, Vue } from 'vue-property-decorator';
 import VHeader from './components/VHeader.vue';
 import VSettings from './components/VSettings.vue';
+import VSearch from './components/VSearch.vue';
 import VFontList from './components/VFontList.vue';
 import { IState, store } from './store';
 import { FontSizes, FontWeightItems } from './util';
@@ -25,6 +29,7 @@ import { FontSizes, FontWeightItems } from './util';
   components: {
     VHeader,
     VSettings,
+    VSearch,
     VFontList
   },
 })

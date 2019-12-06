@@ -7,22 +7,26 @@ const INIT_SIZE = 32
 const INIT_WEIGHT = 400
 const INIT_KERNING = 0
 const INIT_ITALIC = false
-const INIT_FORCE_ITALIC = estore.get('settings.forceItalic')
+const INIT_FORCE_ITALIC = estore.get('settings.forceItalic', false)
+const INIT_DISP_NO_ITALIC = estore.get('settings.dispNoItalic', false)
 const INIT_PREVIEW = 'fontvuer'
 const INIT_FAV_ONLY = false
 
 if (!INIT_FORCE_ITALIC) estore.set('settings.forceItalic', false)
+if (!INIT_DISP_NO_ITALIC) estore.set('settings.dispNoItalic', false)
 
 export interface IState {
   previewText: string
   size: number
   italic: boolean
   forceItalic: boolean
+  dispNoItalic: boolean
   weight: number
   kerning: number
   favoriteOnly: boolean
   detailFont: IFontFamily
   favFonts: string[]
+  searchText: string
 }
 
 export const store = {
@@ -32,11 +36,13 @@ export const store = {
     size: INIT_SIZE,
     italic: INIT_ITALIC,
     forceItalic: INIT_FORCE_ITALIC,
+    dispNoItalic: INIT_DISP_NO_ITALIC,
     weight: INIT_WEIGHT,
     kerning: INIT_KERNING,
     favoriteOnly: INIT_FAV_ONLY,
     favFonts: [],
-    detailFont: {} as IFontFamily
+    detailFont: {} as IFontFamily,
+    searchText: ''
   } as IState,
 
   getPreviewText() {
@@ -61,6 +67,10 @@ export const store = {
     //if (this.debug) console.log('Force italic →', _forceItalic)
     this.state.forceItalic = _forceItalic
   },
+  setDispNoItalic(_dispNoItalic: boolean) {
+    //if (this.debug) console.log('Display no italic →', _dispNoItalic)
+    this.state.dispNoItalic = _dispNoItalic
+  },
   setWeight(_weight: number) {
     if (typeof _weight !== "number" || _weight < 0 || 1000 < _weight) _weight = INIT_WEIGHT
     //if (this.debug) console.log('Weight →', _weight)
@@ -79,5 +89,9 @@ export const store = {
   setDetailFont(_detailFont: IFontFamily) {
     //if (this.debug) console.log('Detail font →', _detailFont.family)
     this.state.detailFont = _detailFont
+  },
+  setSearchText(_searchText: string) {
+    //if (this.debug) console.log('Search text →', _searchText)
+    this.state.searchText = _searchText.toLowerCase()
   }
 }

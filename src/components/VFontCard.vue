@@ -59,7 +59,10 @@ export default class VFontCard extends Vue {
   }
 
   get isDisp() {
-    return (!this.state.favoriteOnly || this.favorite)
+    return (!this.state.favoriteOnly || this.favorite) && this.isSearched
+  }
+  get isSearched() {
+    return this.font.family.toLowerCase().includes(this.state.searchText);
   }
   get showItalicWarn() {
     return this.state.italic && !this.hasItalic && !this.hasOblique;
