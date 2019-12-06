@@ -6,6 +6,7 @@
           <v-text-field
             v-on="on"
             class="title"
+            ref="previewText"
             clearable
             hide-details
             placeholder="Preview text"
@@ -25,20 +26,20 @@
         dense>
         <v-tooltip bottom>
           <template v-slot:activator="{ on }">
-          <v-col cols="4" md="3" lg="1" xl="1" v-on="on">
+          <v-col class="hidden-sm-and-down" cols="4" md="3" lg="1" xl="1" v-on="on">
             <v-select
               hide-details
               placeholder="Font size"
-              :items="[6,8,10,12,14,16,20,24,32,36,48,64,72,96]"
+              :items="fontSizes"
               v-model="state.size"
               @change="changeSize" />
           </v-col>
           </template>
-          <span class="caption">Font size</span>
+          <span class="caption">Font size ({{ctrlOrCmd}} + -/+)</span>
         </v-tooltip>
         <v-tooltip bottom>
           <template v-slot:activator="{ on }">
-            <v-col cols="4" md="3" lg="2" xl="1" v-on="on">
+            <v-col class="hidden-sm-and-down" cols="4" md="3" lg="2" xl="1" v-on="on">
               <v-select
                 hide-details
                 placeholder="Font weight"
@@ -46,7 +47,7 @@
                 v-model="state.weight" />
             </v-col>
           </template>
-          <span class="caption">Font weight</span>
+          <span class="caption">Font weight ({{ctrlOrCmd}} + Up/Down)</span>
         </v-tooltip>
         <v-tooltip bottom>
           <template v-slot:activator="{ on }">
@@ -59,9 +60,9 @@
                 placeholder="Kerning" />
             </v-col>
           </template>
-          <span class="caption">Kerning</span>
+          <span class="caption">Kerning ([/])</span>
         </v-tooltip>
-        <v-col cols="4" md="3" lg="2" xl="1">
+        <v-col class="hidden-sm-and-down" cols="2" md="2" lg="2" xl="1">
           <v-btn-toggle
             multiple
             dense
@@ -72,7 +73,7 @@
                   <v-icon>mdi-format-italic</v-icon>
                 </v-btn>
               </template>
-              <span class="caption">Italic</span>
+              <span class="caption">Italic ({{ctrlOrCmd}} + I)</span>
             </v-tooltip>
             <v-tooltip bottom>
               <template v-slot:activator="{ on }">
@@ -80,19 +81,27 @@
                   <v-icon>mdi-star</v-icon>
                 </v-btn>
               </template>
-              <span class="caption">Favorite only</span>
+              <span class="caption">Favorite only ({{ctrlOrCmd}} + F)</span>
             </v-tooltip>
           </v-btn-toggle>
         </v-col>
       </v-row>
     </v-container>
-      <v-tooltip bottom>
-        <template v-slot:activator="{ on }">
-          <v-btn icon text @click="$emit('open-setting')" v-on="on">
-            <v-icon>mdi-tune</v-icon>
-          </v-btn>
+    <v-tooltip bottom>
+      <template v-slot:activator="{ on }">
+        <v-btn icon text @click="$emit('open-search')" v-on="on">
+          <v-icon>mdi-magnify</v-icon>
+        </v-btn>
       </template>
-      <span class="caption">More</span>
+      <span class="caption">Search (/)</span>
+    </v-tooltip>
+    <v-tooltip bottom>
+      <template v-slot:activator="{ on }">
+        <v-btn icon text @click="$emit('open-setting')" v-on="on">
+          <v-icon>mdi-tune</v-icon>
+        </v-btn>
+      </template>
+      <span class="caption">More (M)</span>
     </v-tooltip>
   </v-app-bar>
 </template>
@@ -101,6 +110,7 @@
 import { Component, Vue } from 'vue-property-decorator';
 import VToggleBtn from './VToggleBtn.vue';
 import { IState, store } from '../store';
+import { CtrlOrCmd, FontSizes, FontWeightItems} from '../util';
 
 @Component({
   components: {
@@ -109,19 +119,10 @@ import { IState, store } from '../store';
 })
 export default class VHeader extends Vue {
   private state: IState = store.state;
-  get fontWeightItems(): Array<object> {
-    return [
-      { text: '100(Thin)', value: 100 },
-      { text: '200(Extra Light)', value: 200 },
-      { text: '300(Light)', value: 300 },
-      { text: '400(Normal)', value: 400 },
-      { text: '500(Medium)', value: 500 },
-      { text: '600(Semi Bold)', value: 600 },
-      { text: '700(Bold)', value: 700 },
-      { text: '800(Extra Bold)', value: 800 },
-      { text: '900(Heavy)', value: 900 }
-    ];
-  }
+
+  get ctrlOrCmd() { return CtrlOrCmd; }
+  get fontSizes() { return FontSizes; }
+  get fontWeightItems() { return FontWeightItems; }
 
   setPreviewText(_previewText: string) {
     store.setPreviewText(_previewText);
