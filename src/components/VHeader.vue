@@ -89,7 +89,7 @@
     </v-container>
     <v-tooltip bottom>
       <template v-slot:activator="{ on }">
-        <v-btn icon text @click="$emit('open-search')" v-on="on">
+        <v-btn icon text @click.stop="$emit('open-search')" v-on="on">
           <v-icon>mdi-magnify</v-icon>
         </v-btn>
       </template>
@@ -97,7 +97,7 @@
     </v-tooltip>
     <v-tooltip bottom>
       <template v-slot:activator="{ on }">
-        <v-btn icon text @click="$emit('open-setting')" v-on="on">
+        <v-btn icon text @click.stop="$emit('open-setting')" v-on="on">
           <v-icon>mdi-tune</v-icon>
         </v-btn>
       </template>
@@ -108,15 +108,10 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
-import VToggleBtn from './VToggleBtn.vue';
 import { IState, store } from '../store';
 import { CtrlOrCmd, FontSizes, FontWeightItems} from '../util';
 
-@Component({
-  components: {
-    VToggleBtn
-  }
-})
+@Component
 export default class VHeader extends Vue {
   private state: IState = store.state;
 

@@ -61,7 +61,7 @@ export const getFavFonts = (): string[] => {
 }
 
 export const getFavFontIndex = (fontFamilyName: string): number => {
-  return getFavFonts().findIndex(favFontFamilyName => favFontFamilyName === fontFamilyName);
+  return getFavFonts().findIndex(favFontFamilyName => favFontFamilyName === fontFamilyName)
 }
 
 export const getFavFont = (fontFamilyName: string): boolean => {
@@ -79,7 +79,8 @@ export const saveFavFonts = (fontFamilyName: string, val: boolean) => {
     estore.set('favFonts', favFonts)
   } else if (!val && favFont) {
     // remove from fav fonts array
-    estore.set('favFonts', favFonts.splice(favFontIndex, 1))
+    favFonts.splice(favFontIndex, 1)
+    estore.set('favFonts', favFonts)
   }
 }
 

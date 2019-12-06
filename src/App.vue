@@ -40,7 +40,6 @@ export default class App extends Vue {
 
   created() {
     window.addEventListener('keyup', e => {
-      console.log(e, document.activeElement!.tagName);
       if (e.ctrlKey || e.metaKey) switch (e.key) {
         // ctrl/cmd + key
         case 'i': {

@@ -58,7 +58,7 @@
             <v-switch label="Force italic" v-model="state.forceItalic" />
           </v-list-item>
           <v-list-item>
-            <v-switch label="Don't display fonts that have no italic" v-model="state.dispNoItalic" />
+            <v-switch label="Don't display fonts that has no italic" v-model="state.dispNoItalic" />
           </v-list-item>
         </v-list>
       </v-card>

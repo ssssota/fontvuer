@@ -1,7 +1,7 @@
 import { IFontFamily } from './type';
 import Store from 'electron-store';
 
-const estore = new Store();
+const estore = new Store()
 
 const INIT_SIZE = 32
 const INIT_WEIGHT = 400

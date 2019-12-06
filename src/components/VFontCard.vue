@@ -11,8 +11,8 @@
       <v-spacer></v-spacer>
       <v-tooltip bottom>
         <template v-slot:activator="{ on }">
-          <v-btn-toggle multiple dense group>
-            <v-btn text icon v-model="favorite" v-on="on">
+          <v-btn-toggle dense group v-model="favorite">
+            <v-btn text icon v-on="on">
               <v-icon>mdi-star</v-icon>
             </v-btn>
           </v-btn-toggle>
@@ -20,11 +20,11 @@
         <span>Favorite</span>
       </v-tooltip>
     </v-card-title>
-    <v-card-subtitle :class="{'pb-0':showItalicWarn}">
+    <v-card-subtitle :class="{'pb-0':hasNoItalicAndOblique}">
       {{ font.family }}
       <v-copy-btn :copy-text="font.family" />
     </v-card-subtitle>
-    <v-card-text v-if="showItalicWarn">
+    <v-card-text v-if="hasNoItalicAndOblique">
       <v-alert
         class="ma-0 caption"
         type="warning"
@@ -51,7 +51,7 @@ export default class VFontCard extends Vue {
   @Prop() private font!: IFontFamily;
 
   private state: IState = store.state;
-  private favorite: boolean = getFavFont(this.font.family);
+  private favorite: number | null | undefined = getFavFont(this.font.family)? 0: null;
 
   setDetailFont() {
     store.setDetailFont(this.font);
@@ -59,12 +59,14 @@ export default class VFontCard extends Vue {
   }
 
   get isDisp() {
-    return (!this.state.favoriteOnly || this.favorite) && this.isSearched
+    return (!this.state.favoriteOnly || this.favorite) &&
+      (!this.state.italic || this.state.forceItalic || !this.state.dispNoItalic || !this.hasNoItalicAndOblique) &&
+      this.isSearched;
   }
   get isSearched() {
     return this.font.family.toLowerCase().includes(this.state.searchText);
   }
-  get showItalicWarn() {
+  get hasNoItalicAndOblique() {
     return this.state.italic && !this.hasItalic && !this.hasOblique;
   }
   get hasItalic() {
@@ -139,7 +141,8 @@ export default class VFontCard extends Vue {
 
   @Watch('favorite')
   _favorite() {
-    saveFavFonts(this.font.family, this.favorite);
+    console.log(this.favorite)
+    saveFavFonts(this.font.family, (typeof this.favorite !== 'undefined'));
   }
 }
 </script>
