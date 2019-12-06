@@ -59,7 +59,7 @@ export default class VFontCard extends Vue {
   }
 
   get isDisp() {
-    return (!this.state.favoriteOnly || this.favorite) &&
+    return (!this.state.favoriteOnly || this._favorite) &&
       (!this.state.italic || this.state.forceItalic || !this.state.dispNoItalic || !this.hasNoItalicAndOblique) &&
       this.isSearched;
   }
@@ -139,9 +139,13 @@ export default class VFontCard extends Vue {
     return store.getPreviewText();
   }
 
+  get _favorite() {
+    return this.favorite === 0;
+  }
+
   @Watch('favorite')
-  _favorite() {
-    saveFavFonts(this.font.family, (typeof this.favorite !== 'undefined'));
+  setFavorite() {
+    saveFavFonts(this.font.family, this._favorite);
   }
 }
 </script>
