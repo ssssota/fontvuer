@@ -16,7 +16,10 @@
    version="1.1"
    id="svg846"
    sodipodi:docname="icon.svg"
-   inkscape:version="0.92.3 (2405546, 2018-03-11)">
+   inkscape:version="0.92.3 (2405546, 2018-03-11)"
+   inkscape:export-filename="/home/sotaro/Documents/fontvuer/build/icons/16x16.png"
+   inkscape:export-xdpi="3.8399999"
+   inkscape:export-ydpi="3.8399999">
   <defs
      id="defs840">
     <linearGradient
@@ -111,8 +114,8 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="1.4"
-     inkscape:cx="325.51864"
-     inkscape:cy="161.83568"
+     inkscape:cx="154.09007"
+     inkscape:cy="218.97854"
      inkscape:document-units="mm"
      inkscape:current-layer="layer1"
      showgrid="true"
@@ -167,7 +170,7 @@
          id="tspan888"
          x="42.333332"
          y="250.32748"
-         style="stroke-width:0.26458332"></tspan></text>
+         style="stroke-width:0.26458332" /></text>
     <text
        xml:space="preserve"
        style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:50.79999924px;line-height:1.25;font-family:'Noto Sans CJK JP';-inkscape-font-specification:'Noto Sans CJK JP';text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332"
