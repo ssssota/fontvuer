@@ -55,10 +55,10 @@
         </v-toolbar>
         <v-list>
           <v-list-item>
-            <v-switch label="Force italic" v-model="state.forceItalic" @change="estore.set('settings.forceItalic, $event')" />
+            <v-switch label="Force italic" v-model="state.forceItalic" @change="estore.set('settings.forceItalic', $event)" />
           </v-list-item>
           <v-list-item>
-            <v-switch label="Don't display fonts that has no italic" v-model="state.dispNoItalic" @change="estore.set('settings.dispNoItalic, $event')" />
+            <v-switch label="Don't display fonts that has no italic" v-model="state.dispNoItalic" @change="estore.set('settings.dispNoItalic', $event)" />
           </v-list-item>
         </v-list>
       </v-card>
