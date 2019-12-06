@@ -141,7 +141,6 @@ export default class VFontCard extends Vue {
 
   @Watch('favorite')
   _favorite() {
-    console.log(this.favorite)
     saveFavFonts(this.font.family, (typeof this.favorite !== 'undefined'));
   }
 }
