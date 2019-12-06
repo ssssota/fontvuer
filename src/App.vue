@@ -39,17 +39,15 @@ export default class App extends Vue {
   private showSearch: boolean = false;
 
   created() {
-    window.addEventListener('keydown', e => {
-      console.log(e);
+    window.addEventListener('keyup', e => {
+      console.log(e, document.activeElement!.tagName);
       if (e.ctrlKey || e.metaKey) switch (e.key) {
         // ctrl/cmd + key
-        case 'i':
-        case 'I': {
+        case 'i': {
           store.setItalic(!this.state.italic);
           break;
         }
-        case 'f':
-        case 'F': {
+        case 'f': {
           store.setFavoriteOnly(!this.state.favoriteOnly);
           break;
         }
@@ -73,20 +71,18 @@ export default class App extends Vue {
           store.setWeight(FontWeightItems[(currentIndex < FontWeightItems.length-1)? currentIndex+1: currentIndex].value);
           break;
         }
-      } else switch(e.key) {
-        // only key
-        case 't':
-        case 'T': {
+      } else if (document.activeElement!.tagName.toUpperCase() !== 'INPUT') switch(e.key) {
+        // only key but focus in <input> through
+        case 't': {
           ((this.$refs.header as Vue).$refs.previewText as HTMLElement).focus();
           break;
         }
-        case 'm':
-        case 'M': {
-          this.showSettings = true;
+        case 'm': {
+          this.showSettings = !this.showSettings;
           break;
         }
         case '/': {
-          this.showSearch = true;
+          this.showSearch = !this.showSearch;
           break;
         }
         case '[': {
