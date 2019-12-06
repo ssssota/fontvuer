@@ -3,7 +3,7 @@
     class="ma-1"
     tile
     outlined
-    v-if="favoriteOnly">
+    v-if="isDisp">
     <v-card-title
       :style="style"
       @click.self.stop="setDetailFont">
@@ -58,8 +58,8 @@ export default class VFontCard extends Vue {
     this.$emit('open-modal');
   }
 
-  get favoriteOnly() {
-    return !this.state.favoriteOnly || this.favorite
+  get isDisp() {
+    return (!this.state.favoriteOnly || this.favorite)
   }
   get showItalicWarn() {
     return this.state.italic && !this.hasItalic && !this.hasOblique;

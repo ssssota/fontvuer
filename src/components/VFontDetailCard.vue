@@ -86,18 +86,18 @@ export default class VFontDetailCard extends Vue {
   get previewText() {
     return store.getPreviewText();
   }
-
-  get style() {
-    const fontStyle =
-      (this.selectedPostscript.italic)? 'italic':
+  get fontStyle() {
+    return (this.selectedPostscript.italic)? 'italic':
       (this.selectedPostscript.style.toLowerCase().includes('oblique'))? 'oblique':
       'normal';
+  }
 
+  get style() {
     return {
       padding: '16px',
       fontSize: `${this.state.size}px`,
       fontFamily: this.state.detailFont.family,
-      fontStyle: fontStyle,
+      fontStyle: this.fontStyle,
       fontWeight: this.selectedPostscript.weight,
       letterSpacing: `${this.state.kerning}em`,
       fontKerning: 'normal',
