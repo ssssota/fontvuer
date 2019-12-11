@@ -24,6 +24,7 @@ import VSearch from './components/VSearch.vue';
 import VFontList from './components/VFontList.vue';
 import { IState, store } from './store';
 import { FontSizes, FontWeightItems } from './util';
+import Mousetrap from 'mousetrap';
 
 @Component({
   components: {
@@ -39,61 +40,29 @@ export default class App extends Vue {
   private showSearch: boolean = false;
 
   created() {
-    window.addEventListener('keyup', e => {
-      if (e.ctrlKey || e.metaKey) switch (e.key) {
-        // ctrl/cmd + key
-        case 'i': {
-          store.setItalic(!this.state.italic);
-          break;
-        }
-        case 'f': {
-          store.setFavoriteOnly(!this.state.favoriteOnly);
-          break;
-        }
-        case '-': {
-          const currentIndex = FontSizes.findIndex(fs => fs === this.state.size);
-          store.setSize(FontSizes[(0 < currentIndex)? currentIndex-1: currentIndex]);
-          break;
-        }
-        case '+': {
-          const currentIndex = FontSizes.findIndex(fs => fs === this.state.size);
-          store.setSize(FontSizes[(currentIndex < FontSizes.length-1)? currentIndex+1: currentIndex]);
-          break;
-        }
-        case 'ArrowDown': {
-          const currentIndex = FontWeightItems.findIndex(fwi => fwi.value === this.state.weight);
-          store.setWeight(FontWeightItems[(0 < currentIndex)? currentIndex-1: currentIndex].value);
-          break;
-        }
-        case 'ArrowUp': {
-          const currentIndex = FontWeightItems.findIndex(fwi => fwi.value === this.state.weight);
-          store.setWeight(FontWeightItems[(currentIndex < FontWeightItems.length-1)? currentIndex+1: currentIndex].value);
-          break;
-        }
-      } else if (document.activeElement!.tagName.toUpperCase() !== 'INPUT') switch(e.key) {
-        // only key but focus in <input> through
-        case 't': {
-          ((this.$refs.header as Vue).$refs.previewText as HTMLElement).focus();
-          break;
-        }
-        case 'm': {
-          this.showSettings = !this.showSettings;
-          break;
-        }
-        case '/': {
-          this.showSearch = !this.showSearch;
-          break;
-        }
-        case '[': {
-          store.setKerning(this.state.kerning-0.1);
-          break;
-        }
-        case ']': {
-          store.setKerning(this.state.kerning+0.1);
-          break;
-        }
-      }
+    Mousetrap.bind(['ctrl+-', 'command+-'], () => {
+      const currentIndex = FontSizes.findIndex(fs => fs === this.state.size);
+      store.setSize(FontSizes[(0 < currentIndex)? currentIndex-1: currentIndex]);
     });
+    Mousetrap.bind(['ctrl+plus', 'command+plus'], () => {
+      const currentIndex = FontSizes.findIndex(fs => fs === this.state.size);
+      store.setSize(FontSizes[(currentIndex < FontSizes.length-1)? currentIndex+1: currentIndex]);
+    });
+    Mousetrap.bind(['ctrl+down', 'command+down'], () => {
+      const currentIndex = FontWeightItems.findIndex(fwi => fwi.value === this.state.weight);
+      store.setWeight(FontWeightItems[(0 < currentIndex)? currentIndex-1: currentIndex].value);
+    });
+    Mousetrap.bind(['ctrl+up', 'command+up'], () => {
+      const currentIndex = FontWeightItems.findIndex(fwi => fwi.value === this.state.weight);
+      store.setWeight(FontWeightItems[(currentIndex < FontWeightItems.length-1)? currentIndex+1: currentIndex].value);
+    });
+    Mousetrap.bind(['ctrl+i', 'command+i'], () => store.setItalic(!this.state.italic));
+    Mousetrap.bind(['ctrl+f', 'command+f', '/'], () => { this.showSearch = !this.showSearch });
+    Mousetrap.bind('f', () => store.setFavoriteOnly(!this.state.favoriteOnly));
+    Mousetrap.bind('t', () => ((this.$refs.header as Vue).$refs.previewText as HTMLElement).focus())
+    Mousetrap.bind('m', () => { this.showSettings = !this.showSettings });
+    Mousetrap.bind('[', () => store.setKerning(this.state.kerning-0.1));
+    Mousetrap.bind(']', () => store.setKerning(this.state.kerning+0.1));
   }
 }
 </script>

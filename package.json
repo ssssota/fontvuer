@@ -14,11 +14,13 @@
   },
   "main": "background.js",
   "dependencies": {
+    "@types/mousetrap": "^1.6.3",
     "core-js": "^3.3.2",
     "electron-store": "^5.1.0",
     "electron-updater": "^4.2.0",
     "font-finder": "^1.0.4",
     "font-manager": "^0.3.0",
+    "mousetrap": "^1.6.3",
     "vue": "^2.6.10",
     "vue-class-component": "^7.0.2",
     "vue-property-decorator": "^8.3.0",
