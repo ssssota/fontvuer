@@ -81,7 +81,7 @@
                   <v-icon>mdi-star</v-icon>
                 </v-btn>
               </template>
-              <span class="caption">Favorite only ({{ctrlOrCmd}} + F)</span>
+              <span class="caption">Favorite only (F)</span>
             </v-tooltip>
           </v-btn-toggle>
         </v-col>
@@ -93,7 +93,7 @@
           <v-icon>mdi-magnify</v-icon>
         </v-btn>
       </template>
-      <span class="caption">Search (/)</span>
+      <span class="caption">Search ({{ctrlOrCmd}} + F)</span>
     </v-tooltip>
     <v-tooltip bottom>
       <template v-slot:activator="{ on }">
