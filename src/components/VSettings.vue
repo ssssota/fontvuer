@@ -12,7 +12,7 @@
         </v-list-item-action>
       </v-list-item>
       <v-list-item>
-        <v-list-item-title>Font weight <kbd>{{ctrlOrCmd}}</kbd> + <kbd>Up</kbd>/<kbd>Down</kbd></v-list-item-title>
+        <v-list-item-title>Font weight <kbd>{{ctrlOrCmd}}</kbd> + <kbd>↑</kbd>/<kbd>↓</kbd></v-list-item-title>
         <v-list-item-action>
           <v-select
             :items="fontWeightItems"
@@ -32,7 +32,7 @@
         </v-list-item-action>
       </v-list-item>
       <v-list-item>
-        <v-list-item-title>Favorite only <kbd>{{ctrlOrCmd}}</kbd> + <kbd>F</kbd></v-list-item-title>
+        <v-list-item-title>Favorite only <kbd>F</kbd></v-list-item-title>
         <v-list-item-action>
           <v-switch v-model="state.favoriteOnly" />
         </v-list-item-action>
