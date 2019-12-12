@@ -17,6 +17,7 @@
 </template>
 
 <script lang="ts">
+import { remote, MessageBoxSyncOptions } from 'electron';
 import { Component, Vue } from 'vue-property-decorator';
 import VHeader from './components/VHeader.vue';
 import VSettings from './components/VSettings.vue';
@@ -24,6 +25,7 @@ import VSearch from './components/VSearch.vue';
 import VFontList from './components/VFontList.vue';
 import { IState, store } from './store';
 import { FontSizes, FontWeightItems } from './util';
+import updateChecker from './update-checker';
 import Mousetrap from 'mousetrap';
 
 @Component({
@@ -63,6 +65,21 @@ export default class App extends Vue {
     Mousetrap.bind('m', () => { this.showSettings = !this.showSettings });
     Mousetrap.bind('[', () => store.setKerning(this.state.kerning-0.1));
     Mousetrap.bind(']', () => store.setKerning(this.state.kerning+0.1));
+
+    // Update check
+    updateChecker().then(updateIsFound => {
+      if (!updateIsFound) return
+      const result = remote.dialog.showMessageBoxSync({
+        type: 'info',
+        title: 'New version was found',
+        message: 'New version was found!\nCheck new version.',
+        buttons: ['Cancel', 'OK']
+      } as MessageBoxSyncOptions)
+
+      if (result) {
+        remote.shell.openExternal('https://fontvuer.netlify.com/#download');
+      }
+    })
   }
 }
 </script>
