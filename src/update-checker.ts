@@ -12,7 +12,6 @@ export default async () => {
     (latestMajor === currentMajor && latestMinor > currentMinor) ||
     (latestMajor === currentMajor && latestMinor === currentMinor && latestBugfix > currentBugfix)) 
   {
-    console.log('update is found')
     return true
   }
   return false
