@@ -7,7 +7,6 @@
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
     "electron:build": "vue-cli-service electron:build",
-    "electron:generate-icons": "electron-icon-builder --input=./public/icon.png --output=build --flatten",
     "electron:serve": "vue-cli-service electron:serve",
     "postinstall": "electron-builder install-app-deps",
     "postuninstall": "electron-builder install-app-deps"
@@ -19,7 +18,7 @@
     "electron-store": "^5.2.0",
     "electron-updater": "^4.3.1",
     "font-finder": "^1.0.4",
-    "font-manager": "^0.3.1",
+    "font-manager": "0.3.0",
     "mousetrap": "^1.6.5",
     "vue": "^2.6.11",
     "vue-class-component": "^7.2.3",
@@ -49,5 +48,8 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/ssssota/fontvuer.git"
+  },
+  "engines": {
+    "node": "10.x"
   }
 }
