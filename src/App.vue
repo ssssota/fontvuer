@@ -68,18 +68,20 @@ export default class App extends Vue {
 
     // Update check
     updateChecker().then(updateIsFound => {
-      if (!updateIsFound) return
+      if (!updateIsFound) return;
+      const platform = (remote.process as NodeJS.Process).platform;
+      const isMacOrWin = platform === 'darwin' || platform === 'win32';
       const result = remote.dialog.showMessageBoxSync({
         type: 'info',
         title: 'New version was found',
         message: 'New version was found!\nCheck new version.',
-        buttons: ['Cancel', 'OK']
-      } as MessageBoxSyncOptions)
+        buttons: isMacOrWin ? ['Cancel', 'OK'] : ['OK']
+      } as MessageBoxSyncOptions);
 
-      if (result) {
+      if (result === 1) {
         remote.shell.openExternal('https://fontvuer.netlify.com/#download');
       }
-    })
+    });
   }
 }
 </script>
