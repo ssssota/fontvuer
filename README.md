@@ -1,24 +1,16 @@
 # fontvuer
 
-## Project setup
-```
-npm install
-```
+[![fontvuer](https://snapcraft.io//fontvuer/badge.svg)](https://snapcraft.io/fontvuer)
 
-### Compiles and hot-reloads for development
-```
-npm run electron:serve
-```
+This is a fontviewer.  
+You can preview fonts that installed.
 
-### Compiles and minifies for production
-```
-npm run electron:build
-```
+## Feature
 
-### Lints and fixes files
-```
-npm run lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+- List and preview
+- Favorite
+  - Show only favorite fonts
+- Change styles
+  - Italic
+  - Size
+  - Weight
