@@ -7,6 +7,7 @@ const INIT_SIZE = 32
 const INIT_WEIGHT = 400
 const INIT_KERNING = 0
 const INIT_ITALIC = false
+const INIT_MONOSPACE = false
 const INIT_FORCE_ITALIC = estore.get('settings.forceItalic', false)
 const INIT_DISP_NO_ITALIC = estore.get('settings.dispNoItalic', false)
 const INIT_PREVIEW = 'fontvuer'
@@ -19,6 +20,7 @@ export interface IState {
   previewText: string
   size: number
   italic: boolean
+  monospace: boolean
   forceItalic: boolean
   dispNoItalic: boolean
   weight: number
@@ -35,6 +37,7 @@ export const store = {
     previewText: INIT_PREVIEW,
     size: INIT_SIZE,
     italic: INIT_ITALIC,
+    monospace: INIT_MONOSPACE,
     forceItalic: INIT_FORCE_ITALIC,
     dispNoItalic: INIT_DISP_NO_ITALIC,
     weight: INIT_WEIGHT,
@@ -62,6 +65,11 @@ export const store = {
     _italic = !!_italic
     //if (this.debug) console.log('Italic →', _italic)
     this.state.italic = _italic
+  },
+  setMonospace(_mono: boolean) {
+    _mono = !!_mono
+    //if (this.debug) console.log('Monospace →', _mono)
+    this.state.monospace = _mono
   },
   setForceItalic(_forceItalic: boolean) {
     //if (this.debug) console.log('Force italic →', _forceItalic)

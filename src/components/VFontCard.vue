@@ -61,10 +61,14 @@ export default class VFontCard extends Vue {
   get isDisp() {
     return (!this.state.favoriteOnly || this._favorite) &&
       (!this.state.italic || this.state.forceItalic || !this.state.dispNoItalic || !this.hasNoItalicAndOblique) &&
+      (!this.state.monospace || this.isMonospace) &&
       this.isSearched;
   }
   get isSearched() {
     return this.font.family.toLowerCase().includes(this.state.searchText);
+  }
+  get isMonospace() {
+    return this.font.postscripts.findIndex(ps => ps.monospace) >= 0;
   }
   get hasNoItalicAndOblique() {
     return this.state.italic && !this.hasItalic && !this.hasOblique;

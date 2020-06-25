@@ -77,6 +77,14 @@
             </v-tooltip>
             <v-tooltip bottom>
               <template v-slot:activator="{ on }">
+                <v-btn text icon v-model="state.monospace" v-on="on">
+                  <v-icon>mdi-alpha-m</v-icon>
+                </v-btn>
+              </template>
+              <span class="caption">Monospace ({{ctrlOrCmd}} + M)</span>
+            </v-tooltip>
+            <v-tooltip bottom>
+              <template v-slot:activator="{ on }">
                 <v-btn text icon v-model="state.favoriteOnly" v-on="on">
                   <v-icon>mdi-star</v-icon>
                 </v-btn>
