@@ -1,5 +1,5 @@
 <template>
-  <v-app-bar dense>
+  <v-app-bar dense fixed elevation="1">
     <v-toolbar-title>
       <v-tooltip bottom>
         <template v-slot:activator="{ on }">

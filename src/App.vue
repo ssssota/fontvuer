@@ -10,7 +10,7 @@
     <v-dialog v-model="showSearch" max-width="450">
       <v-search @close-search="showSearch = false" />
     </v-dialog>
-    <v-main>
+    <v-main class="mt-12">
       <v-font-list />
     </v-main>
   </v-app>
@@ -59,6 +59,7 @@ export default class App extends Vue {
       store.setWeight(FontWeightItems[(currentIndex < FontWeightItems.length-1)? currentIndex+1: currentIndex].value);
     });
     Mousetrap.bind(['ctrl+i', 'command+i'], () => store.setItalic(!this.state.italic));
+    Mousetrap.bind(['ctrl+m', 'command+m'], () => store.setMonospace(!this.state.monospace));
     Mousetrap.bind(['ctrl+f', 'command+f', '/'], () => { this.showSearch = !this.showSearch });
     Mousetrap.bind('f', () => store.setFavoriteOnly(!this.state.favoriteOnly));
     Mousetrap.bind('t', () => ((this.$refs.header as Vue).$refs.previewText as HTMLElement).focus())

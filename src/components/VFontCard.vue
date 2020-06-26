@@ -24,13 +24,21 @@
       {{ font.family }}
       <v-copy-btn :copy-text="font.family" />
     </v-card-subtitle>
-    <v-card-text v-if="hasNoItalicAndOblique">
+    <v-card-text>
       <v-alert
+        v-if="hasNoItalicAndOblique"
         class="ma-0 caption"
         type="warning"
         dense
         outlined
         tile>This font has no italic.</v-alert>
+      <v-alert
+        v-if="hasNoMonospace"
+        class="ma-0 caption mt-1"
+        type="warning"
+        dense
+        outlined
+        tile>This font has no monospace.</v-alert>
     </v-card-text>
   </v-card>
 </template>
@@ -61,14 +69,17 @@ export default class VFontCard extends Vue {
   get isDisp() {
     return (!this.state.favoriteOnly || this._favorite) &&
       (!this.state.italic || this.state.forceItalic || !this.state.dispNoItalic || !this.hasNoItalicAndOblique) &&
-      (!this.state.monospace || this.isMonospace) &&
+      (!this.state.monospace || this.hasMonospace || !this.state.dispNoMonospace) &&
       this.isSearched;
   }
   get isSearched() {
     return this.font.family.toLowerCase().includes(this.state.searchText);
   }
-  get isMonospace() {
+  get hasMonospace() {
     return this.font.postscripts.findIndex(ps => ps.monospace) >= 0;
+  }
+  get hasNoMonospace() {
+    return this.state.monospace && !this.hasMonospace;
   }
   get hasNoItalicAndOblique() {
     return this.state.italic && !this.hasItalic && !this.hasOblique;

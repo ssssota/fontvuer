@@ -10,11 +10,13 @@ const INIT_ITALIC = false
 const INIT_MONOSPACE = false
 const INIT_FORCE_ITALIC = estore.get('settings.forceItalic', false)
 const INIT_DISP_NO_ITALIC = estore.get('settings.dispNoItalic', false)
+const INIT_DISP_NO_MONOSPACE = estore.get('settings.dispNoMonospace', false)
 const INIT_PREVIEW = 'fontvuer'
 const INIT_FAV_ONLY = false
 
 if (!INIT_FORCE_ITALIC) estore.set('settings.forceItalic', false)
 if (!INIT_DISP_NO_ITALIC) estore.set('settings.dispNoItalic', false)
+if (!INIT_DISP_NO_MONOSPACE) estore.set('settings.dispNoMonospace', false)
 
 export interface IState {
   previewText: string
@@ -23,6 +25,7 @@ export interface IState {
   monospace: boolean
   forceItalic: boolean
   dispNoItalic: boolean
+  dispNoMonospace: boolean
   weight: number
   kerning: number
   favoriteOnly: boolean
@@ -40,6 +43,7 @@ export const store = {
     monospace: INIT_MONOSPACE,
     forceItalic: INIT_FORCE_ITALIC,
     dispNoItalic: INIT_DISP_NO_ITALIC,
+    dispNoMonospace: INIT_DISP_NO_MONOSPACE,
     weight: INIT_WEIGHT,
     kerning: INIT_KERNING,
     favoriteOnly: INIT_FAV_ONLY,
@@ -74,10 +78,17 @@ export const store = {
   setForceItalic(_forceItalic: boolean) {
     //if (this.debug) console.log('Force italic →', _forceItalic)
     this.state.forceItalic = _forceItalic
+    estore.set('settings.forceItalic', _forceItalic)
   },
   setDispNoItalic(_dispNoItalic: boolean) {
     //if (this.debug) console.log('Display no italic →', _dispNoItalic)
     this.state.dispNoItalic = _dispNoItalic
+    estore.set('settings.dispNoItalic', _dispNoItalic)
+  },
+  setDispNoMonospace(_dispNoMonospace: boolean) {
+    //if (this.debug) console.log('Display no monospace →', _dispNoMonospace)
+    this.state.dispNoMonospace = _dispNoMonospace
+    estore.set('settings.dispNoMonospace', _dispNoMonospace)
   },
   setWeight(_weight: number) {
     if (typeof _weight !== "number" || _weight < 0 || 1000 < _weight) _weight = INIT_WEIGHT
