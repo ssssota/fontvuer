@@ -67,11 +67,11 @@ export default class VFontCard extends Vue {
   }
 
   get isDisp() {
-    return (!this.state.favoriteOnly || this._favorite) &&
-      (!this.state.italic || this.state.forceItalic || !this.state.dispNoItalic || !this.hasNoItalicAndOblique) &&
-      (!this.state.monospace || this.hasMonospace || !this.state.dispNoMonospace) &&
-      this.isSearched;
+    return this.isDispForFavorite && this.isDispForItalic && this.isDispForMonospace && this.isSearched;
   }
+  get isDispForFavorite() { return !this.state.favoriteOnly || this._favorite; }
+  get isDispForItalic() { return !this.state.italic || this.state.forceItalic || !this.state.dispNoItalic || !this.hasNoItalicAndOblique; }
+  get isDispForMonospace() { return !this.state.monospace || this.hasMonospace || !this.state.dispNoMonospace; }
   get isSearched() {
     return this.font.family.toLowerCase().includes(this.state.searchText);
   }
@@ -94,36 +94,38 @@ export default class VFontCard extends Vue {
     return this.font.postscripts.map(ps => ps.weight)
   }
   hasWeight(weight: number) {
-    return this.hasWeights.findIndex(w => w === weight) >= 0;
+    return this.font.postscripts.findIndex(ps => {
+      return ps.weight === weight && (!this.isDispForItalic || ps.italic) && (!this.isDispForMonospace || ps.monospace);
+    }) >= 0;
   }
   weight(target: number) {
     target = Math.floor(target)
     switch (true) {
-      case 400<=target:
-        for (let weight = target; weight <= 500; weight++) {
-          if (this.hasWeight(weight)) return weight
-        }
-        for (let weight = target; weight > 0; weight--) {
-          if (this.hasWeight(weight)) return weight
-        }
-        for (let weight = 500; weight <= 1000; weight++) {
-          if (this.hasWeight(weight)) return weight
-        }
-        break;
       case 500<=target:
         for (let weight = target; weight <= 1000; weight++) {
-          if (this.hasWeight(weight)) return weight
+          if (this.hasWeight(weight)) return weight;
         }
         for (let weight = target; weight > 0; weight--) {
-          if (this.hasWeight(weight)) return weight
+          if (this.hasWeight(weight)) return weight;
+        }
+        break;
+      case 400<=target:
+        for (let weight = target; weight <= 500; weight++) {
+          if (this.hasWeight(weight)) return weight;
+        }
+        for (let weight = target; weight > 0; weight--) {
+          if (this.hasWeight(weight)) return weight;
+        }
+        for (let weight = 500; weight <= 1000; weight++) {
+          if (this.hasWeight(weight)) return weight;
         }
         break;
       case target<400:
         for (let weight = target; weight > 0; weight--) {
-          if (this.hasWeight(weight)) return weight
+          if (this.hasWeight(weight)) return weight;
         }
         for (let weight = target; weight <= 1000; weight++) {
-          if (this.hasWeight(weight)) return weight
+          if (this.hasWeight(weight)) return weight;
         }
         break;
     }
