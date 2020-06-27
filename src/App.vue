@@ -18,7 +18,7 @@
 
 <script lang="ts">
 import { remote, MessageBoxSyncOptions } from 'electron';
-import { Component, Vue } from 'vue-property-decorator';
+import { Component, Vue, Watch } from 'vue-property-decorator';
 import VHeader from './components/VHeader.vue';
 import VSettings from './components/VSettings.vue';
 import VSearch from './components/VSearch.vue';
@@ -60,7 +60,8 @@ export default class App extends Vue {
     });
     Mousetrap.bind(['ctrl+i', 'command+i'], () => store.setItalic(!this.state.italic));
     Mousetrap.bind(['ctrl+m', 'command+m'], () => store.setMonospace(!this.state.monospace));
-    Mousetrap.bind(['ctrl+f', 'command+f', '/'], () => { this.showSearch = !this.showSearch });
+    Mousetrap.bind(['ctrl+f', 'command+f'], () => { this.showSearch = !this.showSearch });
+    Mousetrap.bind(['ctrl+d', 'command+d'], () => store.setDarkMode(!this.state.darkMode));
     Mousetrap.bind('f', () => store.setFavoriteOnly(!this.state.favoriteOnly));
     Mousetrap.bind('t', () => ((this.$refs.header as Vue).$refs.previewText as HTMLElement).focus())
     Mousetrap.bind('m', () => { this.showSettings = !this.showSettings });
@@ -83,6 +84,11 @@ export default class App extends Vue {
         remote.shell.openExternal('https://fontvuer.netlify.com/#download');
       }
     });
+  }
+
+  @Watch('state.darkMode')
+  setDarkMode() {
+    this.$vuetify.theme.dark = this.state.darkMode
   }
 }
 </script>

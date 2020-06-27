@@ -1,116 +1,68 @@
 <template>
   <v-app-bar dense fixed elevation="1">
     <v-toolbar-title>
-      <v-tooltip bottom>
-        <template v-slot:activator="{ on }">
-          <v-text-field
-            v-on="on"
-            class="title"
-            ref="previewText"
-            clearable
-            hide-details
-            placeholder="Preview text"
-            value="fontvuer"
-            @change="setPreviewText"
-            @click:clear="setPreviewText('')">
+      <span title="Preview text">
+        <v-text-field
+          class="title"
+          ref="previewText"
+          clearable
+          hide-details
+          placeholder="Preview text"
+          value="fontvuer"
+          @change="setPreviewText"
+          @click:clear="setPreviewText('')">
         </v-text-field>
-        </template>
-        <span class="caption">Preview text</span>
-      </v-tooltip>
+      </span>
     </v-toolbar-title>
-    <v-container fluid>
-      <v-row
-        align="center"
-        align-content="end"
-        justify="end"
-        dense>
-        <v-tooltip bottom>
-          <template v-slot:activator="{ on }">
-          <v-col class="hidden-sm-and-down" cols="4" md="3" lg="1" xl="1" v-on="on">
-            <v-select
-              hide-details
-              placeholder="Font size"
-              :items="fontSizes"
-              v-model="state.size"
-              @change="changeSize" />
-          </v-col>
-          </template>
-          <span class="caption">Font size ({{ctrlOrCmd}} + -/+)</span>
-        </v-tooltip>
-        <v-tooltip bottom>
-          <template v-slot:activator="{ on }">
-            <v-col class="hidden-sm-and-down" cols="4" md="3" lg="2" xl="1" v-on="on">
-              <v-select
-                hide-details
-                placeholder="Font weight"
-                :items="fontWeightItems"
-                v-model="state.weight" />
-            </v-col>
-          </template>
-          <span class="caption">Font weight ({{ctrlOrCmd}} + Up/Down)</span>
-        </v-tooltip>
-        <v-tooltip bottom>
-          <template v-slot:activator="{ on }">
-            <v-col class="hidden-sm-and-down" cols="4" md="3" lg="2" xl="1" v-on="on">
-              <v-text-field
-                type="number"
-                step="0.1"
-                hide-details
-                v-model="state.kerning"
-                placeholder="Kerning" />
-            </v-col>
-          </template>
-          <span class="caption">Kerning ([/])</span>
-        </v-tooltip>
-        <v-col class="hidden-sm-and-down" cols="2" md="2" lg="2" xl="1">
-          <v-btn-toggle
-            multiple
-            dense
-            group>
-            <v-tooltip bottom>
-              <template v-slot:activator="{ on }">
-                <v-btn text icon v-model="state.italic" v-on="on">
-                  <v-icon>mdi-format-italic</v-icon>
-                </v-btn>
-              </template>
-              <span class="caption">Italic ({{ctrlOrCmd}} + I)</span>
-            </v-tooltip>
-            <v-tooltip bottom>
-              <template v-slot:activator="{ on }">
-                <v-btn text icon v-model="state.monospace" v-on="on">
-                  <v-icon>mdi-alpha-m</v-icon>
-                </v-btn>
-              </template>
-              <span class="caption">Monospace ({{ctrlOrCmd}} + M)</span>
-            </v-tooltip>
-            <v-tooltip bottom>
-              <template v-slot:activator="{ on }">
-                <v-btn text icon v-model="state.favoriteOnly" v-on="on">
-                  <v-icon>mdi-star</v-icon>
-                </v-btn>
-              </template>
-              <span class="caption">Favorite only (F)</span>
-            </v-tooltip>
-          </v-btn-toggle>
-        </v-col>
-      </v-row>
-    </v-container>
-    <v-tooltip bottom>
-      <template v-slot:activator="{ on }">
-        <v-btn icon text @click.stop="$emit('open-search')" v-on="on">
-          <v-icon>mdi-magnify</v-icon>
+    <v-spacer></v-spacer>
+    <v-toolbar-items class="hidden-sm-and-down">
+      <span :title="`Font size (${ctrlOrCmd} + -/+)`">
+        <v-select
+          class="mt-2 ml-2"
+          placeholder="Font size"
+          :items="fontSizes"
+          v-model="state.size"
+          @change="changeSize" />
+      </span>
+      <span :title="`Font weight (${ctrlOrCmd} + Up/Down)`">
+        <v-select
+          class="mt-2 ml-2"
+          placeholder="Font weight"
+          :items="fontWeightItems"
+          v-model="state.weight" />
+      </span>
+      <span title="Kerning ([/])">
+        <v-text-field
+          type="number"
+          step="0.1"
+          class="mt-2 ml-2"
+          v-model="state.kerning"
+          placeholder="Kerning" />
+      </span>
+      <v-btn-toggle
+        multiple
+        dense
+        group>
+        <v-btn icon v-model="state.italic" :title="`Italic (${ctrlOrCmd} + I)`">
+          <v-icon>mdi-format-italic</v-icon>
         </v-btn>
-      </template>
-      <span class="caption">Search ({{ctrlOrCmd}} + F)</span>
-    </v-tooltip>
-    <v-tooltip bottom>
-      <template v-slot:activator="{ on }">
-        <v-btn icon text @click.stop="$emit('open-setting')" v-on="on">
-          <v-icon>mdi-tune</v-icon>
+        <v-btn icon v-model="state.monospace" :title="`Monospace (${ctrlOrCmd} + M)`">
+          <v-icon>mdi-alpha-m</v-icon>
         </v-btn>
-      </template>
-      <span class="caption">More (M)</span>
-    </v-tooltip>
+        <v-btn icon v-model="state.favoriteOnly" title="Favorite only (F)">
+          <v-icon>mdi-star</v-icon>
+        </v-btn>
+        <v-btn icon v-model="state.darkMode" :title="`Dark mode (${ctrlOrCmd} + D)`">
+          <v-icon>mdi-brightness-6</v-icon>
+        </v-btn>
+      </v-btn-toggle>
+    </v-toolbar-items>
+    <v-btn icon text @click.stop="$emit('open-search')" :title="`Search (${ctrlOrCmd} + F)`">
+      <v-icon>mdi-magnify</v-icon>
+    </v-btn>
+    <v-btn icon text @click.stop="$emit('open-setting')" title="More (M)">
+      <v-icon>mdi-tune</v-icon>
+    </v-btn>
   </v-app-bar>
 </template>
 

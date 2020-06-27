@@ -38,6 +38,12 @@
         </v-list-item-action>
       </v-list-item>
       <v-list-item>
+        <v-list-item-title>Dark mode <kbd>{{ctrlOrCmd}}</kbd> + <kbd>D</kbd></v-list-item-title>
+        <v-list-item-action>
+          <v-switch v-model="state.darkMode" />
+        </v-list-item-action>
+      </v-list-item>
+      <v-list-item>
         <v-spacer />
         <v-btn color="primary" @click="showSettings = true">More settings</v-btn>
       </v-list-item>
