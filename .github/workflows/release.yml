@@ -28,7 +28,7 @@ jobs:
 
     - name: Use snapcraft
       if: ${{ runner.os == 'Linux' }}
-      uses: samuuelmeuli/action-snapcraft@v1
+      uses: samuelmeuli/action-snapcraft@v1
       with:
         snapcraft_token: ${{ secrets.SNAPCRAFT_TOKEN }}
 
