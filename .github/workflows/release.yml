@@ -26,7 +26,7 @@ jobs:
         node-version: ${{ matrix.node-version }}
         
     - name: User snapcraft
-      uses: samuuelmeuli/action-snapcraft@v1
+      uses: samuelmeuli/action-snapcraft@v1
       with:
         snapcraft_token: ${{ secrets.SNAPCRAFT_TOKEN }}
     
