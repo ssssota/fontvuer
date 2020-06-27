@@ -13,10 +13,12 @@ const INIT_DISP_NO_ITALIC = estore.get('settings.dispNoItalic', false)
 const INIT_DISP_NO_MONOSPACE = estore.get('settings.dispNoMonospace', false)
 const INIT_PREVIEW = 'fontvuer'
 const INIT_FAV_ONLY = false
+const INIT_DARK_MODE = estore.get('settings.darkMode', false)
 
 if (!INIT_FORCE_ITALIC) estore.set('settings.forceItalic', false)
 if (!INIT_DISP_NO_ITALIC) estore.set('settings.dispNoItalic', false)
 if (!INIT_DISP_NO_MONOSPACE) estore.set('settings.dispNoMonospace', false)
+if (!INIT_DARK_MODE) estore.set('settings.darkMode', false)
 
 export interface IState {
   previewText: string
@@ -29,6 +31,7 @@ export interface IState {
   weight: number
   kerning: number
   favoriteOnly: boolean
+  darkMode: boolean
   detailFont: IFontFamily
   favFonts: string[]
   searchText: string
@@ -47,6 +50,7 @@ export const store = {
     weight: INIT_WEIGHT,
     kerning: INIT_KERNING,
     favoriteOnly: INIT_FAV_ONLY,
+    darkMode: INIT_DARK_MODE,
     favFonts: [],
     detailFont: {} as IFontFamily,
     searchText: ''
@@ -102,8 +106,13 @@ export const store = {
   },
   setFavoriteOnly(_favoriteOnly: boolean) {
     _favoriteOnly = !!_favoriteOnly
-    //if (this.debug) console.log('Favorite only →', _favoriteOnly)
+    if (this.debug) console.log('Favorite only →', _favoriteOnly)
     this.state.favoriteOnly = _favoriteOnly
+  },
+  setDarkMode(_darkMode: boolean) {
+    _darkMode = !!_darkMode
+    if (this.debug) console.log('Dark mode →', _darkMode)
+    this.state.darkMode = _darkMode
   },
   setDetailFont(_detailFont: IFontFamily) {
     //if (this.debug) console.log('Detail font →', _detailFont.family)
