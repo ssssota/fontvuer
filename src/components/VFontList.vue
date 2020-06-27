@@ -6,11 +6,12 @@
     <v-dialog v-model="showModal" max-width="600">
       <v-font-detail-card />
     </v-dialog>
-    <v-container fluid class="d-flex flex-wrap justify-space-around align-strech">
+    <v-container fluid class="d-flex flex-wrap">
       <v-font-card
         v-for="(font) in targetFontArray"
         :key="font.family"
         :font="font"
+        class="flex-grow-1 flex-shrink-0"
         @open-modal="showModal = true" />
     </v-container>
   </v-card>
