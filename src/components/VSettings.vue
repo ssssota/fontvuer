@@ -55,10 +55,13 @@
         </v-toolbar>
         <v-list>
           <v-list-item>
-            <v-switch label="Force italic" v-model="state.forceItalic" @change="estore.set('settings.forceItalic', $event)" />
+            <v-switch label="Force italic" v-model="state.forceItalic" @change="changeForceItalic" />
           </v-list-item>
           <v-list-item>
-            <v-switch label="Don't display fonts that has no italic" v-model="state.dispNoItalic" @change="estore.set('settings.dispNoItalic', $event)" />
+            <v-switch label="Don't display fonts that has no italic" :value="!state.forceItalic && state.dispNoItalic" @change="changeDispNoItalic" :disabled="state.forceItalic" />
+          </v-list-item>
+          <v-list-item>
+            <v-switch label="Don't display fonts that has no monospace" v-model="state.dispNoMonospace" @change="changeDispNoMonospace" />
           </v-list-item>
         </v-list>
       </v-card>
@@ -84,6 +87,15 @@ export default class VSettings extends Vue {
 
   changeSize(val: number) {
     store.setSize(val)
+  }
+  changeForceItalic(val: boolean) {
+    store.setForceItalic(val)
+  }
+  changeDispNoItalic(val: boolean) {
+    store.setDispNoItalic(val)
+  }
+  changeDispNoMonospace(val: boolean) {
+    store.setDispNoMonospace(val)
   }
 }
 </script>

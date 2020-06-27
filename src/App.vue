@@ -10,9 +10,9 @@
     <v-dialog v-model="showSearch" max-width="450">
       <v-search @close-search="showSearch = false" />
     </v-dialog>
-    <v-content>
+    <v-main class="mt-12">
       <v-font-list />
-    </v-content>
+    </v-main>
   </v-app>
 </template>
 
@@ -25,7 +25,7 @@ import VSearch from './components/VSearch.vue';
 import VFontList from './components/VFontList.vue';
 import { IState, store } from './store';
 import { FontSizes, FontWeightItems } from './util';
-import updateChecker from './update-checker';
+import { isUpdateComing, currentVersion, latestVersion } from './update-checker';
 import Mousetrap from 'mousetrap';
 
 @Component({
@@ -59,6 +59,7 @@ export default class App extends Vue {
       store.setWeight(FontWeightItems[(currentIndex < FontWeightItems.length-1)? currentIndex+1: currentIndex].value);
     });
     Mousetrap.bind(['ctrl+i', 'command+i'], () => store.setItalic(!this.state.italic));
+    Mousetrap.bind(['ctrl+m', 'command+m'], () => store.setMonospace(!this.state.monospace));
     Mousetrap.bind(['ctrl+f', 'command+f', '/'], () => { this.showSearch = !this.showSearch });
     Mousetrap.bind('f', () => store.setFavoriteOnly(!this.state.favoriteOnly));
     Mousetrap.bind('t', () => ((this.$refs.header as Vue).$refs.previewText as HTMLElement).focus())
@@ -67,14 +68,14 @@ export default class App extends Vue {
     Mousetrap.bind(']', () => store.setKerning(this.state.kerning+0.1));
 
     // Update check
-    updateChecker().then(updateIsFound => {
+    isUpdateComing.then(updateIsFound => {
       if (!updateIsFound) return;
       const platform = (remote.process as NodeJS.Process).platform;
       const isMacOrWin = platform === 'darwin' || platform === 'win32';
       const result = remote.dialog.showMessageBoxSync({
         type: 'info',
         title: 'New version was found',
-        message: 'New version was found!\nCheck new version.',
+        message: `New version was found!\nCheck new version.\nCurrent: v${currentVersion}\nLatest: v${latestVersion}`,
         buttons: isMacOrWin ? ['Cancel', 'OK'] : ['OK']
       } as MessageBoxSyncOptions);
 
