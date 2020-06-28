@@ -151,9 +151,10 @@ export default class VFontCard extends Vue {
   }
   get selectedPostscript() { return this.font.postscripts[this.selectedPostscriptIndex]; }
   get fontStyle() {
-    return (this.selectedPostscript.italic)? 'italic':
-      (this.selectedPostscript.style.toLowerCase().includes('oblique'))? 'oblique':
-        'normal';
+    return (this.state.forceItalic)? 'italic':
+      (this.selectedPostscript.italic)? 'italic':
+        (this.selectedPostscript.style.toLowerCase().includes('oblique'))? 'oblique':
+          'normal';
   }
 
   get style() {
