@@ -3,7 +3,7 @@
     <v-card-title>Settings</v-card-title>
     <v-list>
       <v-list-item>
-        <v-list-item-title>Font size(px) <kbd>{{ctrlOrCmd}}</kbd> + <kbd>-</kbd>/<kbd>+</kbd></v-list-item-title>
+        <v-list-item-title>Font size(px) <kbd>{{ctrlOrCmd}}</kbd> + <kbd>-</kbd>&nbsp;/&nbsp;<kbd>+</kbd></v-list-item-title>
         <v-list-item-action>
           <v-select
             v-model="state.size"
@@ -12,7 +12,7 @@
         </v-list-item-action>
       </v-list-item>
       <v-list-item>
-        <v-list-item-title>Font weight <kbd>{{ctrlOrCmd}}</kbd> + <kbd>↑</kbd>/<kbd>↓</kbd></v-list-item-title>
+        <v-list-item-title>Font weight <kbd>{{ctrlOrCmd}}</kbd> + <kbd>↑</kbd>&nbsp;/&nbsp;<kbd>↓</kbd></v-list-item-title>
         <v-list-item-action>
           <v-select
             :items="fontWeightItems"
@@ -26,7 +26,7 @@
         </v-list-item-action>
       </v-list-item>
       <v-list-item>
-        <v-list-item-title>Kerning <kbd>[</kbd>/<kbd>]</kbd></v-list-item-title>
+        <v-list-item-title>Kerning <kbd>[</kbd>&nbsp;/&nbsp;<kbd>]</kbd></v-list-item-title>
         <v-list-item-action>
           <v-text-field type="number" step="0.1" v-model="state.kerning" />
         </v-list-item-action>
@@ -45,7 +45,7 @@
       </v-list-item>
       <v-list-item>
         <v-spacer />
-        <v-btn color="primary" @click="showSettings = true">More settings</v-btn>
+        <v-btn @click="showSettings = true">More settings</v-btn>
       </v-list-item>
     </v-list>
     <v-dialog

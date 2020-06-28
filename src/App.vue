@@ -65,8 +65,8 @@ export default class App extends Vue {
     Mousetrap.bind('f', () => store.setFavoriteOnly(!this.state.favoriteOnly));
     Mousetrap.bind('t', () => ((this.$refs.header as Vue).$refs.previewText as HTMLElement).focus())
     Mousetrap.bind('m', () => { this.showSettings = !this.showSettings });
-    Mousetrap.bind('[', () => store.setKerning(this.state.kerning-0.1));
-    Mousetrap.bind(']', () => store.setKerning(this.state.kerning+0.1));
+    Mousetrap.bind('[', () => store.setKerning(this.state.kerning-0.05));
+    Mousetrap.bind(']', () => store.setKerning(this.state.kerning+0.05));
 
     // Update check
     isUpdateComing.then(updateIsFound => {
@@ -84,11 +84,12 @@ export default class App extends Vue {
         remote.shell.openExternal('https://fontvuer.netlify.com/#download');
       }
     });
+    this.setDarkMode();
   }
 
   @Watch('state.darkMode')
   setDarkMode() {
-    this.$vuetify.theme.dark = this.state.darkMode
+    this.$vuetify.theme.dark = this.state.darkMode;
   }
 }
 </script>
