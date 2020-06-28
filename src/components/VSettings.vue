@@ -95,22 +95,22 @@ export default class VSettings extends Vue {
   get fontWeightItems() { return FontWeightItems; }
 
   changeSize(val: number) {
-    store.setSize(val)
+    store.setSize(val);
   }
   changeForceItalic(val: boolean) {
-    store.setForceItalic(val)
+    store.setForceItalic(val);
   }
   changeDispNoItalic(val: boolean) {
-    store.setDispNoItalic(val)
+    store.setDispNoItalic(val);
   }
   changeDispNoMonospace(val: boolean) {
-    store.setDispNoMonospace(val)
+    store.setDispNoMonospace(val);
   }
   changeFavoriteOnly(val: boolean) {
-    store.setFavoriteOnly(val)
+    store.setFavoriteOnly(val);
   }
   changeDarkMode(val: boolean) {
-    store.setDarkMode(val)
+    store.setDarkMode(val);
   }
 
   openLink(href: string) {

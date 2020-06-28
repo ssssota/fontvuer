@@ -91,7 +91,7 @@ export default class VFontDetailCard extends Vue {
   get fontStyle() {
     return (this.selectedPostscript.italic)? 'italic':
       (this.selectedPostscript.style.toLowerCase().includes('oblique'))? 'oblique':
-      'normal';
+        'normal';
   }
 
   get style() {

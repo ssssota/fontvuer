@@ -98,15 +98,15 @@ export default class VHeader extends Vue {
   }
 
   changeSize(val: number) {
-    store.setSize(val)
+    store.setSize(val);
   }
 
   changeFavoriteOnly(val?: true) {
-    console.log({val})
+    console.log({val});
     store.setFavoriteOnly(!!val);
   }
   changeDarkMode(val?: true) {
-    console.log({val})
+    console.log({val});
     store.setDarkMode(!!val);
   }
 }

@@ -23,7 +23,7 @@ export default class VCopyBtn extends Vue {
 
   copyFamilyName() {
     // 空div 生成
-    const preWrapper = document.createElement("div");
+    const preWrapper = document.createElement('div');
     // 選択用のタグ生成
     const pre = document.createElement('pre');
     // 親要素のCSSで user-select: none だとコピーできないので書き換える

@@ -45,7 +45,7 @@
 
 <script lang="ts">
 import { Component, Prop, Vue, Watch } from 'vue-property-decorator';
-import { IFontFamily, IPostscript } from '../type'
+import { IFontFamily, IPostscript } from '../type';
 import VCopyBtn from './VCopyBtn.vue';
 import { IState, store } from '../store';
 import { getFavFont, saveFavFonts } from '../fonts';
@@ -94,7 +94,7 @@ export default class VFontCard extends Vue {
     return this.font.postscripts.findIndex(ps => ps.style.toLowerCase().includes('oblique')) >= 0;
   }
   get hasWeights() {
-    return this.font.postscripts.map(ps => ps.weight)
+    return this.font.postscripts.map(ps => ps.weight);
   }
   hasWeight(weight: number) {
     return this.font.postscripts.findIndex(ps => {
@@ -102,35 +102,35 @@ export default class VFontCard extends Vue {
     }) >= 0;
   }
   weight(target: number) {
-    target = Math.floor(target)
+    target = Math.floor(target);
     switch (true) {
-      case 500<=target:
-        for (let weight = target; weight <= 1000; weight++) {
-          if (this.hasWeight(weight)) return weight;
-        }
-        for (let weight = target; weight > 0; weight--) {
-          if (this.hasWeight(weight)) return weight;
-        }
-        break;
-      case 400<=target:
-        for (let weight = target; weight <= 500; weight++) {
-          if (this.hasWeight(weight)) return weight;
-        }
-        for (let weight = target; weight > 0; weight--) {
-          if (this.hasWeight(weight)) return weight;
-        }
-        for (let weight = 500; weight <= 1000; weight++) {
-          if (this.hasWeight(weight)) return weight;
-        }
-        break;
-      case target<400:
-        for (let weight = target; weight > 0; weight--) {
-          if (this.hasWeight(weight)) return weight;
-        }
-        for (let weight = target; weight <= 1000; weight++) {
-          if (this.hasWeight(weight)) return weight;
-        }
-        break;
+    case 500<=target:
+      for (let weight = target; weight <= 1000; weight++) {
+        if (this.hasWeight(weight)) return weight;
+      }
+      for (let weight = target; weight > 0; weight--) {
+        if (this.hasWeight(weight)) return weight;
+      }
+      break;
+    case 400<=target:
+      for (let weight = target; weight <= 500; weight++) {
+        if (this.hasWeight(weight)) return weight;
+      }
+      for (let weight = target; weight > 0; weight--) {
+        if (this.hasWeight(weight)) return weight;
+      }
+      for (let weight = 500; weight <= 1000; weight++) {
+        if (this.hasWeight(weight)) return weight;
+      }
+      break;
+    case target<400:
+      for (let weight = target; weight > 0; weight--) {
+        if (this.hasWeight(weight)) return weight;
+      }
+      for (let weight = target; weight <= 1000; weight++) {
+        if (this.hasWeight(weight)) return weight;
+      }
+      break;
     }
     return this.font.postscripts[0].weight;
   }
@@ -138,9 +138,9 @@ export default class VFontCard extends Vue {
   get style() {
     const fontStyle =
       (this.state.forceItalic)? 'italic':
-      (this.hasItalic)? 'italic':
-      (this.hasOblique)? 'oblique':
-      'normal';
+        (this.hasItalic)? 'italic':
+          (this.hasOblique)? 'oblique':
+            'normal';
 
     return {
       fontSize: `${this.state.size}px`,
@@ -152,7 +152,7 @@ export default class VFontCard extends Vue {
       fontFutureSettings: 'palt 1',
       lineHeight: `${this.state.size+4}px`,
       cursor: 'pointer'
-    }
+    };
   }
 
   get previewText() {

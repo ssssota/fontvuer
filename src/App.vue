@@ -60,11 +60,11 @@ export default class App extends Vue {
     });
     Mousetrap.bind(['ctrl+i', 'command+i'], () => store.setItalic(!this.state.italic));
     Mousetrap.bind(['ctrl+m', 'command+m'], () => store.setMonospace(!this.state.monospace));
-    Mousetrap.bind(['ctrl+f', 'command+f'], () => { this.showSearch = !this.showSearch });
+    Mousetrap.bind(['ctrl+f', 'command+f'], () => { this.showSearch = !this.showSearch; });
     Mousetrap.bind(['ctrl+d', 'command+d'], () => store.setDarkMode(!this.state.darkMode));
     Mousetrap.bind('f', () => store.setFavoriteOnly(!this.state.favoriteOnly));
-    Mousetrap.bind('t', () => ((this.$refs.header as Vue).$refs.previewText as HTMLElement).focus())
-    Mousetrap.bind('m', () => { this.showSettings = !this.showSettings });
+    Mousetrap.bind('t', () => ((this.$refs.header as Vue).$refs.previewText as HTMLElement).focus());
+    Mousetrap.bind('m', () => { this.showSettings = !this.showSettings; });
     Mousetrap.bind('[', () => store.setKerning(this.state.kerning-0.05));
     Mousetrap.bind(']', () => store.setKerning(this.state.kerning+0.05));
 
@@ -88,7 +88,7 @@ export default class App extends Vue {
 
   @Watch('state.darkMode', { immediate: true })
   setDarkMode() {
-    console.log('dark', this.state.darkMode)
+    console.log('dark', this.state.darkMode);
     this.$vuetify.theme.dark = this.state.darkMode;
   }
 }
