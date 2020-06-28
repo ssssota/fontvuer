@@ -20,11 +20,11 @@
         <span>Favorite</span>
       </v-tooltip>
     </v-card-title>
-    <v-card-subtitle :class="{'pb-0':hasNoItalicAndOblique}">
+    <v-card-subtitle :class="{ 'pb-2': !displayWarn, 'pb-0': displayWarn }">
       {{ font.family }}
       <v-copy-btn :copy-text="font.family" />
     </v-card-subtitle>
-    <v-card-text>
+    <v-card-text v-if="displayWarn" class="pb-2">
       <v-alert
         v-if="hasNoItalicAndOblique"
         class="ma-0 caption"
@@ -83,6 +83,9 @@ export default class VFontCard extends Vue {
   }
   get hasNoItalicAndOblique() {
     return this.state.italic && !this.hasItalic && !this.hasOblique;
+  }
+  get displayWarn() {
+    return this.hasNoMonospace || this.hasNoItalicAndOblique;
   }
   get hasItalic() {
     return this.font.postscripts.findIndex(ps => ps.italic) >= 0;
