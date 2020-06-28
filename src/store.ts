@@ -113,12 +113,12 @@ export const store = {
   },
   setFavoriteOnly(_favoriteOnly: boolean) {
     _favoriteOnly = !!_favoriteOnly;
-    if (this.debug) console.log('Favorite only →', _favoriteOnly);
+    //if (this.debug) console.log('Favorite only →', _favoriteOnly);
     this.state.favoriteOnly = _favoriteOnly;
   },
   setDarkMode(_darkMode: boolean) {
     _darkMode = !!_darkMode;
-    if (this.debug) console.log('Dark mode →', _darkMode);
+    //if (this.debug) console.log('Dark mode →', _darkMode);
     this.state.darkMode = _darkMode;
     estore.set(settingsPath.darkMode, _darkMode);
   },

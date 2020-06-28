@@ -88,7 +88,6 @@ export default class App extends Vue {
 
   @Watch('state.darkMode', { immediate: true })
   setDarkMode() {
-    console.log('dark', this.state.darkMode);
     this.$vuetify.theme.dark = this.state.darkMode;
   }
 }
