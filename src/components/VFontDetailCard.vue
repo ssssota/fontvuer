@@ -113,10 +113,10 @@ export default class VFontDetailCard extends Vue {
   }
 
   @Watch('state.detailFont')
-  onChangeFont() {
-    this.$nextTick(() => {
-      this.selectedPostscriptIndex = this.state.selectedPostscriptIndex;
-    });
+  async onChangeFont() {
+    await this.$nextTick();
+    this.selectedPostscriptIndex = this.state.selectedPostscriptIndex;
+    await this.$nextTick();
   }
 }
 </script>
