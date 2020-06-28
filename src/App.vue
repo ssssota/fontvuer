@@ -84,11 +84,11 @@ export default class App extends Vue {
         remote.shell.openExternal('https://fontvuer.netlify.com/#download');
       }
     });
-    this.setDarkMode();
   }
 
-  @Watch('state.darkMode')
+  @Watch('state.darkMode', { immediate: true })
   setDarkMode() {
+    console.log('dark', this.state.darkMode)
     this.$vuetify.theme.dark = this.state.darkMode;
   }
 }
