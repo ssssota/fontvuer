@@ -49,10 +49,22 @@
         <v-btn icon v-model="state.monospace" :title="`Monospace (${ctrlOrCmd} + M)`" class="ma-0">
           <v-icon>mdi-alpha-m</v-icon>
         </v-btn>
-        <v-btn icon v-model="state.favoriteOnly" title="Favorite only (F)" class="ma-0">
+      </v-btn-toggle>
+      <v-btn-toggle
+        dense
+        group
+        :value="state.favoriteOnly"
+        @change="changeFavoriteOnly">
+        <v-btn icon :value="true" title="Favorite only (F)" class="ma-0">
           <v-icon>mdi-star</v-icon>
         </v-btn>
-        <v-btn icon v-model="state.darkMode" :title="`Dark mode (${ctrlOrCmd} + D)`" class="ma-0">
+      </v-btn-toggle>
+      <v-btn-toggle
+        dense
+        group
+        :value="state.darkMode"
+        @change="changeDarkMode">
+        <v-btn icon :value="true" :title="`Dark mode (${ctrlOrCmd} + D)`" class="ma-0">
           <v-icon>mdi-brightness-6</v-icon>
         </v-btn>
       </v-btn-toggle>
@@ -67,13 +79,15 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator';
+import { Component, Vue, Watch } from 'vue-property-decorator';
 import { IState, store } from '../store';
 import { CtrlOrCmd, FontSizes, FontWeightItems} from '../util';
 
 @Component
 export default class VHeader extends Vue {
   private state: IState = store.state;
+  private fav: boolean = this.state.favoriteOnly;
+  private dark: boolean = this.state.darkMode;
 
   get ctrlOrCmd() { return CtrlOrCmd; }
   get fontSizes() { return FontSizes; }
@@ -84,7 +98,14 @@ export default class VHeader extends Vue {
   }
 
   changeSize(val: number) {
-    store.setSize(val)
+    store.setSize(val);
+  }
+
+  changeFavoriteOnly(val?: true) {
+    store.setFavoriteOnly(!!val);
+  }
+  changeDarkMode(val?: true) {
+    store.setDarkMode(!!val);
   }
 }
 </script>

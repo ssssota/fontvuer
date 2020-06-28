@@ -39,7 +39,7 @@ export default class VFontList extends Vue {
   private state: IState = store.state;
 
   created() {
-    getFontList().then(res => res.map(ff => this.fontArray.push(ff)))
+    getFontList().then(res => res.map(ff => this.fontArray.push(ff)));
   }
 
   get targetFontArray() {

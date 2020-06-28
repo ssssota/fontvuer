@@ -9,16 +9,11 @@
       @click.self.stop="setDetailFont">
       {{ previewText }}
       <v-spacer></v-spacer>
-      <v-tooltip bottom>
-        <template v-slot:activator="{ on }">
-          <v-btn-toggle dense group v-model="favorite">
-            <v-btn text icon v-on="on">
-              <v-icon>mdi-star</v-icon>
-            </v-btn>
-          </v-btn-toggle>
-        </template>
-        <span>Favorite</span>
-      </v-tooltip>
+      <v-btn-toggle dense group v-model="favorite">
+        <v-btn text icon title="favorite">
+          <v-icon>mdi-star</v-icon>
+        </v-btn>
+      </v-btn-toggle>
     </v-card-title>
     <v-card-subtitle :class="{ 'pb-2': !displayWarn, 'pb-0': displayWarn }">
       {{ font.family }}
@@ -45,7 +40,7 @@
 
 <script lang="ts">
 import { Component, Prop, Vue, Watch } from 'vue-property-decorator';
-import { IFontFamily, IPostscript } from '../type'
+import { IFontFamily, IPostscript } from '../type';
 import VCopyBtn from './VCopyBtn.vue';
 import { IState, store } from '../store';
 import { getFavFont, saveFavFonts } from '../fonts';
@@ -63,15 +58,16 @@ export default class VFontCard extends Vue {
 
   setDetailFont() {
     store.setDetailFont(this.font);
+    store.setSelectedPostscriptIndex(this.selectedPostscriptIndex);
     this.$emit('open-modal');
   }
 
   get isDisp() {
-    return this.isDispForFavorite && this.isDispForItalic && this.isDispForMonospace && this.isSearched;
+    return this.isDispForFavorite && (this.isDispForItalic || !this.hasNoItalicAndOblique) && (this.isDispForMonospace || this.hasMonospace) && this.isSearched;
   }
   get isDispForFavorite() { return !this.state.favoriteOnly || this._favorite; }
-  get isDispForItalic() { return !this.state.italic || this.state.forceItalic || !this.state.dispNoItalic || !this.hasNoItalicAndOblique; }
-  get isDispForMonospace() { return !this.state.monospace || this.hasMonospace || !this.state.dispNoMonospace; }
+  get isDispForItalic() { return !this.state.italic || this.state.forceItalic || !this.state.dispNoItalic; }
+  get isDispForMonospace() { return !this.state.monospace || !this.state.dispNoMonospace; }
   get isSearched() {
     return this.font.family.toLowerCase().includes(this.state.searchText);
   }
@@ -93,66 +89,85 @@ export default class VFontCard extends Vue {
   get hasOblique() {
     return this.font.postscripts.findIndex(ps => ps.style.toLowerCase().includes('oblique')) >= 0;
   }
+  psHasItalic(ps: IPostscript) {
+    return ps.italic || ps.style.toLowerCase().includes('oblique');
+  }
   get hasWeights() {
-    return this.font.postscripts.map(ps => ps.weight)
+    return this.font.postscripts.map(ps => ps.weight);
   }
-  hasWeight(weight: number) {
+  hasWeightPostscriptIndex(weight: number) {
+    const res = this.font.postscripts.findIndex(ps => {
+      return ps.weight === weight &&
+        (this.isDispForMonospace || ps.monospace) &&
+        (
+          (this.state.italic && this.psHasItalic(ps)) ||
+          (!this.state.italic && !this.psHasItalic(ps))
+        );
+    });
+    if (res >= 0) return res;
     return this.font.postscripts.findIndex(ps => {
-      return ps.weight === weight && (!this.isDispForItalic || ps.italic) && (!this.isDispForMonospace || ps.monospace);
-    }) >= 0;
+      return ps.weight === weight && (this.isDispForMonospace || ps.monospace);
+    });
   }
-  weight(target: number) {
-    target = Math.floor(target)
-    switch (true) {
-      case 500<=target:
-        for (let weight = target; weight <= 1000; weight++) {
-          if (this.hasWeight(weight)) return weight;
-        }
-        for (let weight = target; weight > 0; weight--) {
-          if (this.hasWeight(weight)) return weight;
-        }
-        break;
-      case 400<=target:
-        for (let weight = target; weight <= 500; weight++) {
-          if (this.hasWeight(weight)) return weight;
-        }
-        for (let weight = target; weight > 0; weight--) {
-          if (this.hasWeight(weight)) return weight;
-        }
-        for (let weight = 500; weight <= 1000; weight++) {
-          if (this.hasWeight(weight)) return weight;
-        }
-        break;
-      case target<400:
-        for (let weight = target; weight > 0; weight--) {
-          if (this.hasWeight(weight)) return weight;
-        }
-        for (let weight = target; weight <= 1000; weight++) {
-          if (this.hasWeight(weight)) return weight;
-        }
-        break;
+  get selectedPostscriptIndex() {
+    const target = Math.floor(this.state.weight);
+    if (500<=target) {
+      // bold
+      for (let weight = target; weight <= 1000; weight++) {
+        const index = this.hasWeightPostscriptIndex(weight);
+        if (index >= 0) return index;
+      }
+      for (let weight = target; weight > 0; weight--) {
+        const index = this.hasWeightPostscriptIndex(weight);
+        if (index >= 0) return index;
+      }
+    } else if (400<=target) {
+      // regular
+      for (let weight = target; weight <= 500; weight++) {
+        const index = this.hasWeightPostscriptIndex(weight);
+        if (index >= 0) return index;
+      }
+      for (let weight = target; weight > 0; weight--) {
+        const index = this.hasWeightPostscriptIndex(weight);
+        if (index >= 0) return index;
+      }
+      for (let weight = 500; weight <= 1000; weight++) {
+        const index = this.hasWeightPostscriptIndex(weight);
+        if (index >= 0) return index;
+      }
+    } else if (target<400) {
+      // light
+      for (let weight = target; weight > 0; weight--) {
+        const index = this.hasWeightPostscriptIndex(weight);
+        if (index >= 0) return index;
+      }
+      for (let weight = target; weight <= 1000; weight++) {
+        const index = this.hasWeightPostscriptIndex(weight);
+        if (index >= 0) return index;
+      }
     }
-    return this.font.postscripts[0].weight;
+    // fallback
+    return 0;
   }
 
   get style() {
     const fontStyle =
       (this.state.forceItalic)? 'italic':
-      (this.hasItalic)? 'italic':
-      (this.hasOblique)? 'oblique':
-      'normal';
+        (this.hasItalic)? 'italic':
+          (this.hasOblique)? 'oblique':
+            'normal';
 
     return {
       fontSize: `${this.state.size}px`,
       fontFamily: this.font.family,
-      fontWeight: this.weight(this.state.weight),
+      fontWeight: this.font.postscripts[this.selectedPostscriptIndex].weight,
       fontStyle: (this.state.italic)? fontStyle: 'normal',
       letterSpacing: `${this.state.kerning}em`,
       fontKerning: 'normal',
       fontFutureSettings: 'palt 1',
       lineHeight: `${this.state.size+4}px`,
       cursor: 'pointer'
-    }
+    };
   }
 
   get previewText() {

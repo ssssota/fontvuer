@@ -18,10 +18,10 @@ import { store } from '../store';
 
 @Component
 export default class VSearch extends Vue {
-  private searchText: string = ''
+  private searchText: string | null = ''
 
   search() {
-    store.setSearchText(this.searchText);
+    store.setSearchText(this.searchText || '');
     this.$emit('close-search');
   }
 }
