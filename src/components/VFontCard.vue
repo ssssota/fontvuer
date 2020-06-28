@@ -9,16 +9,11 @@
       @click.self.stop="setDetailFont">
       {{ previewText }}
       <v-spacer></v-spacer>
-      <v-tooltip bottom>
-        <template v-slot:activator="{ on }">
-          <v-btn-toggle dense group v-model="favorite">
-            <v-btn text icon v-on="on">
-              <v-icon>mdi-star</v-icon>
-            </v-btn>
-          </v-btn-toggle>
-        </template>
-        <span>Favorite</span>
-      </v-tooltip>
+      <v-btn-toggle dense group v-model="favorite">
+        <v-btn text icon title="favorite">
+          <v-icon>mdi-star</v-icon>
+        </v-btn>
+      </v-btn-toggle>
     </v-card-title>
     <v-card-subtitle :class="{ 'pb-2': !displayWarn, 'pb-0': displayWarn }">
       {{ font.family }}

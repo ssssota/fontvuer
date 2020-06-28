@@ -1,16 +1,11 @@
 <template>
-  <v-tooltip bottom>
-    <template v-slot:activator="{ on }">
-      <v-btn
-        text
-        icon
-        v-on="on"
-        @click="copyFamilyName">
-        <v-icon small>mdi-content-copy</v-icon>
-      </v-btn>
-    </template>
-    <span class="caption">{{ copyMessage }}</span>
-  </v-tooltip>
+  <v-btn
+    text
+    icon
+    :title="copyMessage"
+    @click="copyFamilyName">
+    <v-icon small>mdi-content-copy</v-icon>
+  </v-btn>
 </template>
 
 <script lang="ts">
