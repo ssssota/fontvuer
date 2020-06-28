@@ -64,7 +64,7 @@
 </template>
 
 <script lang="ts">
-import { Component, Prop, Vue } from 'vue-property-decorator';
+import { Component, Prop, Vue, Watch } from 'vue-property-decorator';
 import VCopyBtn from './VCopyBtn.vue';
 import { IFontFamily, IPostscript } from '../type';
 import { IState, store } from '../store';
@@ -108,6 +108,13 @@ export default class VFontDetailCard extends Vue {
 
   boolToYenNo(val: boolean): string {
     return val? 'Yes': 'No';
+  }
+
+  @Watch('state.detailFont')
+  onChangeFont() {
+    this.$nextTick(() => {
+      this.selectedPostscriptIndex = 0;
+    });
   }
 }
 </script>
