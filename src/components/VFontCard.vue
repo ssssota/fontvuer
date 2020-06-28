@@ -62,11 +62,11 @@ export default class VFontCard extends Vue {
   }
 
   get isDisp() {
-    return this.isDispForFavorite && this.isDispForItalic && this.isDispForMonospace && this.isSearched;
+    return this.isDispForFavorite && (this.isDispForItalic || !this.hasNoItalicAndOblique) && (this.isDispForMonospace || this.hasMonospace) && this.isSearched;
   }
   get isDispForFavorite() { return !this.state.favoriteOnly || this._favorite; }
-  get isDispForItalic() { return !this.state.italic || this.state.forceItalic || !this.state.dispNoItalic || !this.hasNoItalicAndOblique; }
-  get isDispForMonospace() { return !this.state.monospace || this.hasMonospace || !this.state.dispNoMonospace; }
+  get isDispForItalic() { return !this.state.italic || this.state.forceItalic || !this.state.dispNoItalic; }
+  get isDispForMonospace() { return !this.state.monospace || !this.state.dispNoMonospace; }
   get isSearched() {
     return this.font.family.toLowerCase().includes(this.state.searchText);
   }
@@ -96,7 +96,8 @@ export default class VFontCard extends Vue {
   }
   hasWeight(weight: number) {
     return this.font.postscripts.findIndex(ps => {
-      return ps.weight === weight && (!this.isDispForItalic || this.psHasItalic(ps)) && (!this.isDispForMonospace || ps.monospace);
+      if (ps.weight === weight) console.log({ psWeight: ps.weight, weight, ps });
+      return ps.weight === weight && (this.isDispForItalic || this.psHasItalic(ps)) && (this.isDispForMonospace || ps.monospace);
     }) >= 0;
   }
   weight(target: number) {
@@ -104,32 +105,50 @@ export default class VFontCard extends Vue {
     target = Math.floor(target);
     if (500<=target) {
       // bold
+      console.log(this.font.family, 'a');
       for (let weight = target; weight <= 1000; weight++) {
-        if (this.hasWeight(weight)) return weight;
+        if (this.hasWeight(weight)) {
+          if (target != weight && this.font.postscripts.length > 1) console.log({ family: this.font.family, has: this.font.postscripts.map(ps=>ps.weight), selected: weight, target });
+          return weight;}
       }
       for (let weight = target; weight > 0; weight--) {
-        if (this.hasWeight(weight)) return weight;
+        if (this.hasWeight(weight)) {
+          if (target != weight && this.font.postscripts.length > 1) console.log({ family: this.font.family, has: this.font.postscripts.map(ps=>ps.weight), selected: weight, target });
+          return weight;}
       }
     } else if (400<=target) {
       // regular
+      console.log(this.font.family, 'b');
       for (let weight = target; weight <= 500; weight++) {
-        if (this.hasWeight(weight)) return weight;
+        if (this.hasWeight(weight)) {
+          if (target != weight && this.font.postscripts.length > 1) console.log({ family: this.font.family, has: this.font.postscripts.map(ps=>ps.weight), selected: weight, target });
+          return weight;}
       }
       for (let weight = target; weight > 0; weight--) {
-        if (this.hasWeight(weight)) return weight;
+        if (this.hasWeight(weight)) {
+          if (target != weight && this.font.postscripts.length > 1) console.log({ family: this.font.family, has: this.font.postscripts.map(ps=>ps.weight), selected: weight, target });
+          return weight;}
       }
       for (let weight = 500; weight <= 1000; weight++) {
-        if (this.hasWeight(weight)) return weight;
+        if (this.hasWeight(weight)) {
+          if (target != weight && this.font.postscripts.length > 1) console.log({ family: this.font.family, has: this.font.postscripts.map(ps=>ps.weight), selected: weight, target });
+          return weight;}
       }
     } else if (target<400) {
       // light
+      console.log(this.font.family, 'c');
       for (let weight = target; weight > 0; weight--) {
-        if (this.hasWeight(weight)) return weight;
+        if (this.hasWeight(weight)) {
+          if (target != weight && this.font.postscripts.length > 1) console.log({ family: this.font.family, has: this.font.postscripts.map(ps=>ps.weight), selected: weight, target });
+          return weight;}
       }
       for (let weight = target; weight <= 1000; weight++) {
-        if (this.hasWeight(weight)) return weight;
+        if (this.hasWeight(weight)) {
+          if (target != weight && this.font.postscripts.length > 1) console.log({ family: this.font.family, has: this.font.postscripts.map(ps=>ps.weight), selected: weight, target });
+          return weight;}
       }
     }
+    console.log('fallback');
     return this.font.postscripts[0].weight;
   }
 
@@ -139,9 +158,6 @@ export default class VFontCard extends Vue {
         (this.hasItalic)? 'italic':
           (this.hasOblique)? 'oblique':
             'normal';
-
-    const weight = this.weight(this.state.weight);
-    if (this.state.weight != weight && this.font.postscripts.length > 1) console.log({ family: this.font.family, has: this.font.postscripts.map(ps=>ps.weight), selected: weight, target: this.state.weight });
 
     return {
       fontSize: `${this.state.size}px`,
