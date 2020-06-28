@@ -5,19 +5,17 @@
       <v-copy-btn :copy-text="state.detailFont.family" />
     </v-card-title>
     <v-card-text>
-      <v-btn-toggle
-        mandatory
+      <v-radio-group
+        v-if="state.detailFont.postscripts.length > 1"
         v-model="selectedPostscriptIndex"
-        v-if="state.detailFont.postscripts.length > 1">
-        <v-btn
-          x-small
-          dense
+        row dense>
+        <v-radio
           v-for="(ps, i) in state.detailFont.postscripts"
           :key="ps.name"
+          :label="ps.style"
           :value="i">
-          {{ ps.style }}
-        </v-btn>
-      </v-btn-toggle>
+        </v-radio>
+      </v-radio-group>
       <h3 :style="style">{{ previewText }}</h3>
       <v-list-item>
         <v-list-item-content>
@@ -80,8 +78,12 @@ export default class VFontDetailCard extends Vue {
   private selectedPostscriptIndex: number = 0;
 
   get selectedPostscript() {
-    if (this.state.detailFont.postscripts.length <= 1) return this.state.detailFont.postscripts[0]
-    return this.state.detailFont.postscripts[this.selectedPostscriptIndex]
+    if (
+      this.selectedPostscriptIndex == null ||
+      this.state.detailFont.postscripts.length <= 1 ||
+      this.state.detailFont.postscripts.length <= this.selectedPostscriptIndex
+    ) return this.state.detailFont.postscripts[0];
+    return this.state.detailFont.postscripts[this.selectedPostscriptIndex];
   }
   get previewText() {
     return store.getPreviewText();
