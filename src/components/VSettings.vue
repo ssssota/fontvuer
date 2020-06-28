@@ -34,13 +34,13 @@
       <v-list-item>
         <v-list-item-title>Favorite only <kbd>F</kbd></v-list-item-title>
         <v-list-item-action>
-          <v-switch v-model="state.favoriteOnly" />
+          <v-switch :value="state.favoriteOnly" @change="changeFavoriteOnly" />
         </v-list-item-action>
       </v-list-item>
       <v-list-item>
         <v-list-item-title>Dark mode <kbd>{{ctrlOrCmd}}</kbd> + <kbd>D</kbd></v-list-item-title>
         <v-list-item-action>
-          <v-switch v-model="state.darkMode" />
+          <v-switch :value="state.darkMode" @change="changeDarkMode" />
         </v-list-item-action>
       </v-list-item>
       <v-list-item>
@@ -69,6 +69,10 @@
           <v-list-item>
             <v-switch label="Don't display fonts that has no monospace" v-model="state.dispNoMonospace" @change="changeDispNoMonospace" />
           </v-list-item>
+          <v-divider></v-divider>
+          <v-list-item>
+            <v-btn text @click="openLink('https://github.com/ssssota/fontvuer/issues')">Report issue / Feature request</v-btn>
+          </v-list-item>
         </v-list>
       </v-card>
     </v-dialog>
@@ -76,7 +80,7 @@
 </template>
 
 <script lang="ts">
-import Store from 'electron-store';
+import { remote } from 'electron';
 import { Component, Vue } from 'vue-property-decorator';
 import { IState, store } from '../store';
 import { CtrlOrCmd, FontSizes, FontWeightItems } from '../util';
@@ -85,7 +89,6 @@ import { CtrlOrCmd, FontSizes, FontWeightItems } from '../util';
 export default class VSettings extends Vue {
   private state: IState = store.state;
   private showSettings: boolean = false;
-  private estore: Store = new Store();
 
   get ctrlOrCmd() { return CtrlOrCmd; }
   get fontSizes() { return FontSizes; }
@@ -102,6 +105,16 @@ export default class VSettings extends Vue {
   }
   changeDispNoMonospace(val: boolean) {
     store.setDispNoMonospace(val)
+  }
+  changeFavoriteOnly(val: boolean) {
+    store.setFavoriteOnly(val)
+  }
+  changeDarkMode(val: boolean) {
+    store.setDarkMode(val)
+  }
+
+  openLink(href: string) {
+    remote.shell.openExternal(href);
   }
 }
 </script>
