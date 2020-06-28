@@ -96,7 +96,6 @@ export default class VFontCard extends Vue {
   }
   hasWeight(weight: number) {
     return this.font.postscripts.findIndex(ps => {
-      if (ps.weight === weight) console.log({ psWeight: ps.weight, weight, ps });
       return ps.weight === weight && (this.isDispForItalic || this.psHasItalic(ps)) && (this.isDispForMonospace || ps.monospace);
     }) >= 0;
   }
@@ -105,50 +104,32 @@ export default class VFontCard extends Vue {
     target = Math.floor(target);
     if (500<=target) {
       // bold
-      console.log(this.font.family, 'a');
       for (let weight = target; weight <= 1000; weight++) {
-        if (this.hasWeight(weight)) {
-          if (target != weight && this.font.postscripts.length > 1) console.log({ family: this.font.family, has: this.font.postscripts.map(ps=>ps.weight), selected: weight, target });
-          return weight;}
+        if (this.hasWeight(weight)) return weight;
       }
       for (let weight = target; weight > 0; weight--) {
-        if (this.hasWeight(weight)) {
-          if (target != weight && this.font.postscripts.length > 1) console.log({ family: this.font.family, has: this.font.postscripts.map(ps=>ps.weight), selected: weight, target });
-          return weight;}
+        if (this.hasWeight(weight)) return weight;
       }
     } else if (400<=target) {
       // regular
-      console.log(this.font.family, 'b');
       for (let weight = target; weight <= 500; weight++) {
-        if (this.hasWeight(weight)) {
-          if (target != weight && this.font.postscripts.length > 1) console.log({ family: this.font.family, has: this.font.postscripts.map(ps=>ps.weight), selected: weight, target });
-          return weight;}
+        if (this.hasWeight(weight)) return weight;
       }
       for (let weight = target; weight > 0; weight--) {
-        if (this.hasWeight(weight)) {
-          if (target != weight && this.font.postscripts.length > 1) console.log({ family: this.font.family, has: this.font.postscripts.map(ps=>ps.weight), selected: weight, target });
-          return weight;}
+        if (this.hasWeight(weight)) return weight;
       }
       for (let weight = 500; weight <= 1000; weight++) {
-        if (this.hasWeight(weight)) {
-          if (target != weight && this.font.postscripts.length > 1) console.log({ family: this.font.family, has: this.font.postscripts.map(ps=>ps.weight), selected: weight, target });
-          return weight;}
+        if (this.hasWeight(weight)) return weight;
       }
     } else if (target<400) {
       // light
-      console.log(this.font.family, 'c');
       for (let weight = target; weight > 0; weight--) {
-        if (this.hasWeight(weight)) {
-          if (target != weight && this.font.postscripts.length > 1) console.log({ family: this.font.family, has: this.font.postscripts.map(ps=>ps.weight), selected: weight, target });
-          return weight;}
+        if (this.hasWeight(weight)) return weight;
       }
       for (let weight = target; weight <= 1000; weight++) {
-        if (this.hasWeight(weight)) {
-          if (target != weight && this.font.postscripts.length > 1) console.log({ family: this.font.family, has: this.font.postscripts.map(ps=>ps.weight), selected: weight, target });
-          return weight;}
+        if (this.hasWeight(weight)) return weight;
       }
     }
-    console.log('fallback');
     return this.font.postscripts[0].weight;
   }
 
