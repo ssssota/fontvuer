@@ -62,11 +62,11 @@ export default class VFontCard extends Vue {
   }
 
   get isDisp() {
-    return this.isDispForFavorite && this.isDispForItalic && this.isDispForMonospace && this.isSearched;
+    return this.isDispForFavorite && (this.isDispForItalic || !this.hasNoItalicAndOblique) && (this.isDispForMonospace || this.hasMonospace) && this.isSearched;
   }
   get isDispForFavorite() { return !this.state.favoriteOnly || this._favorite; }
-  get isDispForItalic() { return !this.state.italic || this.state.forceItalic || !this.state.dispNoItalic || !this.hasNoItalicAndOblique; }
-  get isDispForMonospace() { return !this.state.monospace || this.hasMonospace || !this.state.dispNoMonospace; }
+  get isDispForItalic() { return !this.state.italic || this.state.forceItalic || !this.state.dispNoItalic; }
+  get isDispForMonospace() { return !this.state.monospace || !this.state.dispNoMonospace; }
   get isSearched() {
     return this.font.family.toLowerCase().includes(this.state.searchText);
   }
@@ -88,26 +88,30 @@ export default class VFontCard extends Vue {
   get hasOblique() {
     return this.font.postscripts.findIndex(ps => ps.style.toLowerCase().includes('oblique')) >= 0;
   }
+  psHasItalic(ps: IPostscript) {
+    return ps.italic || ps.style.toLowerCase().includes('oblique');
+  }
   get hasWeights() {
     return this.font.postscripts.map(ps => ps.weight);
   }
   hasWeight(weight: number) {
     return this.font.postscripts.findIndex(ps => {
-      return ps.weight === weight && (!this.isDispForItalic || ps.italic) && (!this.isDispForMonospace || ps.monospace);
+      return ps.weight === weight && (this.isDispForItalic || this.psHasItalic(ps)) && (this.isDispForMonospace || ps.monospace);
     }) >= 0;
   }
   weight(target: number) {
+    let res = this.font.postscripts[0].weight;
     target = Math.floor(target);
-    switch (true) {
-    case 500<=target:
+    if (500<=target) {
+      // bold
       for (let weight = target; weight <= 1000; weight++) {
         if (this.hasWeight(weight)) return weight;
       }
       for (let weight = target; weight > 0; weight--) {
         if (this.hasWeight(weight)) return weight;
       }
-      break;
-    case 400<=target:
+    } else if (400<=target) {
+      // regular
       for (let weight = target; weight <= 500; weight++) {
         if (this.hasWeight(weight)) return weight;
       }
@@ -117,15 +121,14 @@ export default class VFontCard extends Vue {
       for (let weight = 500; weight <= 1000; weight++) {
         if (this.hasWeight(weight)) return weight;
       }
-      break;
-    case target<400:
+    } else if (target<400) {
+      // light
       for (let weight = target; weight > 0; weight--) {
         if (this.hasWeight(weight)) return weight;
       }
       for (let weight = target; weight <= 1000; weight++) {
         if (this.hasWeight(weight)) return weight;
       }
-      break;
     }
     return this.font.postscripts[0].weight;
   }
