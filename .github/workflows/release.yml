@@ -5,7 +5,9 @@ name: Release
 
 on:
   push:
-    tags: [ 'v*' ]
+    branches: [ release ]
+  pull_request:
+    branches: [ release ]
 
 jobs:
   build:
