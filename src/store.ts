@@ -3,22 +3,29 @@ import Store from 'electron-store';
 
 const estore = new Store()
 
+const settingsPath = {
+  forceItalic: 'settings.forceItalic',
+  dispNoItalic: 'settings.dispNoItalic',
+  dispNoMonospace: 'settings.dispNoItalic',
+  darkMode: 'settings.darkMode'
+}
+
 const INIT_SIZE = 32
 const INIT_WEIGHT = 400
 const INIT_KERNING = 0
 const INIT_ITALIC = false
 const INIT_MONOSPACE = false
-const INIT_FORCE_ITALIC = estore.get('settings.forceItalic', false)
-const INIT_DISP_NO_ITALIC = estore.get('settings.dispNoItalic', false)
-const INIT_DISP_NO_MONOSPACE = estore.get('settings.dispNoMonospace', false)
+const INIT_FORCE_ITALIC = estore.get(settingsPath.forceItalic, false)
+const INIT_DISP_NO_ITALIC = estore.get(settingsPath.dispNoItalic, false)
+const INIT_DISP_NO_MONOSPACE = estore.get(settingsPath.dispNoMonospace, false)
 const INIT_PREVIEW = 'fontvuer'
 const INIT_FAV_ONLY = false
-const INIT_DARK_MODE = estore.get('settings.darkMode', false)
+const INIT_DARK_MODE = estore.get(settingsPath.darkMode, false)
 
-if (!INIT_FORCE_ITALIC) estore.set('settings.forceItalic', false)
-if (!INIT_DISP_NO_ITALIC) estore.set('settings.dispNoItalic', false)
-if (!INIT_DISP_NO_MONOSPACE) estore.set('settings.dispNoMonospace', false)
-if (!INIT_DARK_MODE) estore.set('settings.darkMode', false)
+if (!estore.has(settingsPath.forceItalic)) estore.set(settingsPath.forceItalic, false)
+if (!estore.has(settingsPath.dispNoItalic)) estore.set(settingsPath.dispNoItalic, false)
+if (!estore.has(settingsPath.dispNoMonospace)) estore.set(settingsPath.dispNoMonospace, false)
+if (!estore.has(settingsPath.darkMode)) estore.set(settingsPath.darkMode, false)
 
 export interface IState {
   previewText: string
@@ -82,17 +89,17 @@ export const store = {
   setForceItalic(_forceItalic: boolean) {
     //if (this.debug) console.log('Force italic →', _forceItalic)
     this.state.forceItalic = _forceItalic
-    estore.set('settings.forceItalic', _forceItalic)
+    estore.set(settingsPath.forceItalic, _forceItalic)
   },
   setDispNoItalic(_dispNoItalic: boolean) {
     //if (this.debug) console.log('Display no italic →', _dispNoItalic)
     this.state.dispNoItalic = _dispNoItalic
-    estore.set('settings.dispNoItalic', _dispNoItalic)
+    estore.set(settingsPath.dispNoItalic, _dispNoItalic)
   },
   setDispNoMonospace(_dispNoMonospace: boolean) {
     //if (this.debug) console.log('Display no monospace →', _dispNoMonospace)
     this.state.dispNoMonospace = _dispNoMonospace
-    estore.set('settings.dispNoMonospace', _dispNoMonospace)
+    estore.set(settingsPath.dispNoMonospace, _dispNoMonospace)
   },
   setWeight(_weight: number) {
     if (typeof _weight !== "number" || _weight < 0 || 1000 < _weight) _weight = INIT_WEIGHT
@@ -113,6 +120,7 @@ export const store = {
     _darkMode = !!_darkMode
     if (this.debug) console.log('Dark mode →', _darkMode)
     this.state.darkMode = _darkMode
+    estore.set(settingsPath.darkMode, _darkMode)
   },
   setDetailFont(_detailFont: IFontFamily) {
     //if (this.debug) console.log('Detail font →', _detailFont.family)
