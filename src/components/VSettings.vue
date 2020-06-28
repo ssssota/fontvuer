@@ -45,7 +45,7 @@
       </v-list-item>
       <v-list-item>
         <v-spacer />
-        <v-btn color="primary" @click="showSettings = true">More settings</v-btn>
+        <v-btn @click="showSettings = true">More settings</v-btn>
       </v-list-item>
     </v-list>
     <v-dialog
