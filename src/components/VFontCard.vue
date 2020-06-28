@@ -140,6 +140,9 @@ export default class VFontCard extends Vue {
           (this.hasOblique)? 'oblique':
             'normal';
 
+    const weight = this.weight(this.state.weight);
+    if (this.state.weight != weight && this.font.postscripts.length > 1) console.log({ family: this.font.family, has: this.font.postscripts.map(ps=>ps.weight), selected: weight, target: this.state.weight });
+
     return {
       fontSize: `${this.state.size}px`,
       fontFamily: this.font.family,
