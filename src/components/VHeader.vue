@@ -31,10 +31,10 @@
           :items="fontWeightItems"
           v-model="state.weight" />
       </span>
-      <span title="Kerning ([/])">
+      <span title="Kerning ([ / ])">
         <v-text-field
           type="number"
-          step="0.1"
+          step="0.05"
           class="mt-2 ml-2"
           v-model="state.kerning"
           placeholder="Kerning" />
@@ -43,16 +43,16 @@
         multiple
         dense
         group>
-        <v-btn icon v-model="state.italic" :title="`Italic (${ctrlOrCmd} + I)`">
+        <v-btn icon v-model="state.italic" :title="`Italic (${ctrlOrCmd} + I)`" class="ma-0">
           <v-icon>mdi-format-italic</v-icon>
         </v-btn>
-        <v-btn icon v-model="state.monospace" :title="`Monospace (${ctrlOrCmd} + M)`">
+        <v-btn icon v-model="state.monospace" :title="`Monospace (${ctrlOrCmd} + M)`" class="ma-0">
           <v-icon>mdi-alpha-m</v-icon>
         </v-btn>
-        <v-btn icon v-model="state.favoriteOnly" title="Favorite only (F)">
+        <v-btn icon v-model="state.favoriteOnly" title="Favorite only (F)" class="ma-0">
           <v-icon>mdi-star</v-icon>
         </v-btn>
-        <v-btn icon v-model="state.darkMode" :title="`Dark mode (${ctrlOrCmd} + D)`">
+        <v-btn icon v-model="state.darkMode" :title="`Dark mode (${ctrlOrCmd} + D)`" class="ma-0">
           <v-icon>mdi-brightness-6</v-icon>
         </v-btn>
       </v-btn-toggle>
