@@ -1,25 +1,43 @@
 <template>
-  <v-card
-    class="pa-2">
+  <v-card class="pa-2">
     <v-text-field
       class="pa-2"
       prepend-icon="mdi-magnify"
       label="Search"
       hide-details
       clearable
+      ref="searchTextField"
       v-model="searchText"
+      @click:clear="clearSearch"
       @keydown.enter="search" />
   </v-card>
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator';
-import { store } from '../store';
+import { Component, Prop, Vue, Watch } from 'vue-property-decorator';
+import { store, IState } from '../store';
 
 @Component
 export default class VSearch extends Vue {
-  private searchText: string | null = ''
+  @Prop({ default: false }) readonly isOpen!: boolean;
+  private state: IState = store.state;
+  private searchText: string | null = this.state.searchText;
 
+  @Watch('isOpen', { immediate: true })
+  onOpenCloase() {
+    if (!this.isOpen) this.search();
+    else {
+      this.searchText = this.state.searchText;
+      this.$nextTick(() => {
+        ((this.$refs.searchTextField as Vue).$refs.input as HTMLElement).focus();
+      });
+    }
+  }
+
+  clearSearch() {
+    this.searchText = '';
+    this.search();
+  }
   search() {
     store.setSearchText(this.searchText || '');
     this.$emit('close-search');
