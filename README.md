@@ -17,6 +17,8 @@ You can preview fonts that installed.
   - Size
   - Weight
 
+You can see in [screenshots](./screenshots/screenshots.md).
+
 ## Contribution
 
 You must use `node.js 10` for building a native dependency(`font-manager`).
