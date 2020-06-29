@@ -8,7 +8,7 @@
       <v-settings />
     </v-dialog>
     <v-dialog v-model="showSearch" max-width="450">
-      <v-search @close-search="showSearch = false" />
+      <v-search @close-search="showSearch = false" :isOpen="showSearch" />
     </v-dialog>
     <v-main class="mt-12">
       <v-font-list />
