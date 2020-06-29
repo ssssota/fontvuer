@@ -58,6 +58,7 @@ export default class VFontCard extends Vue {
 
   setDetailFont() {
     store.setDetailFont(this.font);
+    store.setSelectedPostscriptIndex(this.selectedPostscriptIndex);
     this.$emit('open-modal');
   }
 
@@ -94,57 +95,74 @@ export default class VFontCard extends Vue {
   get hasWeights() {
     return this.font.postscripts.map(ps => ps.weight);
   }
-  hasWeight(weight: number) {
+  hasWeightPostscriptIndex(weight: number) {
+    const res = this.font.postscripts.findIndex(ps => {
+      return ps.weight === weight &&
+        (this.isDispForMonospace || ps.monospace) &&
+        (
+          (this.state.italic && this.psHasItalic(ps)) ||
+          (!this.state.italic && !this.psHasItalic(ps))
+        );
+    });
+    if (res >= 0) return res;
     return this.font.postscripts.findIndex(ps => {
-      return ps.weight === weight && (this.isDispForItalic || this.psHasItalic(ps)) && (this.isDispForMonospace || ps.monospace);
-    }) >= 0;
+      return ps.weight === weight && (this.isDispForMonospace || ps.monospace);
+    });
   }
-  weight(target: number) {
-    let res = this.font.postscripts[0].weight;
-    target = Math.floor(target);
+  get selectedPostscriptIndex() {
+    const target = Math.floor(this.state.weight);
     if (500<=target) {
       // bold
       for (let weight = target; weight <= 1000; weight++) {
-        if (this.hasWeight(weight)) return weight;
+        const index = this.hasWeightPostscriptIndex(weight);
+        if (index >= 0) return index;
       }
       for (let weight = target; weight > 0; weight--) {
-        if (this.hasWeight(weight)) return weight;
+        const index = this.hasWeightPostscriptIndex(weight);
+        if (index >= 0) return index;
       }
     } else if (400<=target) {
       // regular
       for (let weight = target; weight <= 500; weight++) {
-        if (this.hasWeight(weight)) return weight;
+        const index = this.hasWeightPostscriptIndex(weight);
+        if (index >= 0) return index;
       }
       for (let weight = target; weight > 0; weight--) {
-        if (this.hasWeight(weight)) return weight;
+        const index = this.hasWeightPostscriptIndex(weight);
+        if (index >= 0) return index;
       }
       for (let weight = 500; weight <= 1000; weight++) {
-        if (this.hasWeight(weight)) return weight;
+        const index = this.hasWeightPostscriptIndex(weight);
+        if (index >= 0) return index;
       }
     } else if (target<400) {
       // light
       for (let weight = target; weight > 0; weight--) {
-        if (this.hasWeight(weight)) return weight;
+        const index = this.hasWeightPostscriptIndex(weight);
+        if (index >= 0) return index;
       }
       for (let weight = target; weight <= 1000; weight++) {
-        if (this.hasWeight(weight)) return weight;
+        const index = this.hasWeightPostscriptIndex(weight);
+        if (index >= 0) return index;
       }
     }
-    return this.font.postscripts[0].weight;
+    // fallback
+    return 0;
+  }
+  get selectedPostscript() { return this.font.postscripts[this.selectedPostscriptIndex]; }
+  get fontStyle() {
+    return (this.state.forceItalic)? 'italic':
+      (this.selectedPostscript.italic)? 'italic':
+        (this.selectedPostscript.style.toLowerCase().includes('oblique'))? 'oblique':
+          'normal';
   }
 
   get style() {
-    const fontStyle =
-      (this.state.forceItalic)? 'italic':
-        (this.hasItalic)? 'italic':
-          (this.hasOblique)? 'oblique':
-            'normal';
-
     return {
       fontSize: `${this.state.size}px`,
       fontFamily: this.font.family,
-      fontWeight: this.weight(this.state.weight),
-      fontStyle: (this.state.italic)? fontStyle: 'normal',
+      fontWeight: this.selectedPostscript.weight,
+      fontStyle: (this.state.italic)? this.fontStyle: 'normal',
       letterSpacing: `${this.state.kerning}em`,
       fontKerning: 'normal',
       fontFutureSettings: 'palt 1',
