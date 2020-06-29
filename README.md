@@ -2,6 +2,8 @@
 
 [![fontvuer](https://snapcraft.io//fontvuer/badge.svg)](https://snapcraft.io/fontvuer) [![Release](https://github.com/ssssota/fontvuer/workflows/Release/badge.svg)](https://github.com/ssssota/fontvuer/releases)
 
+![fontvuer screenshot](./screenshots/default.png)
+
 This is a cross platform fontviewer.  
 You can preview fonts that installed.
 
