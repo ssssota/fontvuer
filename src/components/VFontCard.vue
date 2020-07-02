@@ -160,7 +160,7 @@ export default class VFontCard extends Vue {
   get style() {
     return {
       fontSize: `${this.state.size}px`,
-      fontFamily: this.font.family,
+      fontFamily: [this.font.family, this.font.altFamilyName],
       fontWeight: this.selectedPostscript.weight,
       fontStyle: (this.state.italic)? this.fontStyle: 'normal',
       letterSpacing: `${this.state.kerning}em`,

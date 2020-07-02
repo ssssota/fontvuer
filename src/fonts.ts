@@ -1,4 +1,5 @@
 import { IFontDescripter, IFontManager, IFontFamily, IPostscript } from './type';
+import fontkit from 'fontkit';
 import Store from 'electron-store';
 
 const estore = new Store();
@@ -24,8 +25,11 @@ export const getFontListFromManager = (): Promise<IFontFamily[]> => new Promise(
   resolve(getFontDescripters().reduce((arr, fd) => {
     const i = arr.findIndex(obj => obj.family === fd.family);
     if (i < 0) {
+      const font = fontkit.openSync(fd.path, fd.postscriptName);
       arr.push({
         family: fd.family,
+        altFamilyName: font.familyName,
+        //subFamilyName: font.subfamilyName,
         favorite: false,
         postscripts: [
           {
@@ -38,8 +42,7 @@ export const getFontListFromManager = (): Promise<IFontFamily[]> => new Promise(
           } as IPostscript
         ]
       });
-    }
-    else {
+    } else {
       arr[i].postscripts.push({
         name: fd.postscriptName,
         italic: fd.italic,
