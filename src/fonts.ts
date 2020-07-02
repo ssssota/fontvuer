@@ -25,11 +25,23 @@ export const getFontListFromManager = (): Promise<IFontFamily[]> => new Promise(
   resolve(getFontDescripters().reduce((arr, fd) => {
     const i = arr.findIndex(obj => obj.family === fd.family);
     if (i < 0) {
-      const font = fontkit.openSync(fd.path, fd.postscriptName);
+      let altFamilyName: any;
+      //let subFamilyName: any;
+      try {
+        const font = fontkit.openSync(fd.path);
+        altFamilyName = font.familyName;
+        //subFamilyName = font.subfamilyName;
+        const errorBuf2Str = (buf: Buffer) => Array(buf.length).fill(0).map((_,i) => {
+          return ((buf as Buffer)[i] !== 0) ? Buffer.from([buf[i]]).toString() : '';
+        }).join('');
+
+        if (altFamilyName instanceof Buffer) altFamilyName = errorBuf2Str(altFamilyName);
+        //if (subFamilyName instanceof Buffer) subFamilyName = errorBuf2Str(subFamilyName);
+      } catch (e) { console.error(e); }
       arr.push({
         family: fd.family,
-        altFamilyName: font.familyName,
-        //subFamilyName: font.subfamilyName,
+        altFamilyName: altFamilyName,
+        //subFamilyName: subFamilyName,
         favorite: false,
         postscripts: [
           {
