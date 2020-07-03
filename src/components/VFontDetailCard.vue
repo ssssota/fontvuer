@@ -119,15 +119,12 @@ export default class VFontDetailCard extends Vue {
     this.selectedPostscriptIndex = this.state.selectedPostscriptIndex;
     await this.$nextTick();
     const previewElem = this.$refs.mainPreview;
-    if (previewElem instanceof HTMLElement) {
-      //console.log(previewElem.style.fontFamily.replace(/(?:^"|"$)/g, ''), this.state.detailFont.family);
-      if (
-        previewElem.style.fontFamily &&
-        previewElem.style.fontFamily.replace(/(?:^"|"$)/g, '') !== this.state.detailFont.family
-      ) {
-        console.log(this.state.detailFont.family, this.state.detailFont.altFamilyName);
-        previewElem.style.fontFamily = `"${this.state.detailFont.altFamilyName}"` || '';
-      }
+    if (
+      previewElem instanceof HTMLElement &&
+      previewElem.style.fontFamily &&
+      previewElem.style.fontFamily.replace(/(?:^"|"$)/g, '') !== this.state.detailFont.family
+    ) {
+      previewElem.style.fontFamily = `"${this.state.detailFont.altFamilyName}"` || '';
     }
   }
 }
