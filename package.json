@@ -1,6 +1,6 @@
 {
   "name": "fontvuer",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Fontviewer. You can preview fonts.",
   "scripts": {
     "serve": "vue-cli-service serve",
@@ -13,11 +13,13 @@
   },
   "main": "background.js",
   "dependencies": {
+    "@types/fontkit": "^1.8.0",
     "@types/mousetrap": "^1.6.3",
     "core-js": "^3.6.5",
     "electron-store": "^5.2.0",
     "electron-updater": "^4.3.1",
     "font-manager": "0.3.0",
+    "fontkit": "^1.8.1",
     "mousetrap": "^1.6.5",
     "vue": "^2.6.11",
     "vue-class-component": "^7.2.3",
@@ -37,6 +39,7 @@
     "eslint-plugin-vue": "^5.0.0",
     "sass": "^1.26.9",
     "sass-loader": "^8.0.2",
+    "transform-loader": "^0.2.4",
     "typescript": "~3.5.3",
     "vue-cli-plugin-electron-builder": "^1.4.6",
     "vue-cli-plugin-vuetify": "^2.0.6",

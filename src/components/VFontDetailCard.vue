@@ -16,12 +16,13 @@
           :value="i">
         </v-radio>
       </v-radio-group>
-      <h3 :style="style">{{ previewText }}</h3>
+      <h3 :style="style" ref="mainPreview">{{ previewText }}</h3>
       <v-list-item>
         <v-list-item-content>
           <v-list-item-title>Postscript name</v-list-item-title>
           <v-list-item-subtitle>
             {{ selectedPostscript.name }}
+            <v-copy-btn :copy-text="selectedPostscript.name" />
           </v-list-item-subtitle>
         </v-list-item-content>
       </v-list-item>
@@ -97,7 +98,7 @@ export default class VFontDetailCard extends Vue {
   get style() {
     return {
       padding: '16px',
-      fontSize: `${this.state.size}px`,
+      fontSize: `${this.state.size}pt`,
       fontFamily: this.state.detailFont.family,
       fontStyle: this.fontStyle,
       fontWeight: this.selectedPostscript.weight,
@@ -117,6 +118,14 @@ export default class VFontDetailCard extends Vue {
     await this.$nextTick();
     this.selectedPostscriptIndex = this.state.selectedPostscriptIndex;
     await this.$nextTick();
+    const previewElem = this.$refs.mainPreview;
+    if (
+      previewElem instanceof HTMLElement &&
+      previewElem.style.fontFamily &&
+      previewElem.style.fontFamily.replace(/(?:^"|"$)/g, '') !== this.state.detailFont.family
+    ) {
+      previewElem.style.fontFamily = `"${this.state.detailFont.altFamilyName}"` || '';
+    }
   }
 }
 </script>
