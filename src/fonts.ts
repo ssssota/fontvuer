@@ -37,7 +37,8 @@ export const getFontListFromManager = (): Promise<IFontFamily[]> => new Promise(
 
         if (altFamilyName instanceof Buffer) altFamilyName = errorBuf2Str(altFamilyName);
         //if (subFamilyName instanceof Buffer) subFamilyName = errorBuf2Str(subFamilyName);
-      } catch (e) { console.error(e); }
+      } catch (e) { altFamilyName = undefined; }
+
       arr.push({
         family: fd.family,
         altFamilyName: altFamilyName,
