@@ -5,6 +5,7 @@
     outlined
     v-if="isDisp">
     <v-card-title
+      ref="mainPreview"
       :style="style"
       @click.self.stop="setDetailFont">
       {{ previewText }}
@@ -55,6 +56,14 @@ export default class VFontCard extends Vue {
 
   private state: IState = store.state;
   private favorite: number | null | undefined = getFavFont(this.font.family)? 0: null;
+
+  mounted() {
+    const previewElem = this.$refs.mainPreview;
+    if (previewElem instanceof HTMLElement && previewElem.style.fontFamily === '') {
+      console.log(this.font.altFamilyName);
+      previewElem.style.fontFamily = `"${this.font.altFamilyName}"` || '';
+    }
+  }
 
   setDetailFont() {
     store.setDetailFont(this.font);
@@ -159,14 +168,14 @@ export default class VFontCard extends Vue {
 
   get style() {
     return {
-      fontSize: `${this.state.size}px`,
+      fontSize: `${this.state.size}pt`,
       fontFamily: this.font.family,
       fontWeight: this.selectedPostscript.weight,
       fontStyle: (this.state.italic)? this.fontStyle: 'normal',
       letterSpacing: `${this.state.kerning}em`,
       fontKerning: 'normal',
       fontFutureSettings: 'palt 1',
-      lineHeight: `${this.state.size+4}px`,
+      lineHeight: `${this.state.size+4}pt`,
       cursor: 'pointer'
     };
   }
