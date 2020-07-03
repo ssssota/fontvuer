@@ -10,7 +10,7 @@ const settingsPath = {
   darkMode: 'settings.darkMode'
 };
 
-const INIT_SIZE = 32;
+const INIT_SIZE = 24;
 const INIT_WEIGHT = 400;
 const INIT_KERNING = 0;
 const INIT_ITALIC = false;
