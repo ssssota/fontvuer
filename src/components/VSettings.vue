@@ -61,13 +61,16 @@
         </v-toolbar>
         <v-list>
           <v-list-item>
-            <v-switch label="Force italic" v-model="state.forceItalic" @change="changeForceItalic" />
+            <v-switch label="Display English family names first" :value="state.altFamlyNameFirst" @change="changeAltFamlyNameFirst" />
+          </v-list-item>
+          <v-list-item>
+            <v-switch label="Force italic" :value="state.forceItalic" @change="changeForceItalic" />
           </v-list-item>
           <v-list-item>
             <v-switch label="Don't display fonts that has no italic" :value="!state.forceItalic && state.dispNoItalic" @change="changeDispNoItalic" :disabled="state.forceItalic" />
           </v-list-item>
           <v-list-item>
-            <v-switch label="Don't display fonts that has no monospace" v-model="state.dispNoMonospace" @change="changeDispNoMonospace" />
+            <v-switch label="Don't display fonts that has no monospace" :value="state.dispNoMonospace" @change="changeDispNoMonospace" />
           </v-list-item>
           <v-divider></v-divider>
           <v-list-item>
@@ -97,6 +100,15 @@ export default class VSettings extends Vue {
   changeSize(val: number) {
     store.setSize(val);
   }
+  changeFavoriteOnly(val: boolean) {
+    store.setFavoriteOnly(val);
+  }
+  changeDarkMode(val: boolean) {
+    store.setDarkMode(val);
+  }
+  changeAltFamilyNameFirst(val: boolean) {
+    store.setAltFamilyNameFirst(val);
+  }
   changeForceItalic(val: boolean) {
     store.setForceItalic(val);
   }
@@ -105,12 +117,6 @@ export default class VSettings extends Vue {
   }
   changeDispNoMonospace(val: boolean) {
     store.setDispNoMonospace(val);
-  }
-  changeFavoriteOnly(val: boolean) {
-    store.setFavoriteOnly(val);
-  }
-  changeDarkMode(val: boolean) {
-    store.setDarkMode(val);
   }
 
   openLink(href: string) {
