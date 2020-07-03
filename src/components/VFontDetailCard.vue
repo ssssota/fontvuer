@@ -22,6 +22,7 @@
           <v-list-item-title>Postscript name</v-list-item-title>
           <v-list-item-subtitle>
             {{ selectedPostscript.name }}
+            <v-copy-btn :copy-text="selectedPostscript.name" />
           </v-list-item-subtitle>
         </v-list-item-content>
       </v-list-item>
@@ -119,8 +120,11 @@ export default class VFontDetailCard extends Vue {
     await this.$nextTick();
     const previewElem = this.$refs.mainPreview;
     if (previewElem instanceof HTMLElement) {
-      console.log(previewElem.style.fontFamily.replace(/(?:^"|"$)/g, ''), this.state.detailFont.family);
-      if (previewElem.style.fontFamily.replace(/(?:^"|"$)/g, '') !== this.state.detailFont.family) {
+      //console.log(previewElem.style.fontFamily.replace(/(?:^"|"$)/g, ''), this.state.detailFont.family);
+      if (
+        previewElem.style.fontFamily &&
+        previewElem.style.fontFamily.replace(/(?:^"|"$)/g, '') !== this.state.detailFont.family
+      ) {
         console.log(this.state.detailFont.family, this.state.detailFont.altFamilyName);
         previewElem.style.fontFamily = `"${this.state.detailFont.altFamilyName}"` || '';
       }
