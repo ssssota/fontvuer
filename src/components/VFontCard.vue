@@ -60,7 +60,6 @@ export default class VFontCard extends Vue {
   mounted() {
     const previewElem = this.$refs.mainPreview;
     if (previewElem instanceof HTMLElement && previewElem.style.fontFamily === '') {
-      console.log(this.font.altFamilyName);
       previewElem.style.fontFamily = `"${this.font.altFamilyName}"` || '';
     }
   }
