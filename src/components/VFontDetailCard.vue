@@ -1,8 +1,8 @@
 <template>
   <v-card max-width="600">
     <v-card-title>
-      {{ state.detailFont.family }}
-      <v-copy-btn :copy-text="state.detailFont.family" />
+      {{ dispFamilyName }}
+      <v-copy-btn :copy-text="dispFamilyName" />
     </v-card-title>
     <v-card-text>
       <v-radio-group
@@ -76,6 +76,11 @@ export default class VFontDetailCard extends Vue {
   private state: IState = store.state;
   private copyMessage: string = 'Copy';
   private selectedPostscriptIndex: number = 0;
+  
+  get dispFamilyName() {
+    console.log(this.state.altFamilyNameFirst, this.state.detailFont.family, this.state.detailFont.altFamilyName);
+    return this.state.detailFont.getFirstFamilyName(this.state.altFamilyNameFirst);
+  }
 
   get selectedPostscript() {
     if (

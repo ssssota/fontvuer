@@ -61,7 +61,7 @@
         </v-toolbar>
         <v-list>
           <v-list-item>
-            <v-switch label="Display English family names first" :value="state.altFamlyNameFirst" @change="changeAltFamlyNameFirst" />
+            <v-switch label="Display English family names first" :value="state.altFamilyNameFirst" @change="changeAltFamilyNameFirst" />
           </v-list-item>
           <v-list-item>
             <v-switch label="Force italic" :value="state.forceItalic" @change="changeForceItalic" />

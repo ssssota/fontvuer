@@ -17,8 +17,8 @@
       </v-btn-toggle>
     </v-card-title>
     <v-card-subtitle :class="{ 'pb-2': !displayWarn, 'pb-0': displayWarn }">
-      {{ font.family }}
-      <v-copy-btn :copy-text="font.family" />
+      {{ dispFamilyName }}
+      <v-copy-btn :copy-text="dispFamilyName" />
     </v-card-subtitle>
     <v-card-text v-if="displayWarn" class="pb-2">
       <v-alert
@@ -69,6 +69,10 @@ export default class VFontCard extends Vue {
     store.setDetailFont(this.font);
     store.setSelectedPostscriptIndex(this.selectedPostscriptIndex);
     this.$emit('open-modal');
+  }
+
+  get dispFamilyName() {
+    return this.font.getFirstFamilyName(this.state.altFamilyNameFirst);
   }
 
   get isDisp() {

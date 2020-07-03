@@ -94,7 +94,7 @@ export const store = {
     this.state.monospace = _mono;
   },
   setAltFamilyNameFirst(_altFamilyNameFirst: boolean) {
-    //if (this.debug) console.log('Alt family name first →', _altFamilyNameFirst);
+    if (this.debug) console.log('Alt family name first →', _altFamilyNameFirst);
     this.state.altFamilyNameFirst = _altFamilyNameFirst;
     estore.set(settingsPath.altFamilyNameFirst, _altFamilyNameFirst);
   },
