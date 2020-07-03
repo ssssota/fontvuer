@@ -64,7 +64,7 @@
 <script lang="ts">
 import { Component, Prop, Vue, Watch } from 'vue-property-decorator';
 import VCopyBtn from './VCopyBtn.vue';
-import { IFontFamily, IPostscript } from '../type';
+import { FontFamily, IPostscript } from '../type';
 import { IState, store } from '../store';
 
 @Component({
@@ -112,16 +112,19 @@ export default class VFontDetailCard extends Vue {
     return val? 'Yes': 'No';
   }
 
-  @Watch('state.detailFont')
+  @Watch('state.detailFont', { immediate: true })
   async onChangeFont() {
     await this.$nextTick();
     this.selectedPostscriptIndex = this.state.selectedPostscriptIndex;
     await this.$nextTick();
     const previewElem = this.$refs.mainPreview;
     if (previewElem instanceof HTMLElement) {
-      console.log(previewElem.style.fontFamily.replace(/(?:^"|"$)/g, ''), this.state.detailFont.family);
-      if (previewElem.style.fontFamily.replace(/(?:^"|"$)/g, '') !== this.state.detailFont.family) {
-        console.log(this.state.detailFont.family, this.state.detailFont.altFamilyName);
+      //console.log(previewElem.style.fontFamily.replace(/(?:^"|"$)/g, ''), this.state.detailFont.family);
+      if (
+        previewElem.style.fontFamily &&
+        previewElem.style.fontFamily.replace(/(?:^"|"$)/g, '') !== this.state.detailFont.family
+      ) {
+        //console.log(this.state.detailFont.family, this.state.detailFont.altFamilyName);
         previewElem.style.fontFamily = `"${this.state.detailFont.altFamilyName}"` || '';
       }
     }

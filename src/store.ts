@@ -1,9 +1,10 @@
-import { IFontFamily } from './type';
+import { FontFamily } from './type';
 import Store from 'electron-store';
 
 const estore = new Store();
 
 const settingsPath = {
+  altFamilyNameFirst: 'settings.altFamilyNameFirst',
   forceItalic: 'settings.forceItalic',
   dispNoItalic: 'settings.dispNoItalic',
   dispNoMonospace: 'settings.dispNoItalic',
@@ -15,6 +16,7 @@ const INIT_WEIGHT = 400;
 const INIT_KERNING = 0;
 const INIT_ITALIC = false;
 const INIT_MONOSPACE = false;
+const INIT_ALT_FAMILY_NAME_FIRST = estore.get(settingsPath.altFamilyNameFirst, false);
 const INIT_FORCE_ITALIC = estore.get(settingsPath.forceItalic, false);
 const INIT_DISP_NO_ITALIC = estore.get(settingsPath.dispNoItalic, false);
 const INIT_DISP_NO_MONOSPACE = estore.get(settingsPath.dispNoMonospace, false);
@@ -22,6 +24,7 @@ const INIT_PREVIEW = 'fontvuer';
 const INIT_FAV_ONLY = false;
 const INIT_DARK_MODE = estore.get(settingsPath.darkMode, false);
 
+if (!estore.has(settingsPath.altFamilyNameFirst)) estore.set(settingsPath.altFamilyNameFirst, false);
 if (!estore.has(settingsPath.forceItalic)) estore.set(settingsPath.forceItalic, false);
 if (!estore.has(settingsPath.dispNoItalic)) estore.set(settingsPath.dispNoItalic, false);
 if (!estore.has(settingsPath.dispNoMonospace)) estore.set(settingsPath.dispNoMonospace, false);
@@ -32,6 +35,7 @@ export interface IState {
   size: number
   italic: boolean
   monospace: boolean
+  altFamilyNameFirst: boolean
   forceItalic: boolean
   dispNoItalic: boolean
   dispNoMonospace: boolean
@@ -39,7 +43,7 @@ export interface IState {
   kerning: number
   favoriteOnly: boolean
   darkMode: boolean
-  detailFont: IFontFamily
+  detailFont: FontFamily
   selectedPostscriptIndex: number
   favFonts: string[]
   searchText: string
@@ -52,6 +56,7 @@ export const store = {
     size: INIT_SIZE,
     italic: INIT_ITALIC,
     monospace: INIT_MONOSPACE,
+    altFamilyNameFirst: INIT_ALT_FAMILY_NAME_FIRST,
     forceItalic: INIT_FORCE_ITALIC,
     dispNoItalic: INIT_DISP_NO_ITALIC,
     dispNoMonospace: INIT_DISP_NO_MONOSPACE,
@@ -60,7 +65,7 @@ export const store = {
     favoriteOnly: INIT_FAV_ONLY,
     darkMode: INIT_DARK_MODE,
     favFonts: [],
-    detailFont: {} as IFontFamily,
+    detailFont: {} as FontFamily,
     selectedPostscriptIndex: 0,
     searchText: ''
   } as IState,
@@ -87,6 +92,11 @@ export const store = {
     _mono = !!_mono;
     //if (this.debug) console.log('Monospace →', _mono);
     this.state.monospace = _mono;
+  },
+  setAltFamilyNameFirst(_altFamilyNameFirst: boolean) {
+    //if (this.debug) console.log('Alt family name first →', _altFamilyNameFirst);
+    this.state.altFamilyNameFirst = _altFamilyNameFirst;
+    estore.set(settingsPath.altFamilyNameFirst, _altFamilyNameFirst);
   },
   setForceItalic(_forceItalic: boolean) {
     //if (this.debug) console.log('Force italic →', _forceItalic);
@@ -124,7 +134,7 @@ export const store = {
     this.state.darkMode = _darkMode;
     estore.set(settingsPath.darkMode, _darkMode);
   },
-  setDetailFont(_detailFont: IFontFamily) {
+  setDetailFont(_detailFont: FontFamily) {
     //if (this.debug) console.log('Detail font →', _detailFont.family);
     this.state.detailFont = _detailFont;
   },

@@ -41,7 +41,7 @@
 
 <script lang="ts">
 import { Component, Prop, Vue, Watch } from 'vue-property-decorator';
-import { IFontFamily, IPostscript } from '../type';
+import { FontFamily, IPostscript } from '../type';
 import VCopyBtn from './VCopyBtn.vue';
 import { IState, store } from '../store';
 import { getFavFont, saveFavFonts } from '../fonts';
@@ -52,7 +52,7 @@ import { getFavFont, saveFavFonts } from '../fonts';
   }
 })
 export default class VFontCard extends Vue {
-  @Prop() private font!: IFontFamily;
+  @Prop() private font!: FontFamily;
 
   private state: IState = store.state;
   private favorite: number | null | undefined = getFavFont(this.font.family)? 0: null;
@@ -60,7 +60,7 @@ export default class VFontCard extends Vue {
   mounted() {
     const previewElem = this.$refs.mainPreview;
     if (previewElem instanceof HTMLElement && previewElem.style.fontFamily === '') {
-      console.log(this.font.altFamilyName);
+      //console.log(this.font.altFamilyName);
       previewElem.style.fontFamily = `"${this.font.altFamilyName}"` || '';
     }
   }

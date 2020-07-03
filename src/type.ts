@@ -31,10 +31,33 @@ export interface IPostscript {
   width: number;
 }
 
-export interface IFontFamily {
+export class FontFamily {
   family: string;
   altFamilyName?: string;
   //subFamilyName?: string;
   favorite: boolean;
   postscripts: IPostscript[];
+
+  constructor(init: {
+    family: string,
+    altFamilyName?: string,
+    favorite: boolean,
+    postscripts: IPostscript[]
+  }) {
+    this.family = init.family;
+    this.altFamilyName = init.altFamilyName;
+    this.favorite = init.favorite;
+    this.postscripts = init.postscripts;
+  }
+
+  addPostscript(ps: IPostscript) {
+    this.postscripts.push(ps);
+  }
+
+  getFirstFamilyName(altFirst: boolean): string {
+    return altFirst ? this.altFamilyName || this.family : this.family;
+  }
+  getSecondFamilyName(altFirst: boolean): string {
+    return altFirst ? this.family : this.altFamilyName || this.family;
+  }
 }

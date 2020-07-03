@@ -1,4 +1,4 @@
-import { IFontDescripter, IFontManager, IFontFamily, IPostscript } from './type';
+import { IFontDescripter, IFontManager, FontFamily, IPostscript } from './type';
 import fontkit from 'fontkit';
 import Store from 'electron-store';
 
@@ -7,7 +7,7 @@ const estore = new Store();
 const fontManager: IFontManager = require('font-manager');
 let fontDescripters: IFontDescripter[];
 
-export const getFontList = (): Promise<IFontFamily[]> => new Promise(async resolve => {
+export const getFontList = (): Promise<FontFamily[]> => new Promise(async resolve => {
   /*
     |cache|manag|result|
     |-----|-----|------|
@@ -20,8 +20,8 @@ export const getFontList = (): Promise<IFontFamily[]> => new Promise(async resol
   resolve(manager);
 });
 
-// get fontlist(IFontFamily[]) from font-manager module
-export const getFontListFromManager = (): Promise<IFontFamily[]> => new Promise(resolve => {
+// get fontlist(FontFamily[]) from font-manager module
+export const getFontListFromManager = (): Promise<FontFamily[]> => new Promise(resolve => {
   resolve(getFontDescripters().reduce((arr, fd) => {
     const i = arr.findIndex(obj => obj.family === fd.family);
     if (i < 0) {
@@ -38,7 +38,8 @@ export const getFontListFromManager = (): Promise<IFontFamily[]> => new Promise(
         if (altFamilyName instanceof Buffer) altFamilyName = errorBuf2Str(altFamilyName);
         //if (subFamilyName instanceof Buffer) subFamilyName = errorBuf2Str(subFamilyName);
       } catch (e) { console.error(e); }
-      arr.push({
+
+      arr.push(new FontFamily({
         family: fd.family,
         altFamilyName: altFamilyName,
         //subFamilyName: subFamilyName,
@@ -53,9 +54,9 @@ export const getFontListFromManager = (): Promise<IFontFamily[]> => new Promise(
             width: fd.width
           } as IPostscript
         ]
-      });
+      }));
     } else {
-      arr[i].postscripts.push({
+      arr[i].addPostscript({
         name: fd.postscriptName,
         italic: fd.italic,
         monospace: fd.monospace,
@@ -65,7 +66,7 @@ export const getFontListFromManager = (): Promise<IFontFamily[]> => new Promise(
       } as IPostscript);
     }
     return arr;
-  }, [] as IFontFamily[]).map(f => {
+  }, [] as FontFamily[]).map(f => {
     f.postscripts = f.postscripts.sort((p1, p2) => (p1.weight > p2.weight) ? 1 : -1);
     return f;
   }));
