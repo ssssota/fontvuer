@@ -1,5 +1,5 @@
-import { IFontFamily } from './type';
 import Store from 'electron-store';
+import { IFontFamily } from './type';
 
 const estore = new Store();
 
@@ -7,7 +7,7 @@ const settingsPath = {
   forceItalic: 'settings.forceItalic',
   dispNoItalic: 'settings.dispNoItalic',
   dispNoMonospace: 'settings.dispNoItalic',
-  darkMode: 'settings.darkMode'
+  darkMode: 'settings.darkMode',
 };
 
 const INIT_SIZE = 24;
@@ -62,79 +62,79 @@ export const store = {
     favFonts: [],
     detailFont: {} as IFontFamily,
     selectedPostscriptIndex: 0,
-    searchText: ''
+    searchText: '',
   } as IState,
 
   getPreviewText() {
-    return (this.state.previewText === '')? 'Preview text': this.state.previewText;
+    return (this.state.previewText === '') ? 'Preview text' : this.state.previewText;
   },
   setPreviewText(_previewText: string) {
     if (_previewText === '' || typeof _previewText !== 'string') _previewText = '';
-    //if (this.debug) console.log('Preview text →', _previewText);
+    // if (this.debug) console.log('Preview text →', _previewText);
     this.state.previewText = _previewText;
   },
   setSize(_size: number) {
-    if (typeof _size !== 'number' || _size < 0 || 1000 < _size) _size = INIT_SIZE;
-    //if (this.debug) console.log('Size →', _size);
+    if (typeof _size !== 'number' || _size < 0 || _size > 1000) _size = INIT_SIZE;
+    // if (this.debug) console.log('Size →', _size);
     this.state.size = _size;
   },
   setItalic(_italic: boolean) {
     _italic = !!_italic;
-    //if (this.debug) console.log('Italic →', _italic);
+    // if (this.debug) console.log('Italic →', _italic);
     this.state.italic = _italic;
   },
   setMonospace(_mono: boolean) {
     _mono = !!_mono;
-    //if (this.debug) console.log('Monospace →', _mono);
+    // if (this.debug) console.log('Monospace →', _mono);
     this.state.monospace = _mono;
   },
   setForceItalic(_forceItalic: boolean) {
-    //if (this.debug) console.log('Force italic →', _forceItalic);
+    // if (this.debug) console.log('Force italic →', _forceItalic);
     this.state.forceItalic = _forceItalic;
     estore.set(settingsPath.forceItalic, _forceItalic);
   },
   setDispNoItalic(_dispNoItalic: boolean) {
-    //if (this.debug) console.log('Display no italic →', _dispNoItalic);
+    // if (this.debug) console.log('Display no italic →', _dispNoItalic);
     this.state.dispNoItalic = _dispNoItalic;
     estore.set(settingsPath.dispNoItalic, _dispNoItalic);
   },
   setDispNoMonospace(_dispNoMonospace: boolean) {
-    //if (this.debug) console.log('Display no monospace →', _dispNoMonospace);
+    // if (this.debug) console.log('Display no monospace →', _dispNoMonospace);
     this.state.dispNoMonospace = _dispNoMonospace;
     estore.set(settingsPath.dispNoMonospace, _dispNoMonospace);
   },
   setWeight(_weight: number) {
-    if (typeof _weight !== 'number' || _weight < 0 || 1000 < _weight) _weight = INIT_WEIGHT;
-    //if (this.debug) console.log('Weight →', _weight);
+    if (typeof _weight !== 'number' || _weight < 0 || _weight > 1000) _weight = INIT_WEIGHT;
+    // if (this.debug) console.log('Weight →', _weight);
     this.state.weight = _weight;
   },
   setKerning(_kerning: number) {
     if (typeof _kerning !== 'number') _kerning = INIT_KERNING;
-    //if (this.debug) console.log('Kerning →', _kerning);
+    // if (this.debug) console.log('Kerning →', _kerning);
     this.state.kerning = _kerning;
   },
   setFavoriteOnly(_favoriteOnly: boolean) {
     _favoriteOnly = !!_favoriteOnly;
-    //if (this.debug) console.log('Favorite only →', _favoriteOnly);
+    // if (this.debug) console.log('Favorite only →', _favoriteOnly);
     this.state.favoriteOnly = _favoriteOnly;
   },
   setDarkMode(_darkMode: boolean) {
     _darkMode = !!_darkMode;
-    //if (this.debug) console.log('Dark mode →', _darkMode);
+    // if (this.debug) console.log('Dark mode →', _darkMode);
     this.state.darkMode = _darkMode;
     estore.set(settingsPath.darkMode, _darkMode);
   },
   setDetailFont(_detailFont: IFontFamily) {
-    //if (this.debug) console.log('Detail font →', _detailFont.family);
+    // if (this.debug) console.log('Detail font →', _detailFont.family);
     this.state.detailFont = _detailFont;
   },
   setSelectedPostscriptIndex(_index: number) {
     if (typeof _index !== 'number') _index = 0;
-    //if (this.debug) console.log('Postscript index →', _index);
+    // if (this.debug) console.log('Postscript index →', _index);
     this.state.selectedPostscriptIndex = _index;
   },
   setSearchText(_searchText: string) {
-    //if (this.debug) console.log('Search text →', _searchText);
+    // if (this.debug) console.log('Search text →', _searchText);
     this.state.searchText = _searchText.toLowerCase();
-  }
+  },
 };

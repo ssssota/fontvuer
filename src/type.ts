@@ -34,7 +34,7 @@ export interface IPostscript {
 export interface IFontFamily {
   family: string;
   altFamilyName?: string;
-  //subFamilyName?: string;
+  // subFamilyName?: string;
   favorite: boolean;
   postscripts: IPostscript[];
 }

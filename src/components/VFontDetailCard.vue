@@ -63,36 +63,42 @@
 </template>
 
 <script lang="ts">
-import { Component, Prop, Vue, Watch } from 'vue-property-decorator';
+import {
+  Component, Prop, Vue, Watch,
+} from 'vue-property-decorator';
 import VCopyBtn from './VCopyBtn.vue';
 import { IFontFamily, IPostscript } from '../type';
 import { IState, store } from '../store';
 
 @Component({
   components: {
-    VCopyBtn
-  }
+    VCopyBtn,
+  },
 })
 export default class VFontDetailCard extends Vue {
   private state: IState = store.state;
-  private copyMessage: string = 'Copy';
-  private selectedPostscriptIndex: number = 0;
+
+  private copyMessage = 'Copy';
+
+  private selectedPostscriptIndex = 0;
 
   get selectedPostscript() {
     if (
-      this.selectedPostscriptIndex == null ||
-      this.state.detailFont.postscripts.length <= 1 ||
-      this.state.detailFont.postscripts.length <= this.selectedPostscriptIndex
+      this.selectedPostscriptIndex == null
+      || this.state.detailFont.postscripts.length <= 1
+      || this.state.detailFont.postscripts.length <= this.selectedPostscriptIndex
     ) return this.state.detailFont.postscripts[0];
     return this.state.detailFont.postscripts[this.selectedPostscriptIndex];
   }
+
   get previewText() {
     return store.getPreviewText();
   }
+
   get fontStyle() {
-    return (this.selectedPostscript.italic)? 'italic':
-      (this.selectedPostscript.style.toLowerCase().includes('oblique'))? 'oblique':
-        'normal';
+    return (this.selectedPostscript.italic) ? 'italic'
+      : (this.selectedPostscript.style.toLowerCase().includes('oblique')) ? 'oblique'
+        : 'normal';
   }
 
   get style() {
@@ -105,12 +111,12 @@ export default class VFontDetailCard extends Vue {
       letterSpacing: `${this.state.kerning}em`,
       fontKerning: 'normal',
       fontFutureSettings: 'palt 1',
-      lineHeight: `${this.state.size+4}px`
+      lineHeight: `${this.state.size + 4}px`,
     };
   }
 
   boolToYenNo(val: boolean): string {
-    return val? 'Yes': 'No';
+    return val ? 'Yes' : 'No';
   }
 
   @Watch('state.detailFont')
@@ -120,9 +126,9 @@ export default class VFontDetailCard extends Vue {
     await this.$nextTick();
     const previewElem = this.$refs.mainPreview;
     if (
-      previewElem instanceof HTMLElement &&
-      previewElem.style.fontFamily &&
-      previewElem.style.fontFamily.replace(/(?:^"|"$)/g, '') !== this.state.detailFont.family
+      previewElem instanceof HTMLElement
+      && previewElem.style.fontFamily
+      && previewElem.style.fontFamily.replace(/(?:^"|"$)/g, '') !== this.state.detailFont.family
     ) {
       previewElem.style.fontFamily = `"${this.state.detailFont.altFamilyName}"` || '';
     }

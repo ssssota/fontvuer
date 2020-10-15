@@ -14,13 +14,17 @@
 </template>
 
 <script lang="ts">
-import { Component, Prop, Vue, Watch } from 'vue-property-decorator';
+import {
+  Component, Prop, Vue, Watch,
+} from 'vue-property-decorator';
 import { store, IState } from '../store';
 
 @Component
 export default class VSearch extends Vue {
   @Prop({ default: false }) readonly isOpen!: boolean;
+
   private state: IState = store.state;
+
   private searchText: string | null = this.state.searchText;
 
   @Watch('isOpen', { immediate: true })
@@ -38,6 +42,7 @@ export default class VSearch extends Vue {
     this.searchText = '';
     this.search();
   }
+
   search() {
     store.setSearchText(this.searchText || '');
     this.$emit('close-search');

@@ -14,7 +14,8 @@ import { Component, Prop, Vue } from 'vue-property-decorator';
 @Component
 export default class VCopyBtn extends Vue {
   @Prop({ required: true }) private copyText!: string;
-  private copyMessage: string = 'Copy';
+
+  private copyMessage = 'Copy';
 
   copyFamilyName() {
     // 空div 生成

@@ -88,27 +88,35 @@ import { CtrlOrCmd, FontSizes, FontWeightItems } from '../util';
 @Component
 export default class VSettings extends Vue {
   private state: IState = store.state;
-  private showSettings: boolean = false;
+
+  private showSettings = false;
 
   get ctrlOrCmd() { return CtrlOrCmd; }
+
   get fontSizes() { return FontSizes; }
+
   get fontWeightItems() { return FontWeightItems; }
 
   changeSize(val: number) {
     store.setSize(val);
   }
+
   changeForceItalic(val: boolean) {
     store.setForceItalic(val);
   }
+
   changeDispNoItalic(val: boolean) {
     store.setDispNoItalic(val);
   }
+
   changeDispNoMonospace(val: boolean) {
     store.setDispNoMonospace(val);
   }
+
   changeFavoriteOnly(val: boolean) {
     store.setFavoriteOnly(val);
   }
+
   changeDarkMode(val: boolean) {
     store.setDarkMode(val);
   }

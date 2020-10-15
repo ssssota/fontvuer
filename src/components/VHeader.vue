@@ -81,16 +81,20 @@
 <script lang="ts">
 import { Component, Vue, Watch } from 'vue-property-decorator';
 import { IState, store } from '../store';
-import { CtrlOrCmd, FontSizes, FontWeightItems} from '../util';
+import { CtrlOrCmd, FontSizes, FontWeightItems } from '../util';
 
 @Component
 export default class VHeader extends Vue {
   private state: IState = store.state;
+
   private fav: boolean = this.state.favoriteOnly;
+
   private dark: boolean = this.state.darkMode;
 
   get ctrlOrCmd() { return CtrlOrCmd; }
+
   get fontSizes() { return FontSizes; }
+
   get fontWeightItems() { return FontWeightItems; }
 
   setPreviewText(_previewText: string) {
@@ -104,6 +108,7 @@ export default class VHeader extends Vue {
   changeFavoriteOnly(val?: true) {
     store.setFavoriteOnly(!!val);
   }
+
   changeDarkMode(val?: true) {
     store.setDarkMode(!!val);
   }

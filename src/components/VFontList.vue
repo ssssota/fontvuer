@@ -21,7 +21,9 @@
 import { Component, Prop, Vue } from 'vue-property-decorator';
 import VFontCard from './VFontCard.vue';
 import VFontDetailCard from './VFontDetailCard.vue';
-import { IFontDescripter, IFontManager, IFontFamily, IPostscript } from '../type';
+import {
+  IFontDescripter, IFontManager, IFontFamily, IPostscript,
+} from '../type';
 import { getFontList, saveFavFonts } from '../fonts';
 import { IState, store } from '../store';
 
@@ -30,16 +32,18 @@ const fontManager: IFontManager = require('font-manager');
 @Component({
   components: {
     VFontCard,
-    VFontDetailCard
-  }
+    VFontDetailCard,
+  },
 })
 export default class VFontList extends Vue {
   private fontArray: IFontFamily[] = [];
-  private showModal: boolean = false;
+
+  private showModal = false;
+
   private state: IState = store.state;
 
   created() {
-    getFontList().then(res => res.map(ff => this.fontArray.push(ff)));
+    getFontList().then((res) => res.map((ff) => this.fontArray.push(ff)));
   }
 
   get targetFontArray() {
