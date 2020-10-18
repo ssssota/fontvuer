@@ -3,7 +3,9 @@
     <v-card-title>Settings</v-card-title>
     <v-list>
       <v-list-item>
-        <v-list-item-title>Font size(px) <kbd>{{ctrlOrCmd}}</kbd> + <kbd>-</kbd>&nbsp;/&nbsp;<kbd>+</kbd></v-list-item-title>
+        <v-list-item-title>
+          Font size(px) <kbd>{{ctrlOrCmd}}</kbd> + <kbd>-</kbd>&nbsp;/&nbsp;<kbd>+</kbd>
+        </v-list-item-title>
         <v-list-item-action>
           <v-select
             v-model="state.size"
@@ -12,7 +14,9 @@
         </v-list-item-action>
       </v-list-item>
       <v-list-item>
-        <v-list-item-title>Font weight <kbd>{{ctrlOrCmd}}</kbd> + <kbd>↑</kbd>&nbsp;/&nbsp;<kbd>↓</kbd></v-list-item-title>
+        <v-list-item-title>
+          Font weight <kbd>{{ctrlOrCmd}}</kbd> + <kbd>↑</kbd>&nbsp;/&nbsp;<kbd>↓</kbd>
+        </v-list-item-title>
         <v-list-item-action>
           <v-select
             :items="fontWeightItems"
@@ -61,13 +65,26 @@
         </v-toolbar>
         <v-list>
           <v-list-item>
-            <v-switch label="Force italic" v-model="state.forceItalic" @change="changeForceItalic" />
+            <v-switch
+              label="Force italic"
+              v-model="state.forceItalic"
+              @change="changeForceItalic"
+            />
           </v-list-item>
           <v-list-item>
-            <v-switch label="Don't display fonts that has no italic" :value="!state.forceItalic && state.dispNoItalic" @change="changeDispNoItalic" :disabled="state.forceItalic" />
+            <v-switch
+              label="Don't display fonts that has no italic"
+              :value="!state.forceItalic && state.dispNoItalic"
+              @change="changeDispNoItalic"
+              :disabled="state.forceItalic"
+            />
           </v-list-item>
           <v-list-item>
-            <v-switch label="Don't display fonts that has no monospace" v-model="state.dispNoMonospace" @change="changeDispNoMonospace" />
+            <v-switch
+              label="Don't display fonts that has no monospace"
+              v-model="state.dispNoMonospace"
+              @change="changeDispNoMonospace"
+            />
           </v-list-item>
           <v-divider></v-divider>
           <v-list-item>
@@ -80,48 +97,60 @@
 </template>
 
 <script lang="ts">
+import { CtrlCmd } from '@/types';
 import { remote } from 'electron';
 import { Component, Vue } from 'vue-property-decorator';
-import { IState, store } from '../store';
-import { CtrlOrCmd, FontSizes, FontWeightItems } from '../util';
+import { State, store } from '../store';
+import { CtrlOrCmd } from '../utils';
+import { fontSizes, fontWeightItems } from '../constants';
 
 @Component
 export default class VSettings extends Vue {
-  private state: IState = store.state;
+  private state: State = store.state;
 
   private showSettings = false;
 
-  get ctrlOrCmd() { return CtrlOrCmd; }
+  // eslint-disable-next-line class-methods-use-this
+  get ctrlOrCmd(): CtrlCmd { return CtrlOrCmd; }
 
-  get fontSizes() { return FontSizes; }
+  // eslint-disable-next-line class-methods-use-this
+  get fontSizes(): typeof fontSizes { return fontSizes; }
 
-  get fontWeightItems() { return FontWeightItems; }
+  // eslint-disable-next-line class-methods-use-this
+  get fontWeightItems(): typeof fontWeightItems { return fontWeightItems; }
 
-  changeSize(val: number) {
+  // eslint-disable-next-line class-methods-use-this
+  changeSize(val: number): void {
     store.setSize(val);
   }
 
-  changeForceItalic(val: boolean) {
+  // eslint-disable-next-line class-methods-use-this
+  changeForceItalic(val: boolean): void {
     store.setForceItalic(val);
   }
 
-  changeDispNoItalic(val: boolean) {
+  // eslint-disable-next-line class-methods-use-this
+  changeDispNoItalic(val: boolean): void {
     store.setDispNoItalic(val);
   }
 
-  changeDispNoMonospace(val: boolean) {
+  // eslint-disable-next-line class-methods-use-this
+  changeDispNoMonospace(val: boolean): void {
     store.setDispNoMonospace(val);
   }
 
-  changeFavoriteOnly(val: boolean) {
+  // eslint-disable-next-line class-methods-use-this
+  changeFavoriteOnly(val: boolean): void {
     store.setFavoriteOnly(val);
   }
 
-  changeDarkMode(val: boolean) {
+  // eslint-disable-next-line class-methods-use-this
+  changeDarkMode(val: boolean): void {
     store.setDarkMode(val);
   }
 
-  openLink(href: string) {
+  // eslint-disable-next-line class-methods-use-this
+  openLink(href: string): void {
     remote.shell.openExternal(href);
   }
 }

@@ -1,13 +1,8 @@
-/* global __static */
-
 import path from 'path';
 import {
   app, protocol, BrowserWindow, Menu, MenuItemConstructorOptions,
 } from 'electron';
-import {
-  createProtocol,
-  installVueDevtools,
-} from 'vue-cli-plugin-electron-builder/lib';
+import { createProtocol } from 'vue-cli-plugin-electron-builder/lib';
 
 const isDevelopment = process.env.NODE_ENV !== 'production';
 const isMac = process.platform === 'darwin';

@@ -17,7 +17,7 @@ export default class VCopyBtn extends Vue {
 
   private copyMessage = 'Copy';
 
-  copyFamilyName() {
+  copyFamilyName(): void {
     // 空div 生成
     const preWrapper = document.createElement('div');
     // 選択用のタグ生成
@@ -36,7 +36,8 @@ export default class VCopyBtn extends Vue {
     // body に追加
     document.body.appendChild(preWrapper);
     // 要素を選択
-    document.getSelection()!.selectAllChildren(preWrapper);
+    const selection = document.getSelection();
+    if (selection) selection.selectAllChildren(preWrapper);
 
     try {
       if (!document.execCommand('copy')) throw new Error('CopyFailed');
@@ -47,7 +48,7 @@ export default class VCopyBtn extends Vue {
     // 要素削除
     document.body.removeChild(preWrapper);
 
-    setTimeout(() => this.copyMessage = 'Copy', 1000);
+    setTimeout(() => { this.copyMessage = 'Copy'; }, 1000);
   }
 }
 </script>

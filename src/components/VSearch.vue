@@ -17,18 +17,18 @@
 import {
   Component, Prop, Vue, Watch,
 } from 'vue-property-decorator';
-import { store, IState } from '../store';
+import { store, State } from '../store';
 
 @Component
 export default class VSearch extends Vue {
   @Prop({ default: false }) readonly isOpen!: boolean;
 
-  private state: IState = store.state;
+  private state: State = store.state;
 
   private searchText: string | null = this.state.searchText;
 
   @Watch('isOpen', { immediate: true })
-  onOpenCloase() {
+  onOpenCloase(): void {
     if (!this.isOpen) this.search();
     else {
       this.searchText = this.state.searchText;
@@ -38,12 +38,12 @@ export default class VSearch extends Vue {
     }
   }
 
-  clearSearch() {
+  clearSearch(): void {
     this.searchText = '';
     this.search();
   }
 
-  search() {
+  search(): void {
     store.setSearchText(this.searchText || '');
     this.$emit('close-search');
   }

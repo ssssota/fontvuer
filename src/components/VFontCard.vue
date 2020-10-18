@@ -43,10 +43,10 @@
 import {
   Component, Prop, Vue, Watch,
 } from 'vue-property-decorator';
-import { IFontFamily, IPostscript } from '../type';
+import { FontFamily, Postscript } from '../types';
 import VCopyBtn from './VCopyBtn.vue';
-import { IState, store } from '../store';
-import { getFavFont, saveFavFonts } from '../fonts';
+import { State, store } from '../store';
+import { isFavFont, saveFavFonts } from '../fonts';
 
 @Component({
   components: {
@@ -54,115 +54,126 @@ import { getFavFont, saveFavFonts } from '../fonts';
   },
 })
 export default class VFontCard extends Vue {
-  @Prop() private font!: IFontFamily;
+  @Prop() private font!: FontFamily;
 
-  private state: IState = store.state;
+  private state: State = store.state;
 
-  private favorite: number | null | undefined = getFavFont(this.font.family) ? 0 : null;
+  private favorite: number | null = isFavFont(this.font.family) ? 0 : null;
 
-  mounted() {
+  static psHasItalic(ps: Postscript): boolean {
+    return ps.italic || ps.style.toLowerCase().includes('oblique');
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  get previewText(): string {
+    return store.getPreviewText();
+  }
+
+  mounted(): void {
     const previewElem = this.$refs.mainPreview;
     if (previewElem instanceof HTMLElement && previewElem.style.fontFamily === '') {
       previewElem.style.fontFamily = `"${this.font.altFamilyName}"` || '';
     }
   }
 
-  setDetailFont() {
+  setDetailFont(): void {
     store.setDetailFont(this.font);
     store.setSelectedPostscriptIndex(this.selectedPostscriptIndex);
     this.$emit('open-modal');
   }
 
-  get isDisp() {
-    return this.isDispForFavorite && (this.isDispForItalic || !this.hasNoItalicAndOblique) && (this.isDispForMonospace || this.hasMonospace) && this.isSearched;
+  get isDisp(): boolean {
+    return this.isDispForFavorite
+      && (this.isDispForItalic || !this.hasNoItalicAndOblique)
+      && (this.isDispForMonospace || this.hasMonospace)
+      && this.isSearched;
   }
 
-  get isDispForFavorite() { return !this.state.favoriteOnly || this._favorite; }
+  get isDispForFavorite(): boolean { return !this.state.favoriteOnly || this.isFavorite; }
 
-  get isDispForItalic() { return !this.state.italic || this.state.forceItalic || !this.state.dispNoItalic; }
+  get isDispForItalic(): boolean {
+    return !this.state.italic || this.state.forceItalic || !this.state.dispNoItalic;
+  }
 
-  get isDispForMonospace() { return !this.state.monospace || !this.state.dispNoMonospace; }
+  get isDispForMonospace(): boolean { return !this.state.monospace || !this.state.dispNoMonospace; }
 
-  get isSearched() {
+  get isSearched(): boolean {
     return this.font.family.toLowerCase().includes(this.state.searchText);
   }
 
-  get hasMonospace() {
+  get hasMonospace(): boolean {
     return this.font.postscripts.findIndex((ps) => ps.monospace) >= 0;
   }
 
-  get hasNoMonospace() {
+  get hasNoMonospace(): boolean {
     return this.state.monospace && !this.hasMonospace;
   }
 
-  get hasNoItalicAndOblique() {
+  get hasNoItalicAndOblique(): boolean {
     return this.state.italic && !this.hasItalic && !this.hasOblique;
   }
 
-  get displayWarn() {
+  get displayWarn(): boolean {
     return this.hasNoMonospace || this.hasNoItalicAndOblique;
   }
 
-  get hasItalic() {
+  get hasItalic(): boolean {
     return this.font.postscripts.findIndex((ps) => ps.italic) >= 0;
   }
 
-  get hasOblique() {
+  get hasOblique(): boolean {
     return this.font.postscripts.findIndex((ps) => ps.style.toLowerCase().includes('oblique')) >= 0;
   }
 
-  psHasItalic(ps: IPostscript) {
-    return ps.italic || ps.style.toLowerCase().includes('oblique');
-  }
-
-  get hasWeights() {
+  get hasWeights(): number[] {
     return this.font.postscripts.map((ps) => ps.weight);
   }
 
-  hasWeightPostscriptIndex(weight: number) {
+  hasWeightPostscriptIndex(weight: number): number {
     const res = this.font.postscripts.findIndex((ps) => ps.weight === weight
-        && (this.isDispForMonospace || ps.monospace)
-        && (
-          (this.state.italic && this.psHasItalic(ps))
-          || (!this.state.italic && !this.psHasItalic(ps))
-        ));
+      && (this.isDispForMonospace || ps.monospace)
+      && (
+        (this.state.italic && VFontCard.psHasItalic(ps))
+        || (!this.state.italic && !VFontCard.psHasItalic(ps))
+      ));
     if (res >= 0) return res;
-    return this.font.postscripts.findIndex((ps) => ps.weight === weight && (this.isDispForMonospace || ps.monospace));
+    return this.font.postscripts.findIndex((ps) => ps.weight === weight
+      && (this.isDispForMonospace || ps.monospace));
   }
 
-  get selectedPostscriptIndex() {
+  get selectedPostscriptIndex(): number {
     const target = Math.floor(this.state.weight);
     if (target >= 500) {
       // bold
-      for (let weight = target; weight <= 1000; weight++) {
+      for (let weight = target; weight <= 1000; weight += 1) {
         const index = this.hasWeightPostscriptIndex(weight);
         if (index >= 0) return index;
       }
-      for (let weight = target; weight > 0; weight--) {
+      for (let weight = target; weight > 0; weight -= 1) {
         const index = this.hasWeightPostscriptIndex(weight);
         if (index >= 0) return index;
       }
     } else if (target >= 400) {
       // regular
-      for (let weight = target; weight <= 500; weight++) {
+      for (let weight = target; weight <= 500; weight += 1) {
         const index = this.hasWeightPostscriptIndex(weight);
         if (index >= 0) return index;
       }
-      for (let weight = target; weight > 0; weight--) {
+      for (let weight = target; weight > 0; weight -= 1) {
         const index = this.hasWeightPostscriptIndex(weight);
         if (index >= 0) return index;
       }
-      for (let weight = 500; weight <= 1000; weight++) {
+      for (let weight = 500; weight <= 1000; weight += 1) {
         const index = this.hasWeightPostscriptIndex(weight);
         if (index >= 0) return index;
       }
     } else if (target < 400) {
       // light
-      for (let weight = target; weight > 0; weight--) {
+      for (let weight = target; weight > 0; weight -= 1) {
         const index = this.hasWeightPostscriptIndex(weight);
         if (index >= 0) return index;
       }
-      for (let weight = target; weight <= 1000; weight++) {
+      for (let weight = target; weight <= 1000; weight += 1) {
         const index = this.hasWeightPostscriptIndex(weight);
         if (index >= 0) return index;
       }
@@ -171,16 +182,18 @@ export default class VFontCard extends Vue {
     return 0;
   }
 
-  get selectedPostscript() { return this.font.postscripts[this.selectedPostscriptIndex]; }
-
-  get fontStyle() {
-    return (this.state.forceItalic) ? 'italic'
-      : (this.selectedPostscript.italic) ? 'italic'
-        : (this.selectedPostscript.style.toLowerCase().includes('oblique')) ? 'oblique'
-          : 'normal';
+  get selectedPostscript(): Postscript {
+    return this.font.postscripts[this.selectedPostscriptIndex];
   }
 
-  get style() {
+  get fontStyle(): string {
+    if (this.state.forceItalic || this.selectedPostscript.italic) return 'italic';
+    return (this.selectedPostscript.style.toLowerCase().includes('oblique'))
+      ? 'oblique'
+      : 'normal';
+  }
+
+  get style(): Record<string, unknown> {
     return {
       fontSize: `${this.state.size}pt`,
       fontFamily: this.font.family,
@@ -194,17 +207,13 @@ export default class VFontCard extends Vue {
     };
   }
 
-  get previewText() {
-    return store.getPreviewText();
-  }
-
-  get _favorite() {
+  get isFavorite(): boolean {
     return this.favorite === 0;
   }
 
   @Watch('favorite')
-  setFavorite() {
-    saveFavFonts(this.font.family, this._favorite);
+  setFavorite(): void {
+    saveFavFonts(this.font.family, this.isFavorite);
   }
 }
 </script>

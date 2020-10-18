@@ -24,9 +24,9 @@ import VHeader from './components/VHeader.vue';
 import VSettings from './components/VSettings.vue';
 import VSearch from './components/VSearch.vue';
 import VFontList from './components/VFontList.vue';
-import { IState, store } from './store';
-import { FontSizes, FontWeightItems } from './util';
+import { State, store } from './store';
 import { isUpdateComing, currentVersion, latestVersion } from './update-checker';
+import { fontSizes, fontWeightItems } from './constants';
 
 @Component({
   components: {
@@ -37,28 +37,38 @@ import { isUpdateComing, currentVersion, latestVersion } from './update-checker'
   },
 })
 export default class App extends Vue {
-  private state: IState = store.state;
+  private state: State = store.state;
 
   private showSettings = false;
 
   private showSearch = false;
 
-  created() {
+  created(): void {
     Mousetrap.bind(['ctrl+-', 'command+-'], () => {
-      const currentIndex = FontSizes.findIndex((fs) => fs === this.state.size);
-      store.setSize(FontSizes[(currentIndex > 0) ? currentIndex - 1 : currentIndex]);
+      const currentIndex = fontSizes.findIndex((fs) => fs === this.state.size);
+      store.setSize(
+        fontSizes[(currentIndex > 0) ? currentIndex - 1 : currentIndex],
+      );
     });
     Mousetrap.bind(['ctrl+plus', 'command+plus'], () => {
-      const currentIndex = FontSizes.findIndex((fs) => fs === this.state.size);
-      store.setSize(FontSizes[(currentIndex < FontSizes.length - 1) ? currentIndex + 1 : currentIndex]);
+      const currentIndex = fontSizes.findIndex((fs) => fs === this.state.size);
+      store.setSize(
+        fontSizes[(currentIndex < fontSizes.length - 1) ? currentIndex + 1 : currentIndex],
+      );
     });
     Mousetrap.bind(['ctrl+down', 'command+down'], () => {
-      const currentIndex = FontWeightItems.findIndex((fwi) => fwi.value === this.state.weight);
-      store.setWeight(FontWeightItems[(currentIndex > 0) ? currentIndex - 1 : currentIndex].value);
+      const currentIndex = fontWeightItems.findIndex((fwi) => fwi.value === this.state.weight);
+      store.setWeight(
+        fontWeightItems[(currentIndex > 0) ? currentIndex - 1 : currentIndex].value,
+      );
     });
     Mousetrap.bind(['ctrl+up', 'command+up'], () => {
-      const currentIndex = FontWeightItems.findIndex((fwi) => fwi.value === this.state.weight);
-      store.setWeight(FontWeightItems[(currentIndex < FontWeightItems.length - 1) ? currentIndex + 1 : currentIndex].value);
+      const currentIndex = fontWeightItems.findIndex((fwi) => fwi.value === this.state.weight);
+      store.setWeight(
+        fontWeightItems[(currentIndex < fontWeightItems.length - 1)
+          ? currentIndex + 1
+          : currentIndex].value,
+      );
     });
     Mousetrap.bind(['ctrl+i', 'command+i'], () => store.setItalic(!this.state.italic));
     Mousetrap.bind(['ctrl+m', 'command+m'], () => store.setMonospace(!this.state.monospace));
@@ -73,6 +83,7 @@ export default class App extends Vue {
     // Update check
     isUpdateComing.then((updateIsFound) => {
       if (!updateIsFound) return;
+      // eslint-disable-next-line no-undef
       const { platform } = remote.process as NodeJS.Process;
       const isMacOrWin = platform === 'darwin' || platform === 'win32';
       const result = remote.dialog.showMessageBoxSync({
@@ -89,7 +100,7 @@ export default class App extends Vue {
   }
 
   @Watch('state.darkMode', { immediate: true })
-  setDarkMode() {
+  setDarkMode(): void {
     this.$vuetify.theme.dark = this.state.darkMode;
   }
 }

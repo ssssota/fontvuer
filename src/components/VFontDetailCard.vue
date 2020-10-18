@@ -30,7 +30,7 @@
         <v-list-item-content>
           <v-list-item-title>Italic support</v-list-item-title>
           <v-list-item-subtitle>
-            {{ boolToYenNo(selectedPostscript.italic) }}
+            {{ hasItalic }}
           </v-list-item-subtitle>
         </v-list-item-content>
       </v-list-item>
@@ -54,7 +54,7 @@
         <v-list-item-content>
           <v-list-item-title>Monospace support</v-list-item-title>
           <v-list-item-subtitle>
-            {{ boolToYenNo(selectedPostscript.monospace) }}
+            {{ hasMono }}
           </v-list-item-subtitle>
         </v-list-item-content>
       </v-list-item>
@@ -64,11 +64,12 @@
 
 <script lang="ts">
 import {
-  Component, Prop, Vue, Watch,
+  Component, Vue, Watch,
 } from 'vue-property-decorator';
 import VCopyBtn from './VCopyBtn.vue';
-import { IFontFamily, IPostscript } from '../type';
-import { IState, store } from '../store';
+import { Postscript, YesNo } from '../types';
+import { State, store } from '../store';
+import { boolToYenNo } from '../utils';
 
 @Component({
   components: {
@@ -76,13 +77,13 @@ import { IState, store } from '../store';
   },
 })
 export default class VFontDetailCard extends Vue {
-  private state: IState = store.state;
+  private state: State = store.state;
 
   private copyMessage = 'Copy';
 
   private selectedPostscriptIndex = 0;
 
-  get selectedPostscript() {
+  get selectedPostscript(): Postscript {
     if (
       this.selectedPostscriptIndex == null
       || this.state.detailFont.postscripts.length <= 1
@@ -91,17 +92,18 @@ export default class VFontDetailCard extends Vue {
     return this.state.detailFont.postscripts[this.selectedPostscriptIndex];
   }
 
-  get previewText() {
+  // eslint-disable-next-line class-methods-use-this
+  get previewText(): string {
     return store.getPreviewText();
   }
 
-  get fontStyle() {
-    return (this.selectedPostscript.italic) ? 'italic'
-      : (this.selectedPostscript.style.toLowerCase().includes('oblique')) ? 'oblique'
-        : 'normal';
+  get fontStyle(): string {
+    if (this.selectedPostscript.italic) return 'italic';
+    if (this.selectedPostscript.style.toLowerCase().includes('oblique')) return 'oblique';
+    return 'normal';
   }
 
-  get style() {
+  get style(): Record<string, unknown> {
     return {
       padding: '16px',
       fontSize: `${this.state.size}pt`,
@@ -115,12 +117,16 @@ export default class VFontDetailCard extends Vue {
     };
   }
 
-  boolToYenNo(val: boolean): string {
-    return val ? 'Yes' : 'No';
+  get hasItalic(): YesNo {
+    return boolToYenNo(this.selectedPostscript.italic);
+  }
+
+  get hasMono(): YesNo {
+    return boolToYenNo(this.selectedPostscript.monospace);
   }
 
   @Watch('state.detailFont')
-  async onChangeFont() {
+  async onChangeFont(): Promise<void> {
     await this.$nextTick();
     this.selectedPostscriptIndex = this.state.selectedPostscriptIndex;
     await this.$nextTick();

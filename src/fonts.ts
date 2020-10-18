@@ -1,85 +1,79 @@
 import fontkit from 'fontkit';
 import Store from 'electron-store';
-import {
-  IFontDescripter, IFontManager, IFontFamily, IPostscript,
-} from './type';
+import fontManager, { FontDescriptor } from 'font-manager';
+import { FontFamily, Postscript } from './types';
 
 const estore = new Store();
 
-const fontManager: IFontManager = require('font-manager');
+// const fontManager: IFontManager = require('font-manager');
 
-let fontDescripters: IFontDescripter[];
+let fontDescripters: FontDescriptor[];
+const getFontDescripters = (force = false): FontDescriptor[] => {
+  // gotten descripters and not force
+  if (fontDescripters && !force) return fontDescripters;
+  fontDescripters = fontManager
+    .getAvailableFontsSync()
+    .sort((a, b) => ((a.postscriptName < b.postscriptName) ? -1 : 1));
+  return fontDescripters;
+};
 
-export const getFontList = (): Promise<IFontFamily[]> => new Promise(async (resolve) => {
-  /*
-    |cache|manag|result|
-    |-----|-----|------|
-    |0    |0    |0     |
-    |0    |1    |manag |
-    |1    |0    |0     |
-    |1    |1    |cache |
-  */
-  const manager = await getFontListFromManager();
-  resolve(manager);
-});
+const errorBuf2Str = (buf: Buffer) => Array(buf.length)
+  .fill(0)
+  .map((_, i) => (((buf as Buffer)[i] !== 0) ? Buffer.from([buf[i]]).toString() : ''))
+  .join('');
 
-// get fontlist(IFontFamily[]) from font-manager module
-export const getFontListFromManager = (): Promise<IFontFamily[]> => new Promise((resolve) => {
-  resolve(getFontDescripters().reduce((arr, fd) => {
-    const i = arr.findIndex((obj) => obj.family === fd.family);
-    if (i < 0) {
-      let altFamilyName: any;
-      // let subFamilyName: any;
-      try {
-        const font = fontkit.openSync(fd.path);
-        altFamilyName = font.familyName;
-        // subFamilyName = font.subfamilyName;
-        const errorBuf2Str = (buf: Buffer) => Array(buf.length).fill(0).map((_, i) => (((buf as Buffer)[i] !== 0) ? Buffer.from([buf[i]]).toString() : '')).join('');
+export const getFontListFromManager = (): Promise<FontFamily[]> => new Promise((resolve) => {
+  resolve(getFontDescripters().reduce((families, fd) => {
+    const family = families.find((obj) => obj.family === fd.family);
 
-        if (altFamilyName instanceof Buffer) altFamilyName = errorBuf2Str(altFamilyName);
-        // if (subFamilyName instanceof Buffer) subFamilyName = errorBuf2Str(subFamilyName);
-      } catch (e) { altFamilyName = undefined; }
-
-      arr.push({
-        family: fd.family,
-        altFamilyName,
-        // subFamilyName: subFamilyName,
-        favorite: false,
-        postscripts: [
-          {
-            name: fd.postscriptName,
-            italic: fd.italic,
-            monospace: fd.monospace,
-            style: fd.style,
-            weight: fd.weight,
-            width: fd.width,
-          } as IPostscript,
-        ],
-      });
-    } else {
-      arr[i].postscripts.push({
+    // already exists font family
+    if (family) {
+      family.postscripts.push({
         name: fd.postscriptName,
         italic: fd.italic,
         monospace: fd.monospace,
         style: fd.style,
         weight: fd.weight,
         width: fd.width,
-      } as IPostscript);
+      } as Postscript);
+      family.postscripts.sort();
+      return families;
     }
-    return arr;
-  }, [] as IFontFamily[]).map((f) => {
-    f.postscripts = f.postscripts.sort((p1, p2) => ((p1.weight > p2.weight) ? 1 : -1));
-    return f;
-  }));
+
+    // new family
+    let altFamilyName: string | Buffer | undefined;
+    try {
+      const font = fontkit.openSync(fd.path);
+      altFamilyName = font.familyName as string | Buffer;
+
+      if (altFamilyName instanceof Buffer) altFamilyName = errorBuf2Str(altFamilyName);
+    } catch (e) { altFamilyName = undefined; }
+
+    families.push({
+      family: fd.family,
+      altFamilyName,
+      favorite: false,
+      postscripts: [{
+        name: fd.postscriptName,
+        italic: fd.italic,
+        monospace: fd.monospace,
+        style: fd.style,
+        weight: fd.weight,
+        width: fd.width,
+      } as Postscript],
+    });
+    return families;
+  }, [] as FontFamily[]));
 });
 
 export const getFavFonts = (): string[] => estore.get('favFonts', []);
 
-export const getFavFontIndex = (fontFamilyName: string): number => getFavFonts().findIndex((favFontFamilyName) => favFontFamilyName === fontFamilyName);
+export const getFavFontIndex = (fontFamilyName: string): number => getFavFonts()
+  .findIndex((favFontFamilyName) => favFontFamilyName === fontFamilyName);
 
-export const getFavFont = (fontFamilyName: string): boolean => getFavFontIndex(fontFamilyName) >= 0;
+export const isFavFont = (fontFamilyName: string): boolean => getFavFontIndex(fontFamilyName) >= 0;
 
-export const saveFavFonts = (fontFamilyName: string, val: boolean) => {
+export const saveFavFonts = (fontFamilyName: string, val: boolean): void => {
   const favFonts = getFavFonts();
   const favFontIndex = getFavFontIndex(fontFamilyName);
   const favFont = favFontIndex >= 0;
@@ -93,19 +87,4 @@ export const saveFavFonts = (fontFamilyName: string, val: boolean) => {
     favFonts.splice(favFontIndex, 1);
     estore.set('favFonts', favFonts);
   }
-};
-
-const getFontDescripters = (force = false): IFontDescripter[] => {
-  // gotten descripters and not force
-  if (fontDescripters && !force) return fontDescripters;
-  fontDescripters = [
-    // 重複削除
-    ...new Map(
-      // フォント一覧取得
-      (fontManager.getAvailableFontsSync() as IFontDescripter[])
-        .sort((a: IFontDescripter, b: IFontDescripter) => ((a.postscriptName < b.postscriptName) ? -1 : 1))
-        .map((fd) => [fd.postscriptName, fd]),
-    ).values(),
-  ];
-  return fontDescripters;
 };
