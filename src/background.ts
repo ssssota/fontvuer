@@ -1,13 +1,9 @@
-'use strict';
-
-/* global __static */
-
 import path from 'path';
-import { app, protocol, BrowserWindow, Menu, MenuItemConstructorOptions } from 'electron';
 import {
-  createProtocol,
-  installVueDevtools
-} from 'vue-cli-plugin-electron-builder/lib';
+  app, protocol, BrowserWindow, Menu, MenuItemConstructorOptions,
+} from 'electron';
+import { createProtocol } from 'vue-cli-plugin-electron-builder/lib';
+
 const isDevelopment = process.env.NODE_ENV !== 'production';
 const isMac = process.platform === 'darwin';
 
@@ -17,7 +13,7 @@ let win: BrowserWindow | null;
 
 // Set app menu
 const menuTemplate = [
-  ...(isMac? [{
+  ...(isMac ? [{
     label: app.getName(),
     submenu: [
       { role: 'about' },
@@ -28,17 +24,17 @@ const menuTemplate = [
       { role: 'hideothers' },
       { role: 'unhide' },
       { type: 'separator' },
-      { role: 'quit' }
-    ]
-  }]: [])
+      { role: 'quit' },
+    ],
+  }] : []),
 ] as MenuItemConstructorOptions[];
 const menu = Menu.buildFromTemplate(menuTemplate);
 Menu.setApplicationMenu(menu);
 
 // Scheme must be registered before the app is ready
-protocol.registerSchemesAsPrivileged([{scheme: 'app', privileges: { secure: true, standard: true } }]);
+protocol.registerSchemesAsPrivileged([{ scheme: 'app', privileges: { secure: true, standard: true } }]);
 
-function createWindow () {
+function createWindow() {
   // Create the browser window.
   win = new BrowserWindow({
     width: 1280,
@@ -48,8 +44,8 @@ function createWindow () {
     title: 'fontvuer',
     icon: path.join(__dirname, 'icon.png'),
     webPreferences: {
-      nodeIntegration: true
-    }
+      nodeIntegration: true,
+    },
   });
   win.setMenuBarVisibility(false);
   win.removeMenu();
@@ -111,7 +107,7 @@ app.on('ready', async () => {
 // Exit cleanly on request from parent process in development mode.
 if (isDevelopment) {
   if (process.platform === 'win32') {
-    process.on('message', data => {
+    process.on('message', (data) => {
       if (data === 'graceful-exit') {
         app.quit();
       }

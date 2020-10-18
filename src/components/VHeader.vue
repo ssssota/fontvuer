@@ -79,32 +79,46 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue, Watch } from 'vue-property-decorator';
-import { IState, store } from '../store';
-import { CtrlOrCmd, FontSizes, FontWeightItems} from '../util';
+import { Component, Vue } from 'vue-property-decorator';
+import { State, store } from '../store';
+import { CtrlOrCmd } from '../utils';
+import { fontSizes, fontWeightItems } from '../constants';
+import { CtrlCmd } from '../types';
 
 @Component
 export default class VHeader extends Vue {
-  private state: IState = store.state;
+  private state: State = store.state;
+
   private fav: boolean = this.state.favoriteOnly;
+
   private dark: boolean = this.state.darkMode;
 
-  get ctrlOrCmd() { return CtrlOrCmd; }
-  get fontSizes() { return FontSizes; }
-  get fontWeightItems() { return FontWeightItems; }
+  // eslint-disable-next-line class-methods-use-this
+  get ctrlOrCmd(): CtrlCmd { return CtrlOrCmd; }
 
-  setPreviewText(_previewText: string) {
+  // eslint-disable-next-line class-methods-use-this
+  get fontSizes(): typeof fontSizes { return fontSizes; }
+
+  // eslint-disable-next-line class-methods-use-this
+  get fontWeightItems(): typeof fontWeightItems { return fontWeightItems; }
+
+  // eslint-disable-next-line class-methods-use-this
+  setPreviewText(_previewText: string): void {
     store.setPreviewText(_previewText);
   }
 
-  changeSize(val: number) {
+  // eslint-disable-next-line class-methods-use-this
+  changeSize(val: number): void {
     store.setSize(val);
   }
 
-  changeFavoriteOnly(val?: true) {
+  // eslint-disable-next-line class-methods-use-this
+  changeFavoriteOnly(val?: true): void {
     store.setFavoriteOnly(!!val);
   }
-  changeDarkMode(val?: true) {
+
+  // eslint-disable-next-line class-methods-use-this
+  changeDarkMode(val?: true): void {
     store.setDarkMode(!!val);
   }
 }
