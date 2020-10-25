@@ -86,8 +86,17 @@
               @change="changeDispNoMonospace"
             />
           </v-list-item>
-          <v-divider></v-divider>
+        </v-list>
+        <v-divider />
+        <v-card-title>
+          About fontvuer
+        </v-card-title>
+        <v-card-text>
+          version {{ version }}
+        </v-card-text>
+        <v-list>
           <v-list-item>
+            <v-btn text @click="openLink('https://github.com/ssssota/fontvuer')">Check source code</v-btn>
             <v-btn text @click="openLink('https://github.com/ssssota/fontvuer/issues')">Report issue / Feature request</v-btn>
           </v-list-item>
         </v-list>
@@ -104,6 +113,7 @@ import { mdiClose } from '@mdi/js';
 import { State, store } from '../store';
 import { CtrlOrCmd } from '../utils';
 import { fontSizes, fontWeightItems } from '../constants';
+import { currentVersion } from '../update-checker';
 
 @Component
 export default class VSettings extends Vue {
@@ -121,6 +131,9 @@ export default class VSettings extends Vue {
 
   // eslint-disable-next-line class-methods-use-this
   get fontWeightItems(): typeof fontWeightItems { return fontWeightItems; }
+
+  // eslint-disable-next-line class-methods-use-this
+  get version(): string { return currentVersion; }
 
   // eslint-disable-next-line class-methods-use-this
   changeSize(val: number): void {
