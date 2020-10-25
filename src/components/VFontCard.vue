@@ -12,7 +12,7 @@
       <v-spacer></v-spacer>
       <v-btn-toggle dense group v-model="favorite">
         <v-btn text icon title="favorite">
-          <v-icon>mdi-star</v-icon>
+          <v-icon>{{ icons.mdiStar }}</v-icon>
         </v-btn>
       </v-btn-toggle>
     </v-card-title>
@@ -43,6 +43,7 @@
 import {
   Component, Prop, Vue, Watch,
 } from 'vue-property-decorator';
+import { mdiStar } from '@mdi/js';
 import { FontFamily, Postscript } from '../types';
 import VCopyBtn from './VCopyBtn.vue';
 import { State, store } from '../store';
@@ -59,6 +60,8 @@ export default class VFontCard extends Vue {
   private state: State = store.state;
 
   private favorite: number | null = isFavFont(this.font.family) ? 0 : null;
+
+  private icons = { mdiStar };
 
   static psHasItalic(ps: Postscript): boolean {
     return ps.italic || ps.style.toLowerCase().includes('oblique');

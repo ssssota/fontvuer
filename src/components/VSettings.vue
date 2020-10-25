@@ -59,7 +59,7 @@
       <v-card tile>
         <v-toolbar>
           <v-btn icon @click="showSettings = false">
-            <v-icon>mdi-close</v-icon>
+            <v-icon>{{ icons.mdiClose }}</v-icon>
           </v-btn>
           <v-toolbar-title>Settings</v-toolbar-title>
         </v-toolbar>
@@ -100,6 +100,7 @@
 import { CtrlCmd } from '@/types';
 import { remote } from 'electron';
 import { Component, Vue } from 'vue-property-decorator';
+import { mdiClose } from '@mdi/js';
 import { State, store } from '../store';
 import { CtrlOrCmd } from '../utils';
 import { fontSizes, fontWeightItems } from '../constants';
@@ -109,6 +110,8 @@ export default class VSettings extends Vue {
   private state: State = store.state;
 
   private showSettings = false;
+
+  private icons = { mdiClose };
 
   // eslint-disable-next-line class-methods-use-this
   get ctrlOrCmd(): CtrlCmd { return CtrlOrCmd; }
