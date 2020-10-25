@@ -10,7 +10,7 @@
       @click:clear="clearSearch"
       @keydown.enter="search"
     >
-      <template slot="prepenc">
+      <template slot="prepend">
         <v-icon>{{ icons.mdiMagnify }}</v-icon>
       </template>
     </v-text-field>
