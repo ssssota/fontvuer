@@ -4,18 +4,21 @@
     icon
     :title="copyMessage"
     @click="copyFamilyName">
-    <v-icon small>mdi-content-copy</v-icon>
+    <v-icon small>{{ icons.mdiContentCopy }}</v-icon>
   </v-btn>
 </template>
 
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator';
+import { mdiContentCopy } from '@mdi/js';
 
 @Component
 export default class VCopyBtn extends Vue {
   @Prop({ required: true }) private copyText!: string;
 
   private copyMessage = 'Copy';
+
+  private icons = { mdiContentCopy };
 
   copyFamilyName(): void {
     // 空div 生成

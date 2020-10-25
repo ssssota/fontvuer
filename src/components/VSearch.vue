@@ -2,14 +2,18 @@
   <v-card class="pa-2">
     <v-text-field
       class="pa-2"
-      prepend-icon="mdi-magnify"
       label="Search"
       hide-details
       clearable
       ref="searchTextField"
       v-model="searchText"
       @click:clear="clearSearch"
-      @keydown.enter="search" />
+      @keydown.enter="search"
+    >
+      <template slot="prepenc">
+        <v-icon>{{ icons.mdiMagnify }}</v-icon>
+      </template>
+    </v-text-field>
   </v-card>
 </template>
 
@@ -17,6 +21,7 @@
 import {
   Component, Prop, Vue, Watch,
 } from 'vue-property-decorator';
+import { mdiMagnify } from '@mdi/js';
 import { store, State } from '../store';
 
 @Component
@@ -26,6 +31,8 @@ export default class VSearch extends Vue {
   private state: State = store.state;
 
   private searchText: string | null = this.state.searchText;
+
+  private icons = { mdiMagnify };
 
   @Watch('isOpen', { immediate: true })
   onOpenCloase(): void {
