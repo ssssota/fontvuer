@@ -86,14 +86,17 @@
               @change="changeDispNoMonospace"
             />
           </v-list-item>
-          <v-divider />
-          <v-card-title>
-            About fontvuer
-          </v-card-title>
-          <v-card-text>
-            version {{ version }}
-          </v-card-text>
+        </v-list>
+        <v-divider />
+        <v-card-title>
+          About fontvuer
+        </v-card-title>
+        <v-card-text>
+          version {{ version }}
+        </v-card-text>
+        <v-list>
           <v-list-item>
+            <v-btn text @click="openLink('https://github.com/ssssota/fontvuer')">Check source code</v-btn>
             <v-btn text @click="openLink('https://github.com/ssssota/fontvuer/issues')">Report issue / Feature request</v-btn>
           </v-list-item>
         </v-list>
