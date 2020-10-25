@@ -18,31 +18,33 @@
 </template>
 
 <script lang="ts">
-import { Component, Prop, Vue } from 'vue-property-decorator';
+import { Component, Vue } from 'vue-property-decorator';
 import VFontCard from './VFontCard.vue';
 import VFontDetailCard from './VFontDetailCard.vue';
-import { IFontDescripter, IFontManager, IFontFamily, IPostscript } from '../type';
-import { getFontList, saveFavFonts } from '../fonts';
-import { IState, store } from '../store';
-
-const fontManager: IFontManager = require('font-manager');
+import { getFontListFromManager } from '../fonts';
+import { State, store } from '../store';
+import { FontFamily } from '../types';
 
 @Component({
   components: {
     VFontCard,
-    VFontDetailCard
-  }
+    VFontDetailCard,
+  },
 })
 export default class VFontList extends Vue {
-  private fontArray: IFontFamily[] = [];
-  private showModal: boolean = false;
-  private state: IState = store.state;
+  private fontArray: FontFamily[] = [];
 
-  created() {
-    getFontList().then(res => res.map(ff => this.fontArray.push(ff)));
+  private showModal = false;
+
+  private state: State = store.state;
+
+  created(): void {
+    getFontListFromManager()
+      .then((res) => { this.fontArray = res; })
+      .catch(console.error);
   }
 
-  get targetFontArray() {
+  get targetFontArray(): FontFamily[] {
     return this.fontArray;
   }
 }

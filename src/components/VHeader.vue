@@ -44,10 +44,10 @@
         dense
         group>
         <v-btn icon v-model="state.italic" :title="`Italic (${ctrlOrCmd} + I)`" class="ma-0">
-          <v-icon>mdi-format-italic</v-icon>
+          <v-icon>{{ icons.mdiFormatItalic }}</v-icon>
         </v-btn>
         <v-btn icon v-model="state.monospace" :title="`Monospace (${ctrlOrCmd} + M)`" class="ma-0">
-          <v-icon>mdi-alpha-m</v-icon>
+          <v-icon>{{ icons.mdiAlphaM }}</v-icon>
         </v-btn>
       </v-btn-toggle>
       <v-btn-toggle
@@ -56,7 +56,7 @@
         :value="state.favoriteOnly"
         @change="changeFavoriteOnly">
         <v-btn icon :value="true" title="Favorite only (F)" class="ma-0">
-          <v-icon>mdi-star</v-icon>
+          <v-icon>{{ icons.mdiStar }}</v-icon>
         </v-btn>
       </v-btn-toggle>
       <v-btn-toggle
@@ -65,46 +65,72 @@
         :value="state.darkMode"
         @change="changeDarkMode">
         <v-btn icon :value="true" :title="`Dark mode (${ctrlOrCmd} + D)`" class="ma-0">
-          <v-icon>mdi-brightness-6</v-icon>
+          <v-icon>{{ icons.mdiBrightness6 }}</v-icon>
         </v-btn>
       </v-btn-toggle>
     </v-toolbar-items>
     <v-btn icon text @click.stop="$emit('open-search')" :title="`Search (${ctrlOrCmd} + F)`">
-      <v-icon>mdi-magnify</v-icon>
+      <v-icon>{{ icons.mdiMagnify }}</v-icon>
     </v-btn>
     <v-btn icon text @click.stop="$emit('open-setting')" title="More (M)">
-      <v-icon>mdi-tune</v-icon>
+      <v-icon>{{ icons.mdiTune }}</v-icon>
     </v-btn>
   </v-app-bar>
 </template>
 
 <script lang="ts">
-import { Component, Vue, Watch } from 'vue-property-decorator';
-import { IState, store } from '../store';
-import { CtrlOrCmd, FontSizes, FontWeightItems} from '../util';
+import { Component, Vue } from 'vue-property-decorator';
+import {
+  mdiFormatItalic, mdiAlphaM, mdiStar, mdiBrightness6, mdiMagnify, mdiTune,
+} from '@mdi/js';
+import { State, store } from '../store';
+import { CtrlOrCmd } from '../utils';
+import { fontSizes, fontWeightItems } from '../constants';
+import { CtrlCmd } from '../types';
 
 @Component
 export default class VHeader extends Vue {
-  private state: IState = store.state;
+  private state: State = store.state;
+
   private fav: boolean = this.state.favoriteOnly;
+
   private dark: boolean = this.state.darkMode;
 
-  get ctrlOrCmd() { return CtrlOrCmd; }
-  get fontSizes() { return FontSizes; }
-  get fontWeightItems() { return FontWeightItems; }
+  private icons = {
+    mdiFormatItalic,
+    mdiAlphaM,
+    mdiStar,
+    mdiBrightness6,
+    mdiMagnify,
+    mdiTune,
+  };
 
-  setPreviewText(_previewText: string) {
+  // eslint-disable-next-line class-methods-use-this
+  get ctrlOrCmd(): CtrlCmd { return CtrlOrCmd; }
+
+  // eslint-disable-next-line class-methods-use-this
+  get fontSizes(): typeof fontSizes { return fontSizes; }
+
+  // eslint-disable-next-line class-methods-use-this
+  get fontWeightItems(): typeof fontWeightItems { return fontWeightItems; }
+
+  // eslint-disable-next-line class-methods-use-this
+  setPreviewText(_previewText: string): void {
     store.setPreviewText(_previewText);
   }
 
-  changeSize(val: number) {
+  // eslint-disable-next-line class-methods-use-this
+  changeSize(val: number): void {
     store.setSize(val);
   }
 
-  changeFavoriteOnly(val?: true) {
+  // eslint-disable-next-line class-methods-use-this
+  changeFavoriteOnly(val?: true): void {
     store.setFavoriteOnly(!!val);
   }
-  changeDarkMode(val?: true) {
+
+  // eslint-disable-next-line class-methods-use-this
+  changeDarkMode(val?: true): void {
     store.setDarkMode(!!val);
   }
 }
