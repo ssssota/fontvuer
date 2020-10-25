@@ -3,7 +3,9 @@
     <v-card-title>Settings</v-card-title>
     <v-list>
       <v-list-item>
-        <v-list-item-title>Font size(px) <kbd>{{ctrlOrCmd}}</kbd> + <kbd>-</kbd>&nbsp;/&nbsp;<kbd>+</kbd></v-list-item-title>
+        <v-list-item-title>
+          Font size(px) <kbd>{{ctrlOrCmd}}</kbd> + <kbd>-</kbd>&nbsp;/&nbsp;<kbd>+</kbd>
+        </v-list-item-title>
         <v-list-item-action>
           <v-select
             v-model="state.size"
@@ -12,7 +14,9 @@
         </v-list-item-action>
       </v-list-item>
       <v-list-item>
-        <v-list-item-title>Font weight <kbd>{{ctrlOrCmd}}</kbd> + <kbd>↑</kbd>&nbsp;/&nbsp;<kbd>↓</kbd></v-list-item-title>
+        <v-list-item-title>
+          Font weight <kbd>{{ctrlOrCmd}}</kbd> + <kbd>↑</kbd>&nbsp;/&nbsp;<kbd>↓</kbd>
+        </v-list-item-title>
         <v-list-item-action>
           <v-select
             :items="fontWeightItems"
@@ -55,22 +59,44 @@
       <v-card tile>
         <v-toolbar>
           <v-btn icon @click="showSettings = false">
-            <v-icon>mdi-close</v-icon>
+            <v-icon>{{ icons.mdiClose }}</v-icon>
           </v-btn>
           <v-toolbar-title>Settings</v-toolbar-title>
         </v-toolbar>
         <v-list>
           <v-list-item>
-            <v-switch label="Force italic" v-model="state.forceItalic" @change="changeForceItalic" />
+            <v-switch
+              label="Force italic"
+              v-model="state.forceItalic"
+              @change="changeForceItalic"
+            />
           </v-list-item>
           <v-list-item>
-            <v-switch label="Don't display fonts that has no italic" :value="!state.forceItalic && state.dispNoItalic" @change="changeDispNoItalic" :disabled="state.forceItalic" />
+            <v-switch
+              label="Don't display fonts that has no italic"
+              :value="!state.forceItalic && state.dispNoItalic"
+              @change="changeDispNoItalic"
+              :disabled="state.forceItalic"
+            />
           </v-list-item>
           <v-list-item>
-            <v-switch label="Don't display fonts that has no monospace" v-model="state.dispNoMonospace" @change="changeDispNoMonospace" />
+            <v-switch
+              label="Don't display fonts that has no monospace"
+              v-model="state.dispNoMonospace"
+              @change="changeDispNoMonospace"
+            />
           </v-list-item>
-          <v-divider></v-divider>
+        </v-list>
+        <v-divider />
+        <v-card-title>
+          About fontvuer
+        </v-card-title>
+        <v-card-text>
+          version {{ version }}
+        </v-card-text>
+        <v-list>
           <v-list-item>
+            <v-btn text @click="openLink('https://github.com/ssssota/fontvuer')">Check source code</v-btn>
             <v-btn text @click="openLink('https://github.com/ssssota/fontvuer/issues')">Report issue / Feature request</v-btn>
           </v-list-item>
         </v-list>
@@ -80,40 +106,67 @@
 </template>
 
 <script lang="ts">
+import { CtrlCmd } from '@/types';
 import { remote } from 'electron';
 import { Component, Vue } from 'vue-property-decorator';
-import { IState, store } from '../store';
-import { CtrlOrCmd, FontSizes, FontWeightItems } from '../util';
+import { mdiClose } from '@mdi/js';
+import { State, store } from '../store';
+import { CtrlOrCmd } from '../utils';
+import { fontSizes, fontWeightItems } from '../constants';
+import { currentVersion } from '../update-checker';
 
 @Component
 export default class VSettings extends Vue {
-  private state: IState = store.state;
-  private showSettings: boolean = false;
+  private state: State = store.state;
 
-  get ctrlOrCmd() { return CtrlOrCmd; }
-  get fontSizes() { return FontSizes; }
-  get fontWeightItems() { return FontWeightItems; }
+  private showSettings = false;
 
-  changeSize(val: number) {
+  private icons = { mdiClose };
+
+  // eslint-disable-next-line class-methods-use-this
+  get ctrlOrCmd(): CtrlCmd { return CtrlOrCmd; }
+
+  // eslint-disable-next-line class-methods-use-this
+  get fontSizes(): typeof fontSizes { return fontSizes; }
+
+  // eslint-disable-next-line class-methods-use-this
+  get fontWeightItems(): typeof fontWeightItems { return fontWeightItems; }
+
+  // eslint-disable-next-line class-methods-use-this
+  get version(): string { return currentVersion; }
+
+  // eslint-disable-next-line class-methods-use-this
+  changeSize(val: number): void {
     store.setSize(val);
   }
-  changeForceItalic(val: boolean) {
+
+  // eslint-disable-next-line class-methods-use-this
+  changeForceItalic(val: boolean): void {
     store.setForceItalic(val);
   }
-  changeDispNoItalic(val: boolean) {
+
+  // eslint-disable-next-line class-methods-use-this
+  changeDispNoItalic(val: boolean): void {
     store.setDispNoItalic(val);
   }
-  changeDispNoMonospace(val: boolean) {
+
+  // eslint-disable-next-line class-methods-use-this
+  changeDispNoMonospace(val: boolean): void {
     store.setDispNoMonospace(val);
   }
-  changeFavoriteOnly(val: boolean) {
+
+  // eslint-disable-next-line class-methods-use-this
+  changeFavoriteOnly(val: boolean): void {
     store.setFavoriteOnly(val);
   }
-  changeDarkMode(val: boolean) {
+
+  // eslint-disable-next-line class-methods-use-this
+  changeDarkMode(val: boolean): void {
     store.setDarkMode(val);
   }
 
-  openLink(href: string) {
+  // eslint-disable-next-line class-methods-use-this
+  openLink(href: string): void {
     remote.shell.openExternal(href);
   }
 }

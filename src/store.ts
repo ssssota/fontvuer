@@ -1,5 +1,5 @@
-import { IFontFamily } from './type';
 import Store from 'electron-store';
+import { FontFamily } from './types';
 
 const estore = new Store();
 
@@ -7,8 +7,8 @@ const settingsPath = {
   forceItalic: 'settings.forceItalic',
   dispNoItalic: 'settings.dispNoItalic',
   dispNoMonospace: 'settings.dispNoItalic',
-  darkMode: 'settings.darkMode'
-};
+  darkMode: 'settings.darkMode',
+} as const;
 
 const INIT_SIZE = 24;
 const INIT_WEIGHT = 400;
@@ -27,7 +27,7 @@ if (!estore.has(settingsPath.dispNoItalic)) estore.set(settingsPath.dispNoItalic
 if (!estore.has(settingsPath.dispNoMonospace)) estore.set(settingsPath.dispNoMonospace, false);
 if (!estore.has(settingsPath.darkMode)) estore.set(settingsPath.darkMode, false);
 
-export interface IState {
+export interface State {
   previewText: string
   size: number
   italic: boolean
@@ -39,14 +39,13 @@ export interface IState {
   kerning: number
   favoriteOnly: boolean
   darkMode: boolean
-  detailFont: IFontFamily
+  detailFont: FontFamily
   selectedPostscriptIndex: number
   favFonts: string[]
   searchText: string
 }
 
 export const store = {
-  debug: process.env.NODE_ENV !== 'production',
   state: {
     previewText: INIT_PREVIEW,
     size: INIT_SIZE,
@@ -60,81 +59,61 @@ export const store = {
     favoriteOnly: INIT_FAV_ONLY,
     darkMode: INIT_DARK_MODE,
     favFonts: [],
-    detailFont: {} as IFontFamily,
+    detailFont: {} as FontFamily,
     selectedPostscriptIndex: 0,
-    searchText: ''
-  } as IState,
+    searchText: '',
+  } as State,
 
-  getPreviewText() {
-    return (this.state.previewText === '')? 'Preview text': this.state.previewText;
+  getPreviewText(): string {
+    return (this.state.previewText === '') ? 'Preview text' : this.state.previewText;
   },
-  setPreviewText(_previewText: string) {
-    if (_previewText === '' || typeof _previewText !== 'string') _previewText = '';
-    //if (this.debug) console.log('Preview text →', _previewText);
-    this.state.previewText = _previewText;
+  setPreviewText(previewText: string): void {
+    this.state.previewText = (!previewText)
+      ? '' : previewText;
   },
-  setSize(_size: number) {
-    if (typeof _size !== 'number' || _size < 0 || 1000 < _size) _size = INIT_SIZE;
-    //if (this.debug) console.log('Size →', _size);
-    this.state.size = _size;
+  setSize(size: number): void {
+    this.state.size = (size < 0 || size > 1000)
+      ? INIT_SIZE : size;
   },
-  setItalic(_italic: boolean) {
-    _italic = !!_italic;
-    //if (this.debug) console.log('Italic →', _italic);
-    this.state.italic = _italic;
+  setItalic(italic: boolean): void {
+    this.state.italic = italic;
   },
-  setMonospace(_mono: boolean) {
-    _mono = !!_mono;
-    //if (this.debug) console.log('Monospace →', _mono);
-    this.state.monospace = _mono;
+  setMonospace(mono: boolean): void {
+    this.state.monospace = mono;
   },
-  setForceItalic(_forceItalic: boolean) {
-    //if (this.debug) console.log('Force italic →', _forceItalic);
-    this.state.forceItalic = _forceItalic;
-    estore.set(settingsPath.forceItalic, _forceItalic);
+  setForceItalic(forceItalic: boolean): void {
+    this.state.forceItalic = forceItalic;
+    estore.set(settingsPath.forceItalic, forceItalic);
   },
-  setDispNoItalic(_dispNoItalic: boolean) {
-    //if (this.debug) console.log('Display no italic →', _dispNoItalic);
-    this.state.dispNoItalic = _dispNoItalic;
-    estore.set(settingsPath.dispNoItalic, _dispNoItalic);
+  setDispNoItalic(dispNoItalic: boolean): void {
+    this.state.dispNoItalic = dispNoItalic;
+    estore.set(settingsPath.dispNoItalic, dispNoItalic);
   },
-  setDispNoMonospace(_dispNoMonospace: boolean) {
-    //if (this.debug) console.log('Display no monospace →', _dispNoMonospace);
-    this.state.dispNoMonospace = _dispNoMonospace;
-    estore.set(settingsPath.dispNoMonospace, _dispNoMonospace);
+  setDispNoMonospace(dispNoMonospace: boolean): void {
+    this.state.dispNoMonospace = dispNoMonospace;
+    estore.set(settingsPath.dispNoMonospace, dispNoMonospace);
   },
-  setWeight(_weight: number) {
-    if (typeof _weight !== 'number' || _weight < 0 || 1000 < _weight) _weight = INIT_WEIGHT;
-    //if (this.debug) console.log('Weight →', _weight);
-    this.state.weight = _weight;
+  setWeight(weight: number): void {
+    this.state.weight = (weight < 0 || weight > 1000)
+      ? INIT_WEIGHT : weight;
   },
-  setKerning(_kerning: number) {
-    if (typeof _kerning !== 'number') _kerning = INIT_KERNING;
-    //if (this.debug) console.log('Kerning →', _kerning);
-    this.state.kerning = _kerning;
+  setKerning(kerning: number): void {
+    this.state.kerning = kerning;
   },
-  setFavoriteOnly(_favoriteOnly: boolean) {
-    _favoriteOnly = !!_favoriteOnly;
-    //if (this.debug) console.log('Favorite only →', _favoriteOnly);
-    this.state.favoriteOnly = _favoriteOnly;
+  setFavoriteOnly(favoriteOnly: boolean): void {
+    this.state.favoriteOnly = favoriteOnly;
   },
-  setDarkMode(_darkMode: boolean) {
-    _darkMode = !!_darkMode;
-    //if (this.debug) console.log('Dark mode →', _darkMode);
-    this.state.darkMode = _darkMode;
-    estore.set(settingsPath.darkMode, _darkMode);
+  setDarkMode(darkMode: boolean): void {
+    this.state.darkMode = darkMode;
+    estore.set(settingsPath.darkMode, darkMode);
   },
-  setDetailFont(_detailFont: IFontFamily) {
-    //if (this.debug) console.log('Detail font →', _detailFont.family);
-    this.state.detailFont = _detailFont;
+  setDetailFont(detailFont: FontFamily): void {
+    this.state.detailFont = detailFont;
   },
-  setSelectedPostscriptIndex(_index: number) {
-    if (typeof _index !== 'number') _index = 0;
-    //if (this.debug) console.log('Postscript index →', _index);
-    this.state.selectedPostscriptIndex = _index;
+  setSelectedPostscriptIndex(index: number): void {
+    this.state.selectedPostscriptIndex = index;
   },
-  setSearchText(_searchText: string) {
-    //if (this.debug) console.log('Search text →', _searchText);
-    this.state.searchText = _searchText.toLowerCase();
-  }
+  setSearchText(searchText: string): void {
+    this.state.searchText = searchText.toLowerCase();
+  },
 };
