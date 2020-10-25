@@ -35,6 +35,6 @@ jobs:
     - name: Install dependencies
       run: npm ci
     - name: Build and Release
-      run: npm run electron:build -- -p always
+      run: npm run build -- -p always
       env:
         GH_TOKEN: ${{ secrets.GH_TOKEN }}
