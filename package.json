@@ -1,6 +1,6 @@
 {
   "name": "fontvuer",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Fontviewer. You can preview fonts.",
   "scripts": {
     "lint": "vue-cli-service lint",
