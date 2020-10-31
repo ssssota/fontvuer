@@ -57,6 +57,6 @@
     "url": "https://github.com/ssssota/fontvuer.git"
   },
   "engines": {
-    "node": "10.x"
+    "node": "14.x"
   }
 }
