@@ -48,6 +48,7 @@ dependencies = [
  "serde_json",
  "tauri",
  "tauri-build",
+ "ttf-name-decoder",
  "ttf-parser",
  "walkdir",
 ]
@@ -873,6 +874,15 @@ name = "embed_plist"
 version = "1.2.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "4ef6b89e5b37196644d8796de5268852ff179b44e96276cf4290264843743bb7"
+
+[[package]]
+name = "encoding_rs"
+version = "0.8.30"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "7896dc8abb250ffdda33912550faa54c88ec8b998dec0b2c55ab224921ce11df"
+dependencies = [
+ "cfg-if",
+]
 
 [[package]]
 name = "enumflags2"
@@ -3594,6 +3604,14 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "761e8d5ad7ce14bb82b7e61ccc0ca961005a275a060b9644a2431aa11553c2ff"
 dependencies = [
  "serde_json",
+]
+
+[[package]]
+name = "ttf-name-decoder"
+version = "0.1.0"
+source = "git+https://github.com/ssssota/ttf_name_decoder.git#0a8a90846eb788704e2bc4bbfd7df9fbf3ed3619"
+dependencies = [
+ "encoding_rs",
 ]
 
 [[package]]
