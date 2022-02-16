@@ -1,19 +1,31 @@
 <script lang="ts">
-import { onMount } from 'svelte';
-
-  import Font from './components/Font.svelte';
-  import { fonts } from './lib/fonts';
-
-  onMount(() => fonts.load())
+  import { onMount } from "svelte";
+  import FontCard from "./components/FontCard.svelte";
+  import FontDetail from "./components/FontDetail.svelte";
+  import { fonts } from "./lib/fonts";
+  import type { Font } from "./types";
+  import CloseButton from "./components/CloseButton.svelte";
+  import SideOverlay from "./components/SideOverlay.svelte";
+  let selected: Font | undefined = undefined;
+  onMount(() => fonts.load());
 </script>
 
 <svelte:body on:contextmenu={(e) => e.preventDefault()} />
 
 <main>
   {#each $fonts as font (`${font.path}.${font.index}`)}
-    <Font {font} />
+    <FontCard {font} on:click={() => (selected = font)} />
   {/each}
 </main>
+
+<SideOverlay open={selected !== undefined}>
+  <section>
+    <FontDetail font={selected} />
+    <span>
+      <CloseButton on:click={() => (selected = undefined)} />
+    </span>
+  </section>
+</SideOverlay>
 
 <style>
   @font-face {
@@ -32,5 +44,16 @@ import { onMount } from 'svelte';
   }
   main > :global(*) {
     flex-grow: 1;
+  }
+  section {
+    background-color: #222;
+    height: 100%;
+    position: relative;
+    padding: 1em;
+  }
+  section span {
+    position: absolute;
+    top: 1em;
+    right: 1em;
   }
 </style>

@@ -22,6 +22,7 @@
   },
   "dependencies": {
     "@tauri-apps/api": "^1.0.0-rc.0",
-    "eventemitter3": "^4.0.7"
+    "eventemitter3": "^4.0.7",
+    "svelte-portal": "^2.1.2"
   }
 }

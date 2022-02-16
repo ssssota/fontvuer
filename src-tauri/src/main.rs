@@ -3,14 +3,13 @@
     windows_subsystem = "windows"
 )]
 
-use font_kit::handle::Handle;
+use font_kit::loader::Loader;
 use font_kit::source::SystemSource;
+use font_kit::{font::Font, handle::Handle};
 use serde::Serialize;
 use source::CustomDirSource;
 use std::collections::HashSet;
 use std::fs;
-use ttf_name_decoder::decode;
-use ttf_parser::{name_id, Face, PlatformId, Style, Width};
 
 mod source;
 
@@ -79,69 +78,28 @@ struct SystemFont {
     /// (width) 50 ~ 200 [%]
     stretch: f32,
     /// 100~900
-    weight: u16,
+    weight: f32,
+    copyright: Option<String>,
+    sampletext: Option<String>,
+    license: Option<String>,
 }
 
 #[tauri::command]
 fn get_font_from_system(path: String, font_index: u32) -> Result<SystemFont, String> {
-    let data = fs::read(&path).map_err(|e| e.to_string())?;
-    let face = Face::from_slice(&data, font_index).map_err(|e| e.to_string())?;
-    let names = face.names();
+    let font =
+        Font::from_path(&path, font_index).map_err(|_| "Invalid path or index".to_string())?;
     Ok(SystemFont {
         path,
         index: font_index,
-        family: names
-            .get(name_id::FAMILY)
-            .map(|n| {
-                decode(
-                    n.name,
-                    platform_id_to_num(n.platform_id),
-                    n.encoding_id,
-                    n.language_id,
-                )
-            })
-            .flatten()
-            .ok_or("err")?,
-        postscript: names
-            .get(name_id::POST_SCRIPT_NAME)
-            .map(|n| {
-                decode(
-                    n.name,
-                    platform_id_to_num(n.platform_id),
-                    n.encoding_id,
-                    n.language_id,
-                )
-            })
-            .flatten(),
-        full: names
-            .get(name_id::FULL_NAME)
-            .map(|n| {
-                decode(
-                    n.name,
-                    platform_id_to_num(n.platform_id),
-                    n.encoding_id,
-                    n.language_id,
-                )
-            })
-            .flatten()
-            .ok_or("err")?,
-        style: match face.style() {
-            Style::Normal => "normal".to_string(),
-            Style::Italic => "italic".to_string(),
-            Style::Oblique => "oblique".to_string(),
-        },
-        stretch: match face.width() {
-            Width::UltraCondensed => 50.0,
-            Width::ExtraCondensed => 62.5,
-            Width::Condensed => 75.0,
-            Width::SemiCondensed => 87.5,
-            Width::Normal => 100.0,
-            Width::SemiExpanded => 112.5,
-            Width::Expanded => 125.0,
-            Width::ExtraExpanded => 150.0,
-            Width::UltraExpanded => 200.0,
-        },
-        weight: face.weight().to_number(),
+        family: font.family_name(),
+        postscript: font.postscript_name(),
+        full: font.full_name(),
+        style: font.properties().style.to_string(),
+        stretch: font.properties().stretch.0 * 100.0,
+        weight: font.properties().weight.0,
+        copyright: font.copyright_notice(),
+        sampletext: font.sample_text(),
+        license: font.license_description(),
     })
 }
 
@@ -159,80 +117,31 @@ struct CustomDirFont {
     /// (width) 50 ~ 200 [%]
     stretch: f32,
     /// 100~900
-    weight: u16,
-}
-
-fn platform_id_to_num(platform_id: PlatformId) -> u16 {
-    match platform_id {
-        PlatformId::Unicode => 0,
-        PlatformId::Macintosh => 1,
-        PlatformId::Iso => 2,
-        PlatformId::Windows => 3,
-        PlatformId::Custom => 4,
-    }
+    weight: f32,
+    copyright: Option<String>,
+    sampletext: Option<String>,
+    license: Option<String>,
 }
 
 #[tauri::command]
 fn get_font_with_data(path: String, font_index: u32) -> Result<CustomDirFont, String> {
     let data = fs::read(&path).map_err(|e| e.to_string())?;
-    let face = Face::from_slice(&data, font_index).map_err(|e| e.to_string())?;
-    let names = face.names();
+    let data_text = base64::encode(&data);
+    let font =
+        Font::from_path(&path, font_index).map_err(|_| "Invalid path or index".to_string())?;
     Ok(CustomDirFont {
-        data: base64::encode(&data),
+        data: data_text,
         path,
         index: font_index,
-        family: names
-            .get(name_id::FAMILY)
-            .map(|n| {
-                decode(
-                    n.name,
-                    platform_id_to_num(n.platform_id),
-                    n.encoding_id,
-                    n.language_id,
-                )
-            })
-            .flatten()
-            .ok_or("err")?,
-        postscript: names
-            .get(name_id::POST_SCRIPT_NAME)
-            .map(|n| {
-                decode(
-                    n.name,
-                    platform_id_to_num(n.platform_id),
-                    n.encoding_id,
-                    n.language_id,
-                )
-            })
-            .flatten(),
-        full: names
-            .get(name_id::FULL_NAME)
-            .map(|n| {
-                decode(
-                    n.name,
-                    platform_id_to_num(n.platform_id),
-                    n.encoding_id,
-                    n.language_id,
-                )
-            })
-            .flatten()
-            .ok_or("err")?,
-        style: match face.style() {
-            Style::Normal => "normal".to_string(),
-            Style::Italic => "italic".to_string(),
-            Style::Oblique => "oblique".to_string(),
-        },
-        stretch: match face.width() {
-            Width::UltraCondensed => 50.0,
-            Width::ExtraCondensed => 62.5,
-            Width::Condensed => 75.0,
-            Width::SemiCondensed => 87.5,
-            Width::Normal => 100.0,
-            Width::SemiExpanded => 112.5,
-            Width::Expanded => 125.0,
-            Width::ExtraExpanded => 150.0,
-            Width::UltraExpanded => 200.0,
-        },
-        weight: face.weight().to_number(),
+        family: font.family_name(),
+        postscript: font.postscript_name(),
+        full: font.full_name(),
+        style: font.properties().style.to_string(),
+        stretch: font.properties().stretch.0,
+        weight: font.properties().weight.0,
+        copyright: font.copyright_notice(),
+        sampletext: font.sample_text(),
+        license: font.license_description(),
     })
 }
 

@@ -8,6 +8,7 @@ specifiers:
   eventemitter3: ^4.0.7
   svelte: ^3.46.4
   svelte-check: ^2.4.3
+  svelte-portal: ^2.1.2
   svelte-preprocess: ^4.10.2
   tslib: ^2.3.1
   typescript: ^4.5.5
@@ -16,6 +17,7 @@ specifiers:
 dependencies:
   '@tauri-apps/api': 1.0.0-rc.0
   eventemitter3: 4.0.7
+  svelte-portal: 2.1.2
 
 devDependencies:
   '@sveltejs/vite-plugin-svelte': 1.0.0-next.37_svelte@3.46.4+vite@2.8.1
@@ -814,6 +816,10 @@ packages:
     dependencies:
       svelte: 3.46.4
     dev: true
+
+  /svelte-portal/2.1.2:
+    resolution: {integrity: sha512-u1ONI4ZJDNhVJPDW7tH6RH1ZIzALt6kJZbF00Hz9bgNIVRlzvzimsnwf35rGFMtPFA+FYenvsTHUR815yYNc9A==}
+    dev: false
 
   /svelte-preprocess/4.10.3_svelte@3.46.4+typescript@4.5.5:
     resolution: {integrity: sha512-ttw17lJfb/dx2ZJT9sesaXT5l7mPQ9Apx1H496Kli3Hkk7orIRGpOw6rCPkRNzr6ueVPqb4vzodS5x7sBFhKHw==}

@@ -1,14 +1,13 @@
 <script lang="ts">
-import type { Font } from '../types';
+  import type { Font } from "../types";
   export let displayText: string | undefined = undefined;
   export let font: Font;
   export let fontSize: number = 24;
-  export let fallbackFont = 'Last Resort';
 </script>
 
 <div>
   <h3
-    style:font-family="'{font.family}','{fallbackFont}'"
+    style:font-family="'{font.family}'"
     style:font-weight={font.weight}
     style:font-stretch="{font.stretch}%"
     style:font-style={font.style}
@@ -17,6 +16,11 @@ import type { Font } from '../types';
     {displayText ?? font.full}
   </h3>
   <p>{font.full}</p>
+  <ul>
+    {#each Object.entries(font) as [key, value]}
+      <li>{key}: {value}</li>
+    {/each}
+  </ul>
 </div>
 
 <style>
