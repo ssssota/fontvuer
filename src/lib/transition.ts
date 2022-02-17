@@ -1,11 +1,11 @@
 import type { EasingFunction, TransitionConfig } from "svelte/transition";
-import { cubicOut } from 'svelte/easing';
+import { cubicOut } from "svelte/easing";
 
 export type SlideParams = {
   delay?: number;
   duration?: number;
   easing?: EasingFunction;
-}
+};
 
 export const slide = (
   node: Element,
@@ -17,6 +17,6 @@ export const slide = (
     delay,
     duration,
     easing: easing$1,
-    css: t => `transform: translateX(${(1 - t) * width}px);`
+    css: (t) => `transform: translateX(${(1 - t) * width}px);`,
   };
-}
+};

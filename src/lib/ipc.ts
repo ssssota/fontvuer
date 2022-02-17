@@ -7,19 +7,18 @@ export type FontDescriptor = {
   font_index: number;
 };
 
-export const getFonts = (customDirs = [], systemFonts = true) => invoke<{
-  fonts: FontDescriptor[]
-}>(
-  'get_fonts',
-  { customDirs, systemFonts }
-).then(({ fonts }) => fonts);
+export const getFonts = (customDirs = [], systemFonts = true) =>
+  invoke<{
+    fonts: FontDescriptor[];
+  }>("get_fonts", { customDirs, systemFonts }).then(({ fonts }) => fonts);
 
-export const getFont = ({ installed, font_index, path }: FontDescriptor): Promise<Font> => installed
-  ? invoke<SystemFont>(
-      'get_font_from_system',
-      { fontIndex: font_index, path }
-    ).then((font) => ({...font, type: 'system'}))
-  : invoke<CustomDirFont>(
-      'get_font_with_data',
-      { fontIndex: font_index, path }
-    ).then((font) => ({ ...font, type: 'custom_dir'}));
+export const getFont = ({
+  installed,
+  font_index,
+  path,
+}: FontDescriptor): Promise<Font> =>
+  invoke<SystemFont | CustomDirFont>("get_font", {
+    fontIndex: font_index,
+    path,
+    installed,
+  });

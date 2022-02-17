@@ -10,9 +10,13 @@ const createFontStore = () => {
     loader?.removeAllListeners();
     set([]);
     loader = new FontLoader(props);
-    loader.on('fontload', (f) => update(
-      (acc) => [...acc, f].sort((a, b) => a.full < b.full ? -1 : a.full > b.full ? 1 : a.index - b.index)
-    ));
+    loader.on("fontload", (f) =>
+      update((acc) =>
+        [...acc, f].sort((a, b) =>
+          a.family < b.family ? -1 : a.family > b.family ? 1 : a.index - b.index
+        )
+      )
+    );
   };
 
   return { subscribe, load };

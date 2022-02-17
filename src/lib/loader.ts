@@ -1,15 +1,15 @@
-import { EventEmitter } from 'eventemitter3';
-import type { Font } from '../types';
-import { getFonts, getFont } from './ipc';
+import { EventEmitter } from "eventemitter3";
+import type { Font } from "../types";
+import { getFonts, getFont } from "./ipc";
 
 export type FontLoaderProps = {
   customDirs: string[];
   loadSystemFonts?: boolean;
-}
+};
 
 export type FontLoaderEventMap = {
   fontload: Font;
-}
+};
 
 export class FontLoader extends EventEmitter<FontLoaderEventMap> {
   constructor(private props?: FontLoaderProps) {
@@ -17,7 +17,10 @@ export class FontLoader extends EventEmitter<FontLoaderEventMap> {
     this.loadFonts();
   }
 
-  on<K extends keyof FontLoaderEventMap>(event: K, listener: (v: FontLoaderEventMap[K]) => unknown) {
+  on<K extends keyof FontLoaderEventMap>(
+    event: K,
+    listener: (v: FontLoaderEventMap[K]) => unknown
+  ) {
     super.on(event, listener);
     return this;
   }
@@ -28,7 +31,7 @@ export class FontLoader extends EventEmitter<FontLoaderEventMap> {
       this.props?.loadSystemFonts
     );
     descriptors.map((desc) => {
-      getFont(desc).then((f) => this.emit('fontload', f));
+      getFont(desc).then((f) => this.emit("fontload", f));
     });
   }
 }

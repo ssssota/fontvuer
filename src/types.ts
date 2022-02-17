@@ -5,7 +5,7 @@ export type FontBase = {
   family: string;
   postscript: string | undefined;
   full: string;
-  style: 'normal' | 'italic' | 'oblique';
+  style: "normal" | "italic" | "oblique";
   /** (width) 50 ~ 200 [%] */
   stretch: number;
   /** 100 ~ 900 */
@@ -13,12 +13,12 @@ export type FontBase = {
 };
 
 export type SystemFont = FontBase & {
-  type: 'system';
+  type: "system";
 };
 export type CustomDirFont = FontBase & {
-  type: 'custom_dir';
+  type: "custom_dir";
   /** base64 font data */
   data: string;
-}
+};
 
 export type Font = SystemFont | CustomDirFont;
