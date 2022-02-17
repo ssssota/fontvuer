@@ -1,15 +1,24 @@
+// Rust compat types
+type Option<T> = T | null | undefined;
+type String = string;
+type u32 = number;
+type f32 = number;
+
 export type FontBase = {
-  path: string;
-  /** font index for TTC */
-  index: number;
-  family: string;
-  postscript: string | undefined;
-  full: string;
-  style: "normal" | "italic" | "oblique";
-  /** (width) 50 ~ 200 [%] */
-  stretch: number;
-  /** 100 ~ 900 */
-  weight: number;
+  path: String;
+  /// font index for TTC
+  index: u32;
+  family: String;
+  postscript: Option<String>;
+  full: String;
+  style: String;
+  /// (width) 50 ~ 200 [%]
+  stretch: f32;
+  /// 100~900
+  weight: f32;
+  copyright: Option<String>;
+  sampletext: Option<String>;
+  license: Option<String>;
 };
 
 export type SystemFont = FontBase & {

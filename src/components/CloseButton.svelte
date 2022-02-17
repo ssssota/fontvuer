@@ -11,6 +11,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    cursor: pointer;
   }
   span {
     transform: rotate(45deg);

@@ -50,6 +50,7 @@
     height: 100%;
     position: relative;
     padding: 1em;
+    overflow: auto;
   }
   section span {
     position: absolute;
