@@ -10,16 +10,16 @@ repository = ""
 version = "0.1.0"
 
 [build-dependencies]
-tauri-build = {version = "1.0.0-rc.2", features = [] }
+tauri-build = "1.0.0-rc.4"
 
 [dependencies]
 base64 = "0.13.0"
-font-kit = {git = "https://github.com/ssssota/font-kit.git", rev = "c74e7478b91f12c3137fb268b554b534b07d3b1c"}
-serde = {version = "1.0", features = ["derive"] }
+font-kit = {git = "https://github.com/ssssota/font-kit.git", rev = "c5d48e1c4bf96b80a5f687b742d3f84cad28dd82"}
+serde = {version = "1.0", features = ["derive"]}
 serde_json = "1.0"
-tauri = {version = "1.0.0-rc.2", features = ["api-all"] }
-ttf-name-decoder = {git = "https://github.com/ssssota/ttf_name_decoder.git"}
-ttf-parser = "0.14.0"
+tauri = {version = "1.0.0-rc.4", features = ["api-all"]}
+ttf-name-decoder = "0.1"
+ttf-parser = "0.15.0"
 walkdir = "2.3.2"
 
 [features]
