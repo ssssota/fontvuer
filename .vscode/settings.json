@@ -1,7 +1,0 @@
-{
-  "deno.enable": false,
-  "editor.tabSize": 2,
-  "files.eol": "\n",
-  "files.insertFinalNewline": true,
-  "files.trimFinalNewlines": true
-}
