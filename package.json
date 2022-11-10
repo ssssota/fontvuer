@@ -18,7 +18,7 @@
     "@types/mousetrap": "^1.6.4",
     "@types/node": "^14.11.8",
     "core-js": "^3.6.5",
-    "electron": "^6.1.12",
+    "electron": "^18.3.7",
     "electron-store": "^5.2.0",
     "electron-updater": "^4.3.5",
     "font-manager": "^0.3.0",
